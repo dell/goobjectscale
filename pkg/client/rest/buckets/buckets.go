@@ -1,8 +1,6 @@
 package buckets
 
 import (
-	"encoding/xml"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
@@ -23,17 +21,10 @@ func (b *Buckets) List(params map[string]string) (*model.BucketList, error) {
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
-	resp, err := b.Client.MakeRemoteCall(req)
+	bucketList := &model.BucketList{}
+	err := b.Client.MakeRemoteCall(req, bucketList)
 	if err != nil {
 		return nil, err
 	}
-	var body []byte
-	if body, err = ioutil.ReadAll(resp.Body); err != nil {
-		return nil, err
-	}
-	retval := &model.BucketList{}
-	if err = xml.Unmarshal(body, retval); err !=  nil {
-		return nil, err
-	}
-	return retval, nil
+	return bucketList, nil
 }

@@ -94,7 +94,7 @@ func (c *Client) isLoggedIn() bool {
 }
 
 // MakeRemoteCall executes an API request against the client endpoint
-func (c *Client) MakeRemoteCall(r Request) (*http.Response, error) {
+func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	var (
 		obj []byte
 		err error
@@ -106,14 +106,14 @@ func (c *Client) MakeRemoteCall(r Request) (*http.Response, error) {
 	case ContentTypeJSON:
 		obj, err = json.Marshal(r.Body)
 	default:
-		return nil, errors.New("invalid content-type")
+		return errors.New("invalid content-type")
 	}
 	if err != nil {
-		return nil, err
+		return err
 	}
 	u, err := url.Parse(c.Endpoint)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	u.Path = r.Path
 	if r.Params != nil {
@@ -124,30 +124,45 @@ func (c *Client) MakeRemoteCall(r Request) (*http.Response, error) {
 	u.RawQuery = q.Encode()
 	req, err := http.NewRequest(r.Method, u.String(), bytes.NewBuffer(obj))
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if !c.isLoggedIn() {
 		if err = c.login(); err != nil {
-			return nil, err
+			return err
 		}
 	}
+	req.Header.Add("Accept", r.ContentType)
 	req.Header.Add("Content-Type", r.ContentType)
 	req.Header.Add("Accept", "application/xml")
 	req.Header.Add("X-SDS-AUTH-TOKEN", c.token)
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if resp.StatusCode == 401 {
 		if c.authRetries < AuthRetriesMax {
 			c.authRetries += 1
 			c.token = ""
-			return c.MakeRemoteCall(r)
+			return c.MakeRemoteCall(r, into)
 		} else {
-			return nil, errors.New(strings.ToLower(resp.Status))
+			return errors.New(strings.ToLower(resp.Status))
 		}
 	}
-	return resp, nil
+	var body []byte
+	if body, err = ioutil.ReadAll(resp.Body); err != nil {
+		return err
+	}
+	switch r.ContentType {
+	case ContentTypeXML:
+		if err = xml.Unmarshal(body, into); err != nil {
+			return err
+		}
+	case ContentTypeJSON:
+		if err = json.Unmarshal(body, into); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 const (
