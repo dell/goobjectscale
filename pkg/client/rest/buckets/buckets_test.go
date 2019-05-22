@@ -73,6 +73,27 @@ var _ = Describe("Buckets", func() {
 			})
 		})
 	})
+
+	Context("#Get", func() {
+		var (
+			bucket *model.Bucket
+			err error
+		)
+
+		Context("with no params", func() {
+			BeforeEach(func() {
+				bucket, err = clientset.Buckets().Get("Files", map[string]string{})
+			})
+
+			It("shouldn't error", func() {
+				Expect(err).ToNot(HaveOccurred())
+			})
+
+			It("should return the bucket", func() {
+				Expect(bucket.Name).To(Equal("Files"))
+			})
+		})
+	})
 })
 
 func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {

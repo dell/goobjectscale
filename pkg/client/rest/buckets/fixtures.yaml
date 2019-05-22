@@ -15,9 +15,9 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Tue, 21 May 2019 20:09:52 GMT
+      - Wed, 22 May 2019 04:06:41 GMT
       X-Sds-Auth-Token:
-      - BAAcdHBkRVpuTUdJUFI3b3FWcExwUGFGb3hiRVM4PQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46ZmIyMGQ4YjItYzRkZC00OTM4LTkwN2MtMTM0ZWMzM2NhNTM3AgAC0A8=
+      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
     status: 200 OK
     code: 200
     duration: ""
@@ -27,10 +27,11 @@ interactions:
     headers:
       Accept:
       - application/xml
+      - application/xml
       Content-Type:
       - application/xml
       X-Sds-Auth-Token:
-      - BAAcdHBkRVpuTUdJUFI3b3FWcExwUGFGb3hiRVM4PQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46ZmIyMGQ4YjItYzRkZC00OTM4LTkwN2MtMTM0ZWMzM2NhNTM3AgAC0A8=
+      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
     url: https://testserver/object/bucket
     method: GET
   response:
@@ -60,7 +61,7 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Tue, 21 May 2019 20:09:52 GMT
+      - Wed, 22 May 2019 04:06:41 GMT
     status: 200 OK
     code: 200
     duration: ""
@@ -70,10 +71,11 @@ interactions:
     headers:
       Accept:
       - application/xml
+      - application/xml
       Content-Type:
       - application/xml
       X-Sds-Auth-Token:
-      - BAAcdHBkRVpuTUdJUFI3b3FWcExwUGFGb3hiRVM4PQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46ZmIyMGQ4YjItYzRkZC00OTM4LTkwN2MtMTM0ZWMzM2NhNTM3AgAC0A8=
+      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
     url: https://testserver/object/bucket
     method: GET
   response:
@@ -103,7 +105,59 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Tue, 21 May 2019 20:09:52 GMT
+      - Wed, 22 May 2019 04:06:41 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/xml
+      - application/xml
+      Content-Type:
+      - application/xml
+      X-Sds-Auth-Token:
+      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
+    url: https://testserver/object/bucket/Files/info
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><bucket_info><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549@ecstestdrive.emc.com</owner><created>2017-07-11T16:26:13.357Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.Files</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
+      rel="self" href="/object/bucket/130820808912778549.Files"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>Files</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></bucket_info>
+    headers:
+      Content-Length:
+      - "1556"
+      Content-Type:
+      - application/xml
+      Date:
+      - Wed, 22 May 2019 04:06:41 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/xml
+      - application/xml
+      Content-Type:
+      - application/xml
+      X-Sds-Auth-Token:
+      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
+    url: https://testserver/object/bucket/Files/info
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><bucket_info><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549@ecstestdrive.emc.com</owner><created>2017-07-11T16:26:13.357Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.Files</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
+      rel="self" href="/object/bucket/130820808912778549.Files"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>Files</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></bucket_info>
+    headers:
+      Content-Length:
+      - "1556"
+      Content-Type:
+      - application/xml
+      Date:
+      - Wed, 22 May 2019 04:06:41 GMT
     status: 200 OK
     code: 200
     duration: ""

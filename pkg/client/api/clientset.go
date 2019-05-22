@@ -12,6 +12,9 @@ type ClientSet interface {
 
 // BucketsInterfaces represents a bucket resource client interface
 type BucketsInterface interface {
-	// List returns a list of buckets in the ObjectScale instance buckets
+	// List returns a list of buckets within the ObjectScale object store
 	List(params map[string]string) (*model.BucketList, error)
+
+	// Get returns a bucket in the ObjectScale object store
+	Get(name string, params map[string]string) (*model.Bucket, error)
 }

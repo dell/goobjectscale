@@ -2,6 +2,14 @@ package model
 
 import "encoding/xml"
 
+// BucketInfo is an object storage bucket with an alternate XML tag name
+type BucketInfo struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"bucket_info"`
+
+	Bucket
+}
+
 // Bucket is an object storage bucket
 type Bucket struct {
 	// XMLName is the name of the xml tag used XML marshalling
