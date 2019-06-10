@@ -28,7 +28,6 @@ var _ = Describe("Rest client", func() {
 	Context("with a valid user", func() {
 
 		var (
-			resp     *http.Response
 			err      error
 			captures map[string]interface{}
 		)
@@ -41,11 +40,11 @@ var _ = Describe("Rest client", func() {
 				"https://host",
 				newTestHTTPClient(captures, false),
 			)
-			resp, err = clientset.Client().MakeRemoteCall(client.Request{
+			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,
 				Path:        "/test",
 				ContentType: client.ContentTypeJSON,
-			})
+			}, nil)
 		})
 
 		It("should not error", func() {
@@ -65,10 +64,7 @@ var _ = Describe("Rest client", func() {
 		})
 
 		It("should return an OK response", func() {
-			respBody, e := ioutil.ReadAll(resp.Body)
-			Expect(e).ToNot(HaveOccurred())
-			Expect(resp.StatusCode).To(Equal(200))
-			Expect(string(respBody)).To(Equal("OK"))
+			Expect(err).ToNot(HaveOccurred())
 		})
 	})
 
@@ -86,11 +82,11 @@ var _ = Describe("Rest client", func() {
 				":not:a:valid:url",
 				newTestHTTPClient(captures, false),
 			)
-			_, err = clientset.Client().MakeRemoteCall(client.Request{
+			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,
 				Path:        "",
 				ContentType: client.ContentTypeJSON,
-			})
+			}, nil)
 		})
 
 		It("should return an error", func() {
@@ -119,18 +115,17 @@ var _ = Describe("Rest client", func() {
 				"https://host",
 				newTestHTTPClient(captures, false),
 			)
-			_, err = clientset.Client().MakeRemoteCall(client.Request{
+			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,
 				Path:        "",
 				ContentType: "NotAContentType",
-			})
+			}, nil)
 		})
 
 		It("should return an error", func() {
 			e := "invalid content-type"
 			Expect(err.Error()).To(Equal(e))
 		})
-
 
 		It("should not make a login call", func() {
 			Expect(captures["login"]).To(BeNil())
@@ -159,11 +154,11 @@ var _ = Describe("Rest client", func() {
 				"https://host",
 				newTestHTTPClient(captures, true),
 			)
-			_, err = clientset.Client().MakeRemoteCall(client.Request{
+			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,
 				Path:        "/test",
 				ContentType: client.ContentTypeJSON,
-			})
+			}, nil)
 		})
 
 		It("shouldn't error", func() {

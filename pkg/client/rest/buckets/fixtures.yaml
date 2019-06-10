@@ -15,9 +15,9 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Wed, 22 May 2019 04:06:41 GMT
+        - Mon, 10 Jun 2019 21:04:52 GMT
       X-Sds-Auth-Token:
-      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
     status: 200 OK
     code: 200
     duration: ""
@@ -31,7 +31,7 @@ interactions:
       Content-Type:
       - application/xml
       X-Sds-Auth-Token:
-      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
     url: https://testserver/object/bucket
     method: GET
   response:
@@ -52,16 +52,15 @@ interactions:
       rel="self" href="/object/bucket/130820808912778549.ecs-cf-broker-repository"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>ecs-cf-broker-repository</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>5</block_size><owner>130820808912778549-admin</owner><created>2018-03-20T16:32:59.686Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.pie-27-3282f736-812f-4af1-a4dc-cb18a8ab53fe</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
       rel="self" href="/object/bucket/130820808912778549.pie-27-3282f736-812f-4af1-a4dc-cb18a8ab53fe"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>pie-27-3282f736-812f-4af1-a4dc-cb18a8ab53fe</name><namespace>130820808912778549</namespace><notification_size>4</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>4</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549-admin</owner><created>2018-02-28T00:47:11.918Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.pie-27-repository</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
       rel="self" href="/object/bucket/130820808912778549.pie-27-repository"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>pie-27-repository</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>5</block_size><owner>130820808912778549-admin</owner><created>2018-05-31T18:56:52.693Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.pie-ci-1-12-repository</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
-      rel="self" href="/object/bucket/130820808912778549.pie-ci-1-12-repository"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>pie-ci-1-12-repository</name><namespace>130820808912778549</namespace><notification_size>4</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>4</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549@ecstestdrive.emc.com</owner><created>2017-07-11T18:51:47.108Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.test-bucket</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
-      rel="self" href="/object/bucket/130820808912778549.test-bucket"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>test-bucket</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549@ecstestdrive.emc.com</owner><created>2019-03-29T01:51:13.197Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.vxflex-os</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
+      rel="self" href="/object/bucket/130820808912778549.pie-ci-1-12-repository"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>pie-ci-1-12-repository</name><namespace>130820808912778549</namespace><notification_size>4</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>4</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549@ecstestdrive.emc.com</owner><created>2019-03-29T01:51:13.197Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.vxflex-os</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
       rel="self" href="/object/bucket/130820808912778549.vxflex-os"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>vxflex-os</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></object_bucket></object_buckets>
     headers:
       Content-Length:
-      - "29600"
+        - "28077"
       Content-Type:
       - application/xml
       Date:
-      - Wed, 22 May 2019 04:06:41 GMT
+        - Mon, 10 Jun 2019 21:04:52 GMT
     status: 200 OK
     code: 200
     duration: ""
@@ -75,7 +74,7 @@ interactions:
       Content-Type:
       - application/xml
       X-Sds-Auth-Token:
-      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
     url: https://testserver/object/bucket
     method: GET
   response:
@@ -96,16 +95,15 @@ interactions:
       rel="self" href="/object/bucket/130820808912778549.ecs-cf-broker-repository"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>ecs-cf-broker-repository</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>5</block_size><owner>130820808912778549-admin</owner><created>2018-03-20T16:32:59.686Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.pie-27-3282f736-812f-4af1-a4dc-cb18a8ab53fe</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
       rel="self" href="/object/bucket/130820808912778549.pie-27-3282f736-812f-4af1-a4dc-cb18a8ab53fe"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>pie-27-3282f736-812f-4af1-a4dc-cb18a8ab53fe</name><namespace>130820808912778549</namespace><notification_size>4</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>4</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549-admin</owner><created>2018-02-28T00:47:11.918Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.pie-27-repository</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
       rel="self" href="/object/bucket/130820808912778549.pie-27-repository"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>pie-27-repository</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>5</block_size><owner>130820808912778549-admin</owner><created>2018-05-31T18:56:52.693Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.pie-ci-1-12-repository</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
-      rel="self" href="/object/bucket/130820808912778549.pie-ci-1-12-repository"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>pie-ci-1-12-repository</name><namespace>130820808912778549</namespace><notification_size>4</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>4</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549@ecstestdrive.emc.com</owner><created>2017-07-11T18:51:47.108Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.test-bucket</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
-      rel="self" href="/object/bucket/130820808912778549.test-bucket"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>test-bucket</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549@ecstestdrive.emc.com</owner><created>2019-03-29T01:51:13.197Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.vxflex-os</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
+      rel="self" href="/object/bucket/130820808912778549.pie-ci-1-12-repository"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>pie-ci-1-12-repository</name><namespace>130820808912778549</namespace><notification_size>4</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>4</softquota><TagSet/></object_bucket><object_bucket><api_type>S3</api_type><audit_delete_expiration>-2</audit_delete_expiration><auto_commit_period>0</auto_commit_period><block_size>-1</block_size><owner>130820808912778549@ecstestdrive.emc.com</owner><created>2019-03-29T01:51:13.197Z</created><default_group_dir_execute_permission>false</default_group_dir_execute_permission><default_group_dir_read_permission>false</default_group_dir_read_permission><default_group_dir_write_permission>false</default_group_dir_write_permission><default_group_file_execute_permission>false</default_group_file_execute_permission><default_group_file_read_permission>false</default_group_file_read_permission><default_group_file_write_permission>false</default_group_file_write_permission><default_retention>0</default_retention><fs_access_enabled>false</fs_access_enabled><id>130820808912778549.vxflex-os</id><is_encryption_enabled>false</is_encryption_enabled><is_stale_allowed>true</is_stale_allowed><is_tso_read_only>false</is_tso_read_only><link
       rel="self" href="/object/bucket/130820808912778549.vxflex-os"/><locked>false</locked><search_metadata><isEnabled>false</isEnabled><maxKeys>0</maxKeys></search_metadata><min_max_governor><enforce_retention>false</enforce_retention></min_max_governor><name>vxflex-os</name><namespace>130820808912778549</namespace><notification_size>-1</notification_size><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><retention>0</retention><softquota>-1</softquota><TagSet/></object_bucket></object_buckets>
     headers:
       Content-Length:
-      - "29600"
+        - "28077"
       Content-Type:
       - application/xml
       Date:
-      - Wed, 22 May 2019 04:06:41 GMT
+        - Mon, 10 Jun 2019 21:04:53 GMT
     status: 200 OK
     code: 200
     duration: ""
@@ -119,7 +117,7 @@ interactions:
       Content-Type:
       - application/xml
       X-Sds-Auth-Token:
-      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
     url: https://testserver/object/bucket/Files/info
     method: GET
   response:
@@ -131,7 +129,7 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Wed, 22 May 2019 04:06:41 GMT
+        - Mon, 10 Jun 2019 21:04:53 GMT
     status: 200 OK
     code: 200
     duration: ""
@@ -145,7 +143,7 @@ interactions:
       Content-Type:
       - application/xml
       X-Sds-Auth-Token:
-      - BAAcamttTWNzQUx0ZUowRTc2SGpHU1gwQkpQTlBZPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46YjYzM2JjNDctN2FjYS00NDE0LTgwMzItYTRjYzYzMTQ0NTgxAgAC0A8=
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
     url: https://testserver/object/bucket/Files/info
     method: GET
   response:
@@ -157,7 +155,157 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Wed, 22 May 2019 04:06:41 GMT
+        - Mon, 10 Jun 2019 21:04:53 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: <object_bucket_create><name>testbucket1</name><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><namespace>130820808912778549</namespace><notification_size>0</notification_size><TagSet></TagSet><MaxKeys>0</MaxKeys><Enabled>false</Enabled><Type></Type><Name></Name><Datatype></Datatype><enforce_retention>false</enforce_retention><minimum_fixed_retention>0</minimum_fixed_retention><minimum_variable_retention>0</minimum_variable_retention><maximum_fixed_retention>0</maximum_fixed_retention><maximum_variable_retention>0</maximum_variable_retention><HREF></HREF><Rel></Rel><inactive>false</inactive><global>false</global><remote>false</remote><internal>false</internal></object_bucket_create>
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket
+    method: POST
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><object_bucket><id>130820808912778549.testbucket1</id><inactive>false</inactive><name>testbucket1</name><metaData><isEnabled>false</isEnabled><maxKeys>0</maxKeys></metaData><TagSet/></object_bucket>
+    headers:
+      Content-Length:
+        - "253"
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:54 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: "null"
+    form: {}
+    headers:
+      Accept:
+        - application/json
+        - application/xml
+      Content-Type:
+        - application/json
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket1/deactivate?namespace=130820808912778549
+    method: POST
+  response:
+    body: ""
+    headers:
+      Content-Length:
+        - "0"
+      Content-Type:
+        - application/json
+      Date:
+        - Mon, 10 Jun 2019 21:04:55 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: <object_bucket_create><name>testbucket1</name><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><namespace>130820808912778549</namespace><notification_size>0</notification_size><TagSet></TagSet><MaxKeys>0</MaxKeys><Enabled>false</Enabled><Type></Type><Name></Name><Datatype></Datatype><enforce_retention>false</enforce_retention><minimum_fixed_retention>0</minimum_fixed_retention><minimum_variable_retention>0</minimum_variable_retention><maximum_fixed_retention>0</maximum_fixed_retention><maximum_variable_retention>0</maximum_variable_retention><HREF></HREF><Rel></Rel><inactive>false</inactive><global>false</global><remote>false</remote><internal>false</internal></object_bucket_create>
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket
+    method: POST
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><object_bucket><id>130820808912778549.testbucket1</id><inactive>false</inactive><name>testbucket1</name><metaData><isEnabled>false</isEnabled><maxKeys>0</maxKeys></metaData><TagSet/></object_bucket>
+    headers:
+      Content-Length:
+        - "253"
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:56 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: "null"
+    form: {}
+    headers:
+      Accept:
+        - application/json
+        - application/xml
+      Content-Type:
+        - application/json
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket1/deactivate?namespace=130820808912778549
+    method: POST
+  response:
+    body: ""
+    headers:
+      Content-Length:
+        - "0"
+      Content-Type:
+        - application/json
+      Date:
+        - Mon, 10 Jun 2019 21:04:58 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: <object_bucket_create><name>testbucket1</name><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><namespace>130820808912778549</namespace><notification_size>0</notification_size><TagSet></TagSet><MaxKeys>0</MaxKeys><Enabled>false</Enabled><Type></Type><Name></Name><Datatype></Datatype><enforce_retention>false</enforce_retention><minimum_fixed_retention>0</minimum_fixed_retention><minimum_variable_retention>0</minimum_variable_retention><maximum_fixed_retention>0</maximum_fixed_retention><maximum_variable_retention>0</maximum_variable_retention><HREF></HREF><Rel></Rel><inactive>false</inactive><global>false</global><remote>false</remote><internal>false</internal></object_bucket_create>
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket
+    method: POST
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><object_bucket><id>130820808912778549.testbucket1</id><inactive>false</inactive><name>testbucket1</name><metaData><isEnabled>false</isEnabled><maxKeys>0</maxKeys></metaData><TagSet/></object_bucket>
+    headers:
+      Content-Length:
+        - "253"
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:59 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: "null"
+    form: {}
+    headers:
+      Accept:
+        - application/json
+        - application/xml
+      Content-Type:
+        - application/json
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket1/deactivate?namespace=130820808912778549
+    method: POST
+  response:
+    body: ""
+    headers:
+      Content-Length:
+        - "0"
+      Content-Type:
+        - application/json
+      Date:
+        - Mon, 10 Jun 2019 21:05:04 GMT
     status: 200 OK
     code: 200
     duration: ""

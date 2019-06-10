@@ -10,107 +10,115 @@ type BucketInfo struct {
 	Bucket
 }
 
+// BucketCreate is an object storage bucket with an alternate XML tag name
+type BucketCreate struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"object_bucket_create"`
+
+	Bucket
+}
+
 // Bucket is an object storage bucket
 type Bucket struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"object_bucket"`
 
 	// APIType is the object API type used by the bucket
-	APIType string `json:"api_type" xml:"api_type"`
+	APIType string `json:"api_type,omitempty" xml:"api_type,omitempty"`
 
 	// AuditDeleteExpiration is the amount of time to retain deletion audit
 	// entries
-	AuditDeleteExpiration int `json:"audit_delete_expiration" xml:"audit_delete_expiration"`
+	AuditDeleteExpiration int `json:"audit_delete_expiration,omitempty" xml:"audit_delete_expiration,omitempty"`
 
 	// Created is the date and time that the bucket was created
-	Created string `json:"created" xml:"created"`
+	Created string `json:"created,omitempty" xml:"created,omitempty"`
 
 	// ID is the id of the bucket scoped to the cluster instance
-	ID string `json:"id" xml:"id"`
+	ID string `json:"id,omitempty" xml:"id,omitempty"`
 
 	// Name is the name of the cluster instance
 	Name string `json:"name" xml:"name"`
 
 	// EncryptionEnabled displays if this bucket is configured for encryption
 	// at rest
-	EncryptionEnabled bool `json:"is_encryption_enabled" xml:"is_encryption_enabled"`
+	EncryptionEnabled bool `json:"is_encryption_enabled,omitempty" xml:"is_encryption_enabled,omitempty"`
 
 	// SoftQuota is the warning quota level for the bucket
-	SoftQuota string `json:"softquota" xml:"softquota"`
+	SoftQuota string `json:"softquota,omitempty" xml:"softquota,omitempty"`
 
 	// FSEnabled indicates if the bucket has file-system support enabled
-	FSEnabled bool `json:"fs_access_enabled" xml:"fs_access_enabled"`
+	FSEnabled bool `json:"fs_access_enabled,omitempty" xml:"fs_access_enabled,omitempty"`
 
 	// Locked indicates if the bucket is locked
-	Locked bool `json:"locked" xml:"locked"`
+	Locked bool `json:"locked,omitempty" xml:"locked,omitempty"`
 
-	// VPool is the replication group id of the bucket
-	VPool string `json:"vpool" xml:"vpool"`
+	// ReplicationGroup is the replication group id of the bucket
+	ReplicationGroup string `json:"vpool,omitempty" xml:"vpool,omitempty"`
 
 	// Namespace is the namespace of the bucket
-	Namespace string `json:"namespace" xml:"namespace"`
+	Namespace string `json:"namespace,omitempty" xml:"namespace,omitempty"`
 
 	// Owner is the s3 object user owner of the bucket
-	Owner string `json:"owner" xml:"owner"`
+	Owner string `json:"owner,omitempty" xml:"owner,omitempty"`
 
 	// StaleAllowed indicates if access to the bucket is allowed during an
 	// outage
-	StaleAllowed bool `json:"is_stale_allowed" xml:"is_stale_allowed"`
+	StaleAllowed bool `json:"is_stale_allowed,omitempty" xml:"is_stale_allowed,omitempty"`
 
 	// TSOReadOnly indicates if access to the bucket is allowed during an
 	// outage
-	TSOReadOnly bool `json:"is_tso_read_only" xml:"is_tso_read_only"`
+	TSOReadOnly bool `json:"is_tso_read_only,omitempty" xml:"is_tso_read_only,omitempty"`
 
 	// DefaultRetention is the default retention period for objects in bucket
-	DefaultRetention int64 `json:"default_retention,omit_empty" xml:"default_retention,omit_empty"`
+	DefaultRetention int64 `json:"default_retention,omit_empty,omitempty" xml:"default_retention,omit_empty,omitempty"`
 
 	// BlockSize is the bucket size at which new object creations will be
 	// blocked
-	BlockSize int64 `json:"block_size,omit_empty" xml:"block_size,omit_empty"`
+	BlockSize int64 `json:"block_size,omit_empty,omitempty" xml:"block_size,omit_empty,omitempty"`
 
 	// NotificationSize is the bucket size at which the users will be notified
 	NotificationSize int64 `json:"notification_size,omit_empty" xml:"notification_size,omit_empty"`
 
 	// Tags is a list of arbitrary metadata keys and values applied to the
 	// bucket
-	Tags TagSet `json:"TagSet" xml:"TagSet"`
+	Tags TagSet `json:"TagSet,omitempty" xml:"TagSet,omitempty"`
 
 	// Retention is the default retention value for the bucket
-	Retention int64 `json:"retention" xml:"retention"`
+	Retention int64 `json:"retention,omitempty" xml:"retention,omitempty"`
 
 	// DefaultGroupFileReadPermission is a flag indicating the Read permission
 	// for default group
-	DefaultGroupFileReadPermission bool `json:"default_group_file_read_permission" xml:"default_group_file_read_permission"`
+	DefaultGroupFileReadPermission bool `json:"default_group_file_read_permission,omitempty" xml:"default_group_file_read_permission,omitempty"`
 
 	// DefaultGroupFileWritePermission is a flag indicating the Execute permission
 	// for default group
-	DefaultGroupFileExecutePermission bool `json:"default_group_file_execute_permission" xml:"default_group_file_execute_permission"`
+	DefaultGroupFileExecutePermission bool `json:"default_group_file_execute_permission,omitempty" xml:"default_group_file_execute_permission,omitempty"`
 
 	// DefaultGroupFileExecutePermission is a flag indicating the Write permission
 	// for default group
-	DefaultGroupFileWritePermission bool `json:"default_group_file_write_permission" xml:"default_group_file_write_permission"`
+	DefaultGroupFileWritePermission bool `json:"default_group_file_write_permission,omitempty" xml:"default_group_file_write_permission,omitempty"`
 
 	// DefaultGroupDirReadPermission is a flag indicating the Read permission
 	// for default group
-	DefaultGroupDirReadPermission bool `json:"default_group_dir_read_permission" xml:"default_group_dir_read_permission"`
+	DefaultGroupDirReadPermission bool `json:"default_group_dir_read_permission,omitempty" xml:"default_group_dir_read_permission,omitempty"`
 
 	// DefaultGroupDirWritePermission is a flag indicating the Execute permission
 	// for default group
-	DefaultGroupDirExecutePermission bool `json:"default_group_dir_execute_permission" xml:"default_group_dir_execute_permission"`
+	DefaultGroupDirExecutePermission bool `json:"default_group_dir_execute_permission,omitempty" xml:"default_group_dir_execute_permission,omitempty"`
 
 	// DefaultGroupDirExecutePermission is a flag indicating the Write permission
 	// for default group
-	DefaultGroupDirWritePermission bool `json:"default_group_dir_write_permission" xml:"default_group_dir_write_permission"`
+	DefaultGroupDirWritePermission bool `json:"default_group_dir_write_permission,omitempty" xml:"default_group_dir_write_permission,omitempty"`
 
 	// DefaultGroup is the bucket's default group
-	DefaultGroup string `json:"default_group,omitempty" xml:"default_group,omitempty"`
+	DefaultGroup string `json:"default_group,omitempty,omitempty" xml:"default_group,omitempty,omitempty"`
 
 	// SearchMetadata is the custom metadata for enabled for querying on the
 	// bucket
-	SearchMetadata `json:"search_metadata" xml:"search_metadata"`
+	SearchMetadata `json:"search_metadata,omitempty" xml:"search_metadata,omitempty"`
 
 	// MinMaxGovenor enforces minimum and maximum retention for bucket objects
-	MinMaxGovenor `json:"min_max_govenor" xml:"min_max_govenor"`
+	MinMaxGovenor `json:"min_max_govenor,omitempty" xml:"min_max_govenor,omitempty"`
 
 }
 
