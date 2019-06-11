@@ -75,7 +75,7 @@ func handleResponse(resp *http.Response) error {
 			}
 			apiError := &model.Error{}
 			err = xml.Unmarshal(body, apiError)
-			if  err != nil {
+			if err != nil {
 				return errors.New(string(body))
 			}
 			switch {
@@ -93,7 +93,8 @@ func (c *Client) isLoggedIn() bool {
 	return c.token != ""
 }
 
-// MakeRemoteCall executes an API request against the client endpoint
+// MakeRemoteCall executes an API request against the client endpoint, returning
+// the object body of the response into a reponse object
 func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	var (
 		obj []byte
@@ -139,27 +140,45 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	if err != nil {
 		return err
 	}
-	if resp.StatusCode == 401 {
-		if c.authRetries < AuthRetriesMax {
-			c.authRetries += 1
-			c.token = ""
-			return c.MakeRemoteCall(r, into)
-		} else {
-			return errors.New(strings.ToLower(resp.Status))
-		}
-	}
 	var body []byte
 	if body, err = ioutil.ReadAll(resp.Body); err != nil {
 		return err
 	}
-	switch r.ContentType {
-	case ContentTypeXML:
-		if err = xml.Unmarshal(body, into); err != nil {
-			return err
+	switch {
+	case resp.StatusCode == http.StatusUnauthorized:
+		if c.authRetries < AuthRetriesMax {
+			c.authRetries += 1
+			c.token = ""
+			return c.MakeRemoteCall(r, into)
 		}
-	case ContentTypeJSON:
-		if err = json.Unmarshal(body, into); err != nil {
-			return err
+		return errors.New(strings.ToLower(resp.Status))
+	case resp.StatusCode > 399:
+		ecsError := &model.Error{}
+		switch r.ContentType {
+		case ContentTypeXML:
+			if err = xml.Unmarshal(body, ecsError); err != nil {
+				return err
+			}
+		case ContentTypeJSON:
+			if err = json.Unmarshal(body, ecsError); err != nil {
+				return err
+			}
+		}
+		return fmt.Errorf("%s: %s", ecsError.Description, ecsError.Details)
+	case into == nil:
+		// No errors found, and no response object defined, so just return
+		// without error
+		return nil
+	default:
+		switch r.ContentType {
+		case ContentTypeXML:
+			if err = xml.Unmarshal(body, into); err != nil {
+				return err
+			}
+		case ContentTypeJSON:
+			if err = json.Unmarshal(body, into); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -194,4 +213,3 @@ type Request struct {
 	// Params are the parameters of the REST API request
 	Params map[string]string
 }
-
