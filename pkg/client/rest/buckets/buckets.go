@@ -46,12 +46,12 @@ func (b *Buckets) List(params map[string]string) (*model.BucketList, error) {
 }
 
 // Create implements the buckets interface
-func (b *Buckets) Create(createParam *model.Bucket) (*model.Bucket, error) {
+func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        "/object/bucket",
 		ContentType: client.ContentTypeXML,
-		Body:        &model.BucketCreate{Bucket: *createParam},
+		Body:        &model.BucketCreate{Bucket: createParam},
 	}
 	bucket := &model.Bucket{}
 	err := b.Client.MakeRemoteCall(req, bucket)

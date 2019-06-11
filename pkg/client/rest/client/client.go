@@ -145,7 +145,7 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 		return err
 	}
 	switch {
-	case resp.StatusCode == 401:
+	case resp.StatusCode == http.StatusUnauthorized:
 		if c.authRetries < AuthRetriesMax {
 			c.authRetries += 1
 			c.token = ""

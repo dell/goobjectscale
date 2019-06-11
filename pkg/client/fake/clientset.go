@@ -52,17 +52,14 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 }
 
 // Create implements the buckets API
-func (b *Buckets) Create(createParam *model.Bucket) (*model.Bucket, error) {
-	if createParam.ReplicationGroup == "" {
-		return nil, errors.New("replication group required")
-	}
+func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 	for _, existingBucket := range b.items {
 		if existingBucket.Namespace == createParam.Namespace && existingBucket.Name == createParam.Name	 {
 			return nil, errors.New("duplicate found")
 		}
 	}
-	b.items = append(b.items, *createParam)
-	return createParam, nil
+	b.items = append(b.items, createParam)
+	return &createParam, nil
 }
 
 // Delete implements the buckets API

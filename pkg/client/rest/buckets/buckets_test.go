@@ -103,7 +103,7 @@ var _ = Describe("Buckets", func() {
 
 		Context("without one existing", func() {
 			BeforeEach(func() {
-				createBucket := &model.Bucket{
+				createBucket := model.Bucket{
 					Name: "testbucket1",
 					ReplicationGroup: "urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global",
 					Namespace: "130820808912778549",
@@ -133,7 +133,7 @@ var _ = Describe("Buckets", func() {
 
 		Context("with no params", func() {
 			BeforeEach(func() {
-				createBucket := &model.Bucket{
+				createBucket := model.Bucket{
 					Name: "testbucket1",
 					ReplicationGroup: "urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global",
 					Namespace: "130820808912778549",
