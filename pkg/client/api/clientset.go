@@ -8,6 +8,7 @@ import (
 type ClientSet interface {
 	// Buckets returns a bucket client interface
 	Buckets() BucketsInterface
+	ObjectUser() ObjectUserInterface
 }
 
 // BucketsInterfaces represents a bucket resource client interface
@@ -23,4 +24,16 @@ type BucketsInterface interface {
 
 	// Delete deletes bucket from the ObjectScale object store
 	Delete(name string, namespace string) error
+}
+
+// ObjectUserInterface represents an object user resource client interface.
+type ObjectUserInterface interface {
+	// List returns a list of object users within the ObjectScale object store.
+	List(params map[string]string) (*model.ObjectUserList, error)
+
+	// GetInfo returns information about an object user within the ObjectScale object store.
+	GetInfo(uid string, params map[string]string) (*model.ObjectUserInfo, error)
+
+	// GetSecret returns information about object user secrets.
+	GetSecret(uid string, params map[string]string) (*model.ObjectUserSecret, error)
 }

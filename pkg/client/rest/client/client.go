@@ -144,6 +144,7 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	if body, err = ioutil.ReadAll(resp.Body); err != nil {
 		return err
 	}
+
 	switch {
 	case resp.StatusCode == http.StatusUnauthorized:
 		if c.authRetries < AuthRetriesMax {
