@@ -94,7 +94,7 @@ func (c *Client) isLoggedIn() bool {
 }
 
 // MakeRemoteCall executes an API request against the client endpoint, returning
-// the object body of the response into a reponse object
+// the object body of the response into a response object
 func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	var (
 		obj []byte

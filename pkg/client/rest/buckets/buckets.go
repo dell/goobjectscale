@@ -1,6 +1,8 @@
 package buckets
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"path"
 
@@ -43,6 +45,22 @@ func (b *Buckets) List(params map[string]string) (*model.BucketList, error) {
 		return nil, err
 	}
 	return bucketList, nil
+}
+
+func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string, error) {
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        fmt.Sprintf("object/bucket/%s/policy", bucketName),
+		ContentType: client.ContentTypeJSON,
+		Params:      param,
+	}
+	var bucketPolicy json.RawMessage
+	err := b.Client.MakeRemoteCall(req, &bucketPolicy)
+	if err != nil {
+		return "", err
+	}
+	policy, err := bucketPolicy.MarshalJSON()
+	return string(policy), err
 }
 
 // Create implements the buckets interface

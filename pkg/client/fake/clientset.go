@@ -17,7 +17,8 @@ type ClientSet struct {
 // NewClientSet returns a new client set based on the provided REST client parameters
 func NewClientSet(objs ...interface{}) *ClientSet {
 	var (
-		bucketList []model.Bucket
+		policy       = make(map[string]string)
+		bucketList   []model.Bucket
 		blobUsers    []model.BlobUser
 		userSecrets  []UserSecret
 		userInfoList []UserInfo
@@ -26,6 +27,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		switch object := o.(type) {
 		case *model.Bucket:
 			bucketList = append(bucketList, *object)
+		case *BucketPolicy:
+			policy[fmt.Sprintf("%s/%s", object.BucketName, object.Namespace)] = object.Policy
 		case *model.BlobUser:
 			blobUsers = append(blobUsers, *object)
 		case *UserSecret:
@@ -38,7 +41,9 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 	}
 
 	return &ClientSet{
-		buckets:    &Buckets{items: bucketList},
+		buckets: &Buckets{
+			items: bucketList,
+		},
 		objectUser: NewObjectUsers(blobUsers, userSecrets, userInfoList),
 	}
 }
@@ -46,6 +51,12 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 // Buckets implements the client API
 func (c *ClientSet) Buckets() api.BucketsInterface {
 	return c.buckets
+}
+
+type BucketPolicy struct {
+	BucketName string
+	Policy     string
+	Namespace  string
 }
 
 // ObjectUser implements the client API.
@@ -114,7 +125,8 @@ func (o *ObjectUsers) GetInfo(uid string, params map[string]string) (*model.Obje
 
 // Buckets implements the buckets API
 type Buckets struct {
-	items []model.Bucket
+	items  []model.Bucket
+	policy map[string]string
 }
 
 // List implements the buckets API
@@ -130,6 +142,11 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 		}
 	}
 	return nil, errors.New("not found")
+}
+
+// Get implements the buckets API
+func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string, error) {
+	return b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])], nil
 }
 
 // Create implements the buckets API

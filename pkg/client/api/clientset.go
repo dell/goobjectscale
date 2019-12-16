@@ -16,6 +16,9 @@ type BucketsInterface interface {
 	// List returns a list of buckets within the ObjectScale object store
 	List(params map[string]string) (*model.BucketList, error)
 
+	// GetPolicy returns current policy for a bucket as json string.
+	GetPolicy(bucketName string, param map[string]string) (string, error)
+
 	// Get returns a bucket in the ObjectScale object store
 	Get(name string, params map[string]string) (*model.Bucket, error)
 
