@@ -19,7 +19,7 @@ type Buckets struct {
 func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
-		Path: path.Join("object", "bucket", name, "info"),
+		Path:        path.Join("object", "bucket", name, "info"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
@@ -63,6 +63,21 @@ func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string,
 	return string(policy), err
 }
 
+func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[string]string) error {
+	req := client.Request{
+		Method:      http.MethodPut,
+		Path:        fmt.Sprintf("object/bucket/%s/policy", bucketName),
+		ContentType: client.ContentTypeJSON,
+		Params:      param,
+		Body:        json.RawMessage(policy),
+	}
+	err := b.Client.MakeRemoteCall(req, nil)
+	if err != nil {
+		return err
+	}
+	return err
+}
+
 // Create implements the buckets interface
 func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 	req := client.Request{
@@ -82,9 +97,9 @@ func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 // Delete implements the buckets interface
 func (b *Buckets) Delete(name string, namespace string) error {
 	req := client.Request{
-		Method: http.MethodPost,
-		Path: path.Join("object", "bucket", name, "deactivate"),
-		Params: map[string]string{"namespace": namespace},
+		Method:      http.MethodPost,
+		Path:        path.Join("object", "bucket", name, "deactivate"),
+		Params:      map[string]string{"namespace": namespace},
 		ContentType: client.ContentTypeJSON,
 	}
 	err := b.Client.MakeRemoteCall(req, nil)

@@ -105,7 +105,11 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	case ContentTypeXML:
 		obj, err = xml.Marshal(r.Body)
 	case ContentTypeJSON:
-		obj, err = json.Marshal(r.Body)
+		if raw, ok := r.Body.(json.RawMessage); ok {
+			obj, err = raw.MarshalJSON()
+		} else {
+			obj, err = json.Marshal(r.Body)
+		}
 	default:
 		return errors.New("invalid content-type")
 	}
@@ -171,12 +175,16 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 		// without error
 		return nil
 	default:
+		if len(body) == 0 {
+			return nil
+		}
 		switch r.ContentType {
 		case ContentTypeXML:
 			if err = xml.Unmarshal(body, into); err != nil {
 				return err
 			}
 		case ContentTypeJSON:
+
 			if err = json.Unmarshal(body, into); err != nil {
 				return err
 			}

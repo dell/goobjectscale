@@ -19,6 +19,9 @@ type BucketsInterface interface {
 	// GetPolicy returns current policy for a bucket as json string.
 	GetPolicy(bucketName string, param map[string]string) (string, error)
 
+	// UpdatePolicy adds/replace new policy to the existing bucket.
+	UpdatePolicy(bucketName string, policy string, param map[string]string) error
+
 	// Get returns a bucket in the ObjectScale object store
 	Get(name string, params map[string]string) (*model.Bucket, error)
 

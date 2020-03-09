@@ -144,9 +144,15 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 	return nil, errors.New("not found")
 }
 
-// Get implements the buckets API
+// GetPolicy implements the buckets API
 func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string, error) {
 	return b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])], nil
+}
+
+// UpdatePolicy implements the buckets API
+func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[string]string) error {
+	b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
+	return nil
 }
 
 // Create implements the buckets API
