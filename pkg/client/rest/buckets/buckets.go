@@ -47,6 +47,7 @@ func (b *Buckets) List(params map[string]string) (*model.BucketList, error) {
 	return bucketList, nil
 }
 
+// GetPolicy implements the buckets interface
 func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
@@ -63,6 +64,7 @@ func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string,
 	return string(policy), err
 }
 
+// UpdatePolicy implements the buckets interface
 func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPut,

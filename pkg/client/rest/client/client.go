@@ -184,7 +184,6 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 				return err
 			}
 		case ContentTypeJSON:
-
 			if err = json.Unmarshal(body, into); err != nil {
 				return err
 			}
