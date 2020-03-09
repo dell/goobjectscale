@@ -42,7 +42,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 
 	return &ClientSet{
 		buckets: &Buckets{
-			items: bucketList,
+			items:  bucketList,
+			policy: policy,
 		},
 		objectUser: NewObjectUsers(blobUsers, userSecrets, userInfoList),
 	}
@@ -146,7 +147,10 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 
 // GetPolicy implements the buckets API
 func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string, error) {
-	return b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])], nil
+	if policy, ok := b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])]; ok {
+		return policy, nil
+	}
+	return "", nil
 }
 
 // UpdatePolicy implements the buckets API
