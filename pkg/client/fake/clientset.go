@@ -155,8 +155,19 @@ func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string,
 
 // UpdatePolicy implements the buckets API
 func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[string]string) error {
-	b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
-	return nil
+	found := false
+	for _, bucket := range b.items {
+		if bucket.Name == bucketName {
+			found = true
+			break
+		}
+	}
+	if found {
+ 		b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
+		return nil
+	} else {
+		 return errors.New("bucket not found")
+ 	}
 }
 
 // Create implements the buckets API

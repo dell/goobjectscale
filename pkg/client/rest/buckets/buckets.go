@@ -73,11 +73,7 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[strin
 		Params:      param,
 		Body:        json.RawMessage(policy),
 	}
-	err := b.Client.MakeRemoteCall(req, nil)
-	if err != nil {
-		return err
-	}
-	return err
+	return b.Client.MakeRemoteCall(req, nil)
 }
 
 // Create implements the buckets interface
