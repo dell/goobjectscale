@@ -42,4 +42,10 @@ type ObjectUserInterface interface {
 
 	// GetSecret returns information about object user secrets.
 	GetSecret(uid string, params map[string]string) (*model.ObjectUserSecret, error)
+
+	// CreateSecret creates a secret for an object user within the Objectscale object store
+	CreateSecret(uid string, req model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error)
+
+	// DeleteSecret delete a secret for an object user within the Objectscale object store
+	DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error
 }

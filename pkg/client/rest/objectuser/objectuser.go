@@ -3,9 +3,10 @@ package objectuser
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
-	"net/http"
 )
 
 // ObjectUser is a REST implementation of the object user interface
@@ -43,6 +44,35 @@ func (o *ObjectUser) GetSecret(uid string, params map[string]string) (*model.Obj
 		return nil, err
 	}
 	return ou, nil
+}
+
+// CreateSecret creates secret for a user.
+func (o *ObjectUser) CreateSecret(uid string, key model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
+	req := client.Request{
+		Method:      http.MethodPost,
+		Path:        fmt.Sprintf("/object/user-secret-keys/%s", uid),
+		ContentType: client.ContentTypeJSON,
+		Body:        &key,
+		Params:      params,
+	}
+	resp := &model.ObjectUserSecretKeyCreateRes{}
+	err := o.Client.MakeRemoteCall(req, resp)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// DeleteSecret deletes secret for a user.
+func (o *ObjectUser) DeleteSecret(uid string, key model.ObjectUserSecretKeyDeleteReq, params map[string]string) error {
+	req := client.Request{
+		Method:      http.MethodPost,
+		Path:        fmt.Sprintf("/object/user-secret-keys/%s/deactivate", uid),
+		ContentType: client.ContentTypeJSON,
+		Body:        &key,
+		Params:      params,
+	}
+	return o.Client.MakeRemoteCall(req, nil)
 }
 
 // List returns a list of object users within the ObjectScale object store.

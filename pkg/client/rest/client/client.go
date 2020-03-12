@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -116,6 +117,7 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	if err != nil {
 		return err
 	}
+	log.Println("vinod: ", string(obj))
 	u, err := url.Parse(c.Endpoint)
 	if err != nil {
 		return err
