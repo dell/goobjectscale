@@ -116,6 +116,55 @@ func (o *ObjectUsers) GetSecret(uid string, params map[string]string) (*model.Ob
 	return o.Secrets[uid], nil
 }
 
+// CreateSecret will create a specific secret
+func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
+	if _, ok := o.Secrets[uid]; !ok {
+		o.Secrets[uid].SecretKey1 = req.SecretKey
+		return &model.ObjectUserSecretKeyCreateRes{
+			SecretKey: req.SecretKey,
+		}, nil
+	}
+
+	switch {
+	case o.Secrets[uid].SecretKey1 != "" && o.Secrets[uid].SecretKey2 != "":
+		return nil, fmt.Errorf("User %s already has 2 valid keys", uid)
+	case o.Secrets[uid].SecretKey1 != "":
+		o.Secrets[uid].SecretKey2 = req.SecretKey
+		return &model.ObjectUserSecretKeyCreateRes{
+			SecretKey: req.SecretKey,
+		}, nil
+	default:
+		o.Secrets[uid].SecretKey1 = req.SecretKey
+		return &model.ObjectUserSecretKeyCreateRes{
+			SecretKey: req.SecretKey,
+		}, nil
+	}
+}
+
+// DeleteSecret will delete a specific secret
+func (o *ObjectUsers) DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error {
+	if _, ok := o.Secrets[uid]; !ok {
+		return fmt.Errorf("User %s not found", uid)
+	}
+	switch req.SecretKey {
+	case o.Secrets[uid].SecretKey1:
+		o.Secrets[uid].SecretKey1 = o.Secrets[uid].SecretKey2
+		clearSecretKey2(o.Secrets[uid])
+		return nil
+	case o.Secrets[uid].SecretKey2:
+		clearSecretKey2(o.Secrets[uid])
+		return nil
+	default:
+		return fmt.Errorf("User %s secret key not found", uid)
+	}
+}
+
+func clearSecretKey2(key *model.ObjectUserSecret) {
+	key.SecretKey2 = ""
+	key.KeyExpiryTimestamp2 = ""
+	key.KeyExpiryTimestamp2 = ""
+}
+
 // GetSecret returns information about object user secrets.
 func (o *ObjectUsers) GetInfo(uid string, params map[string]string) (*model.ObjectUserInfo, error) {
 	if _, ok := o.InfoList[uid]; !ok {
@@ -163,11 +212,11 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[strin
 		}
 	}
 	if found {
- 		b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
+		b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
 		return nil
 	} else {
-		 return errors.New("bucket not found")
- 	}
+		return errors.New("bucket not found")
+	}
 }
 
 // Create implements the buckets API

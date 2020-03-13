@@ -2,14 +2,15 @@ package objectuser_test
 
 import (
 	"crypto/tls"
+	"log"
+	"net/http"
+	"testing"
+
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/stretchr/testify/require"
-	"log"
-	"net/http"
-	"testing"
 )
 
 var (
@@ -58,8 +59,8 @@ func TestObjectUser_List(t *testing.T) {
 }
 
 var objectUserGetInfoTest = []struct {
-	in string
-	out      *model.ObjectUserInfo
+	in      string
+	out     *model.ObjectUserInfo
 	withErr bool
 }{
 	{
@@ -67,12 +68,12 @@ var objectUserGetInfoTest = []struct {
 		out: &model.ObjectUserInfo{
 			Namespace: "small-operator-acceptance",
 			Name:      "zmvodjnrbmjxagvwcxf5cg==",
-			Created: "Mon Nov 25 09:55:38 GMT 2019",
+			Created:   "Mon Nov 25 09:55:38 GMT 2019",
 		},
 	},
 	{
-		in: "non existed UID",
-		out:      nil,
+		in:      "non existed UID",
+		out:     nil,
 		withErr: true,
 	},
 }
@@ -92,24 +93,24 @@ func TestObjectUser_GetInfo(t *testing.T) {
 }
 
 var objectUserGetSecretTest = []struct {
-	in string
-	out      *model.ObjectUserSecret
+	in      string
+	out     *model.ObjectUserSecret
 	withErr bool
 }{
 	{
 		in: "zmvodjnrbmjxagvwcxf5cg==",
 		out: &model.ObjectUserSecret{
-			SecretKey1: "cmowa2dxeXZrM2U1NWptdHdrdTB6a3B4YnRub3RwZHY=",
+			SecretKey1:    "cmowa2dxeXZrM2U1NWptdHdrdTB6a3B4YnRub3RwZHY=",
 			KeyTimestamp1: "2019-11-25 09:56:32.364",
 			Link: model.Link{
 				HREF: "/object/secret-keys",
-				Rel: "self",
+				Rel:  "self",
 			},
 		},
 	},
 	{
-		in: "non existed UID",
-		out:      nil,
+		in:      "non existed UID",
+		out:     nil,
 		withErr: true,
 	},
 }
@@ -124,6 +125,77 @@ func TestObjectUser_GetSecret(t *testing.T) {
 				require.NoError(t, err)
 			}
 			require.Equal(t, data, tt.out)
+		})
+	}
+}
+
+var objectUserCreateSecretTest = []struct {
+	in1     string
+	in2     model.ObjectUserSecretKeyCreateReq
+	out     *model.ObjectUserSecretKeyCreateRes
+	withErr bool
+}{
+	{
+		in1: "zmvodjnrbmjxagvwcxf5cg==",
+		in2: model.ObjectUserSecretKeyCreateReq{
+			SecretKey: "aaaaaa",
+		},
+		out: &model.ObjectUserSecretKeyCreateRes{
+			SecretKey:          "aaaaaa",
+			KeyTimeStamp:       "2020-03-12 19:45:00.333",
+			KeyExpiryTimestamp: "",
+		},
+	},
+	{
+		in1:     "non existed UID",
+		out:     nil,
+		withErr: true,
+	},
+}
+
+func TestObjectUser_CreateSecret(t *testing.T) {
+	for _, tt := range objectUserCreateSecretTest {
+		t.Run(tt.in1, func(t *testing.T) {
+			data, err := clientset.ObjectUser().CreateSecret(tt.in1, tt.in2, nil)
+			if tt.withErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+			require.Equal(t, data, tt.out)
+		})
+	}
+}
+
+var objectUserDeleteSecretTest = []struct {
+	in1     string
+	in2     model.ObjectUserSecretKeyDeleteReq
+	withErr bool
+}{
+	{
+		in1: "zmvodjnrbmjxagvwcxf5cg==",
+		in2: model.ObjectUserSecretKeyDeleteReq{
+			SecretKey: "aaaaaa",
+		},
+	},
+	{
+		in1: "non existed UID",
+		in2: model.ObjectUserSecretKeyDeleteReq{
+			SecretKey: "aaaaaa",
+		},
+		withErr: true,
+	},
+}
+
+func TestObjectUser_DeleteSecret(t *testing.T) {
+	for _, tt := range objectUserDeleteSecretTest {
+		t.Run(tt.in1, func(t *testing.T) {
+			err := clientset.ObjectUser().DeleteSecret(tt.in1, tt.in2, nil)
+			if tt.withErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
 		})
 	}
 }

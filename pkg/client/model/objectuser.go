@@ -29,3 +29,24 @@ type ObjectUserSecret struct {
 	KeyExpiryTimestamp2 string `json:"key_expiry_timestamp_2"`
 	Link                Link   `json:"link"`
 }
+
+// ObjectUserSecretKeyCreateReq to marshal ObjectUserSecretKey create req
+type ObjectUserSecretKeyCreateReq struct {
+	SecretKey          string `json:"secretkey"`
+	Namespace          string `json:"namespace"`
+	ExistingKeyExpTime string `json:"existing_key_expire_time_mins,omitempty"`
+}
+
+// ObjectUserSecretKeyDeleteReq to marshal ObjectUserSecretKey delete req
+type ObjectUserSecretKeyDeleteReq struct {
+	SecretKey string `json:"secret_key"`
+	Namespace string `json:"namespace"`
+}
+
+// ObjectUserSecretKeyRes to unmarshal ObjectUserSecretKey create resp
+type ObjectUserSecretKeyCreateRes struct {
+	SecretKey          string `json:"secret_key"`
+	KeyTimeStamp       string `json:"key_timestamp"`
+	KeyExpiryTimestamp string `json:"key_expiry_timestamp"`
+	Link               Link   `json:"link"`
+}
