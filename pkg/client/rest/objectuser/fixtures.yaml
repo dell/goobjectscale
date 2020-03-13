@@ -156,3 +156,54 @@ interactions:
     status: 200 OK
     code: 200
     duration: ""
+- request:
+    body: '{"namespace": "ecs-cluster", "secretkey": "aaaaaa"}'
+    form: {}
+    headers:
+      Accept:
+        - application/json
+        - application/xml
+      Content-Type:
+        - application/json
+      X-Sds-Auth-Token:
+        - BAAcaUkxTjFiOER3bU1rVTNIVEdwa2s4WGlGcUFrPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjUzYTA2NjJmLTNhOWMtNDI2My04ZTUyLTEzZDY2ZjUxMTBmOQIADTE1NzQ3NjEyMTQzNTkDAC51cm46VG9rZW46MDRmNGUzZmItYjVhOS00ZmQ2LWJkNjMtY2E5NzQ2YzhkYjIwAgAC0A8=
+    url: https://testserver:443/object/user-secret-keys/zmvodjnrbmjxagvwcxf5cg==
+    method: POST
+  response:
+    body: '{"secret_key": "aaaaaa","key_timestamp": "2020-03-12 19:45:00.333","key_expiry_timestamp": ""}'
+    headers:
+      Connection:
+        - keep-alive
+      Content-Type:
+        - application/json
+      Date:
+        - Wed, 27 Nov 2019 07:53:13 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: '{"namespace": "ecs-cluster", "secretkey": "aaaaaa"}'
+    form: {}
+    headers:
+      Accept:
+        - application/json
+        - application/xml
+      Content-Type:
+        - application/json
+      X-Sds-Auth-Token:
+        - BAAcaUkxTjFiOER3bU1rVTNIVEdwa2s4WGlGcUFrPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjUzYTA2NjJmLTNhOWMtNDI2My04ZTUyLTEzZDY2ZjUxMTBmOQIADTE1NzQ3NjEyMTQzNTkDAC51cm46VG9rZW46MDRmNGUzZmItYjVhOS00ZmQ2LWJkNjMtY2E5NzQ2YzhkYjIwAgAC0A8=
+    url: https://testserver:443/object/user-secret-keys/zmvodjnrbmjxagvwcxf5cg==/deactivate
+    method: POST
+  response:
+    body: 'null'
+    headers:
+      Connection:
+        - keep-alive
+      Content-Type:
+        - application/json
+      Date:
+        - Wed, 27 Nov 2019 07:53:13 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+

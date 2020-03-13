@@ -30,7 +30,7 @@ type ObjectUserSecret struct {
 	Link                Link   `json:"link"`
 }
 
-// ObjectUserSecretKeyCreateReq to marshal ObjectUserSecretKey delete req
+// ObjectUserSecretKeyCreateReq to marshal ObjectUserSecretKey create req
 type ObjectUserSecretKeyCreateReq struct {
 	SecretKey          string `json:"secretkey"`
 	Namespace          string `json:"namespace"`
