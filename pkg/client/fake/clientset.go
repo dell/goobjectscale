@@ -119,7 +119,9 @@ func (o *ObjectUsers) GetSecret(uid string, params map[string]string) (*model.Ob
 // CreateSecret will create a specific secret
 func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
 	if _, ok := o.Secrets[uid]; !ok {
-		o.Secrets[uid].SecretKey1 = req.SecretKey
+		o.Secrets[uid] = &model.ObjectUserSecret{
+			SecretKey1: req.SecretKey,
+		}
 		return &model.ObjectUserSecretKeyCreateRes{
 			SecretKey: req.SecretKey,
 		}, nil
