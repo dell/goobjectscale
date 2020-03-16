@@ -34,7 +34,7 @@ type ObjectUserSecret struct {
 type ObjectUserSecretKeyCreateReq struct {
 	SecretKey          string `json:"secretkey"`
 	Namespace          string `json:"namespace"`
-	ExistingKeyExpTime string `json:"existing_key_expire_time_mins,omitempty"`
+	ExistingKeyExpTime string `json:"existing_key_expiry_time_mins,omitempty"`
 }
 
 // ObjectUserSecretKeyDeleteReq to marshal ObjectUserSecretKey delete req
