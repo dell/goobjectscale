@@ -17,13 +17,13 @@ type ClientSet struct {
 }
 
 // Returns a new client set based on the provided REST client parameters
-func NewClientSet(u string, p string, e string, h *http.Client, oh string) *ClientSet {
+func NewClientSet(u string, p string, e string, h *http.Client, overrideHdr bool) *ClientSet {
 	c := &client.Client{
 		Username:       u,
 		Password:       p,
 		Endpoint:       e,
 		HTTPClient:     h,
-		OverrideHeader: oh,
+		OverrideHeader: overrideHdr,
 	}
 	return &ClientSet{
 		client:     c,
