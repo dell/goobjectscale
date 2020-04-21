@@ -30,7 +30,7 @@ type Client struct {
 	authRetries int
 
 	// Should X-EMC-Override header be added into the request
-	OverrideHeader string
+	OverrideHeader bool 
 }
 
 func (c *Client) login() error {
@@ -143,8 +143,8 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	req.Header.Add("Content-Type", r.ContentType)
 	req.Header.Add("Accept", "application/xml")
 	req.Header.Add("X-SDS-AUTH-TOKEN", c.token)
-	if c.OverrideHeader != "" {
-		req.Header.Add("X-EMC-Override", c.OverrideHeader)
+	if c.OverrideHeader {
+		req.Header.Add("X-EMC-Override", "true")
 	}
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
