@@ -76,6 +76,17 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[strin
 	return b.Client.MakeRemoteCall(req, nil)
 }
 
+// DeletePolicy implements the buckets interface
+func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error {
+	req := client.Request{
+		Method:      http.MethodDelete,
+		Path:        fmt.Sprintf("object/bucket/%s/policy", bucketName),
+		ContentType: client.ContentTypeJSON,
+		Params:      param,
+	}
+	return b.Client.MakeRemoteCall(req, nil)
+}
+
 // Create implements the buckets interface
 func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 	req := client.Request{
