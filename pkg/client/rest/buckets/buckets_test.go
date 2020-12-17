@@ -23,9 +23,9 @@ func TestBuckets(t *testing.T) {
 var _ = Describe("Buckets", func() {
 
 	var (
-		r *recorder.Recorder
+		r         *recorder.Recorder
 		clientset *rest.ClientSet
-		err error
+		err       error
 	)
 
 	BeforeSuite(func() {
@@ -43,6 +43,7 @@ var _ = Describe("Buckets", func() {
 			"ChangeMe",
 			"https://testserver",
 			newRecordedHTTPClient(r),
+			false,
 		)
 	})
 
@@ -77,7 +78,7 @@ var _ = Describe("Buckets", func() {
 	Context("#Get", func() {
 		var (
 			bucket *model.Bucket
-			err error
+			err    error
 		)
 
 		Context("with no params", func() {
@@ -98,21 +99,21 @@ var _ = Describe("Buckets", func() {
 	Context("#Create", func() {
 		var (
 			bucket *model.Bucket
-			err error
+			err    error
 		)
 
 		Context("without one existing", func() {
 			BeforeEach(func() {
 				createBucket := model.Bucket{
-					Name: "testbucket1",
+					Name:             "testbucket1",
 					ReplicationGroup: "urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global",
-					Namespace: "130820808912778549",
+					Namespace:        "130820808912778549",
 				}
 				bucket, err = clientset.Buckets().Create(createBucket)
 			})
 
 			AfterEach(func() {
-				delErr := clientset.Buckets().Delete("testbucket1","130820808912778549")
+				delErr := clientset.Buckets().Delete("testbucket1", "130820808912778549")
 				if delErr != nil {
 					panic(delErr)
 				}
@@ -134,9 +135,9 @@ var _ = Describe("Buckets", func() {
 		Context("with no params", func() {
 			BeforeEach(func() {
 				createBucket := model.Bucket{
-					Name: "testbucket1",
+					Name:             "testbucket1",
 					ReplicationGroup: "urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global",
-					Namespace: "130820808912778549",
+					Namespace:        "130820808912778549",
 				}
 				_, createErr := clientset.Buckets().Create(createBucket)
 				if createErr != nil {

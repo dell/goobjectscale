@@ -204,6 +204,23 @@ func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string,
 	return "", nil
 }
 
+// DeletePolicy implements the buckets API
+func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error {
+	found := false
+	for _, bucket := range b.items {
+		if bucket.Name == bucketName {
+			found = true
+			break
+		}
+	}
+	if found {
+		delete(b.policy, fmt.Sprintf("%s/%s", bucketName, param["namespace"]))
+		return nil
+	} else {
+		return errors.New("bucket not found")
+	}
+}
+
 // UpdatePolicy implements the buckets API
 func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[string]string) error {
 	found := false

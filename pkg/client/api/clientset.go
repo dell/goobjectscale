@@ -22,6 +22,9 @@ type BucketsInterface interface {
 	// UpdatePolicy adds/replaces new policy to the existing bucket.
 	UpdatePolicy(bucketName string, policy string, param map[string]string) error
 
+	// DeletePolicy removes a policy from an existing bucket.
+	DeletePolicy(bucketName string, param map[string]string) error
+
 	// Get returns a bucket in the ObjectScale object store
 	Get(name string, params map[string]string) (*model.Bucket, error)
 
