@@ -251,6 +251,14 @@ func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 		}
 	}
 	b.items = append(b.items, createParam)
+	if createParam.BlockSize != -1 && createParam.NotificationSize != -1 {
+		b.quota[fmt.Sprintf("%s/%s", createParam.Name, createParam.Namespace)] = model.BucketQuota{
+			Namespace:        createParam.Namespace,
+			BucketName:       createParam.Name,
+			BlockSize:        createParam.BlockSize,
+			NotificationSize: createParam.NotificationSize,
+		}
+	}
 	return &createParam, nil
 }
 
