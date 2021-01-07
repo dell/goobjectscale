@@ -18,6 +18,21 @@ type BucketCreate struct {
 	Bucket
 }
 
+// BucketQuota is a bucket quota object
+type BucketQuota struct {
+	// BucketName is bucket name
+	BucketName string `json:"bucket_name" xml:"bucket_name"`
+
+	// Namespace is the namespace
+	Namespace string `json:"namespace" xml:"namespace"`
+
+	// BlockSize is the bucket size at which new object creations will be blocked
+	BlockSize int64 `json:"block_size,omit_empty,omitempty" xml:"block_size,omit_empty,omitempty"`
+
+	// NotificationSize is the bucket size at which the users will be notified
+	NotificationSize int64 `json:"notification_size,omit_empty" xml:"notification_size,omit_empty"`
+}
+
 // Bucket is an object storage bucket
 type Bucket struct {
 	// XMLName is the name of the xml tag used XML marshalling
@@ -119,7 +134,6 @@ type Bucket struct {
 
 	// MinMaxGovenor enforces minimum and maximum retention for bucket objects
 	MinMaxGovenor `json:"min_max_govenor,omitempty" xml:"min_max_govenor,omitempty"`
-
 }
 
 // BucketList is a list of object storage buckets

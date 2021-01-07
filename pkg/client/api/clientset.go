@@ -33,6 +33,15 @@ type BucketsInterface interface {
 
 	// Delete deletes bucket from the ObjectScale object store
 	Delete(name string, namespace string) error
+
+	// Gets the quota for the given bucket and namespace.
+	GetQuota(namespace string, bucketName string) (*model.BucketQuota, error)
+
+	// Updates the quota for the specified bucket.
+	UpdateQuota(bucketQuota model.BucketQuota) error
+
+	// Deletes the quota setting for the given bucket and namespace.
+	DeleteQuota(namespace string, bucketName string) error
 }
 
 // ObjectUserInterface represents an object user resource client interface.

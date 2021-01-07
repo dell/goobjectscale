@@ -89,6 +89,12 @@ func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error
 
 // Create implements the buckets interface
 func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
+	if createParam.BlockSize == -1 || createParam.NotificationSize == -1 {
+		err := b.DeleteQuota(createParam.Namespace, createParam.Name)
+		if err != nil {
+			return nil, err
+		}
+	}
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        "/object/bucket",
@@ -116,4 +122,42 @@ func (b *Buckets) Delete(name string, namespace string) error {
 		return err
 	}
 	return nil
+}
+
+// GetQuota gets the quota for the given bucket and namespace.
+func (b *Buckets) GetQuota(namespace string, bucketName string) (*model.BucketQuota, error) {
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketName),
+		ContentType: client.ContentTypeJSON,
+		Params:      map[string]string{"namespace": namespace},
+	}
+	var bucketQuota model.BucketQuota
+	err := b.Client.MakeRemoteCall(req, &bucketQuota)
+	if err != nil {
+		return nil, err
+	}
+	return &bucketQuota, err
+}
+
+// UpdateQuota updates the quota for the specified bucket.
+func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuota) error {
+	req := client.Request{
+		Method:      http.MethodPut,
+		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketQuota.BucketName),
+		ContentType: client.ContentTypeJSON,
+		Body:        bucketQuota,
+	}
+	return b.Client.MakeRemoteCall(req, nil)
+}
+
+// DeleteQuota deletes the quota setting for the given bucket and namespace.
+func (b *Buckets) DeleteQuota(namespace string, bucketName string) error {
+	req := client.Request{
+		Method:      http.MethodDelete,
+		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketName),
+		ContentType: client.ContentTypeJSON,
+		Params:      map[string]string{"namespace": namespace},
+	}
+	return b.Client.MakeRemoteCall(req, nil)
 }
