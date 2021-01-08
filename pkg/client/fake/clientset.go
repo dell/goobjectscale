@@ -274,15 +274,8 @@ func (b *Buckets) Delete(name string, namespace string) error {
 }
 
 // GetQuota gets the quota for the given bucket and namespace.
-func (b *Buckets) GetQuota(namespace string, bucketName string) (*model.BucketQuota, error) {
-	found := false
-	for _, bucket := range b.items {
-		if bucket.Name == bucketName {
-			found = true
-			break
-		}
-	}
-	if found {
+func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQuota, error) {
+	if b.BucketExists(bucketName) {
 		if quota, ok := b.quota[fmt.Sprintf("%s/%s", bucketName, namespace)]; ok {
 			return &quota, nil
 		}
@@ -293,14 +286,7 @@ func (b *Buckets) GetQuota(namespace string, bucketName string) (*model.BucketQu
 
 // UpdateQuota updates the quota for the specified bucket.
 func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuota) error {
-	found := false
-	for _, bucket := range b.items {
-		if bucket.Name == bucketQuota.BucketName {
-			found = true
-			break
-		}
-	}
-	if found {
+	if b.BucketExists(bucketQuota.BucketName) {
 		if _, ok := b.quota[fmt.Sprintf("%s/%s", bucketQuota.BucketName, bucketQuota.Namespace)]; ok {
 			b.quota[fmt.Sprintf("%s/%s", bucketQuota.BucketName, bucketQuota.Namespace)] = bucketQuota
 			return nil
@@ -311,15 +297,8 @@ func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuota) error {
 }
 
 // DeleteQuota deletes the quota setting for the given bucket and namespace.
-func (b *Buckets) DeleteQuota(namespace string, bucketName string) error {
-	found := false
-	for _, bucket := range b.items {
-		if bucket.Name == bucketName {
-			found = true
-			break
-		}
-	}
-	if found {
+func (b *Buckets) DeleteQuota(bucketName string, namespace string) error {
+	if b.BucketExists(bucketName) {
 		if _, ok := b.quota[fmt.Sprintf("%s/%s", bucketName, namespace)]; ok {
 			delete(b.policy, fmt.Sprintf("%s/%s", bucketName, namespace))
 			return nil
@@ -327,4 +306,16 @@ func (b *Buckets) DeleteQuota(namespace string, bucketName string) error {
 		return errors.New("not found quota")
 	}
 	return errors.New("bucket not found")
+}
+
+// BucketExists to get the bucket whether exist
+func (b *Buckets) BucketExists(bucketName string) bool {
+	found := false
+	for _, bucket := range b.items {
+		if bucket.Name == bucketName {
+			found = true
+			break
+		}
+	}
+	return found
 }
