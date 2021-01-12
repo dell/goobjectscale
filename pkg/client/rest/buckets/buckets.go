@@ -119,14 +119,14 @@ func (b *Buckets) Delete(name string, namespace string) error {
 }
 
 // GetQuota gets the quota for the given bucket and namespace.
-func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQuota, error) {
+func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.Bucket, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketName),
 		ContentType: client.ContentTypeJSON,
 		Params:      map[string]string{"namespace": namespace},
 	}
-	bucketQuota := &model.BucketQuota{}
+	bucketQuota := &model.Bucket{}
 	err := b.Client.MakeRemoteCall(req, bucketQuota)
 	if err != nil {
 		return nil, err
@@ -135,10 +135,10 @@ func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQu
 }
 
 // UpdateQuota updates the quota for the specified bucket.
-func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuota) error {
+func (b *Buckets) UpdateQuota(bucketQuota model.Bucket) error {
 	req := client.Request{
 		Method:      http.MethodPut,
-		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketQuota.BucketName),
+		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketQuota.Name),
 		ContentType: client.ContentTypeJSON,
 		Body:        bucketQuota,
 	}

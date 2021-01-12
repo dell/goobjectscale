@@ -18,7 +18,7 @@ type ClientSet struct {
 func NewClientSet(objs ...interface{}) *ClientSet {
 	var (
 		policy       = make(map[string]string)
-		quota        = make(map[string]model.BucketQuota)
+		quota        = make(map[string]model.Bucket)
 		bucketList   []model.Bucket
 		blobUsers    []model.BlobUser
 		userSecrets  []UserSecret
@@ -28,10 +28,9 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		switch object := o.(type) {
 		case *model.Bucket:
 			bucketList = append(bucketList, *object)
+			quota[fmt.Sprintf("%s/%s", object.Name, object.Namespace)] = *object
 		case *BucketPolicy:
 			policy[fmt.Sprintf("%s/%s", object.BucketName, object.Namespace)] = object.Policy
-		case *model.BucketQuota:
-			quota[fmt.Sprintf("%s/%s", object.BucketName, object.Namespace)] = *object
 		case *model.BlobUser:
 			blobUsers = append(blobUsers, *object)
 		case *UserSecret:
@@ -183,7 +182,7 @@ func (o *ObjectUsers) GetInfo(uid string, params map[string]string) (*model.Obje
 type Buckets struct {
 	items  []model.Bucket
 	policy map[string]string
-	quota  map[string]model.BucketQuota
+	quota  map[string]model.Bucket
 }
 
 // List implements the buckets API
@@ -251,14 +250,6 @@ func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 		}
 	}
 	b.items = append(b.items, createParam)
-	if createParam.BlockSize != -1 && createParam.NotificationSize != -1 {
-		b.quota[fmt.Sprintf("%s/%s", createParam.Name, createParam.Namespace)] = model.BucketQuota{
-			Namespace:        createParam.Namespace,
-			BucketName:       createParam.Name,
-			BlockSize:        createParam.BlockSize,
-			NotificationSize: createParam.NotificationSize,
-		}
-	}
 	return &createParam, nil
 }
 
@@ -274,7 +265,7 @@ func (b *Buckets) Delete(name string, namespace string) error {
 }
 
 // GetQuota gets the quota for the given bucket and namespace.
-func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQuota, error) {
+func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.Bucket, error) {
 	if b.BucketExists(bucketName) {
 		if quota, ok := b.quota[fmt.Sprintf("%s/%s", bucketName, namespace)]; ok {
 			return &quota, nil
@@ -285,10 +276,10 @@ func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQu
 }
 
 // UpdateQuota updates the quota for the specified bucket.
-func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuota) error {
-	if b.BucketExists(bucketQuota.BucketName) {
-		if _, ok := b.quota[fmt.Sprintf("%s/%s", bucketQuota.BucketName, bucketQuota.Namespace)]; ok {
-			b.quota[fmt.Sprintf("%s/%s", bucketQuota.BucketName, bucketQuota.Namespace)] = bucketQuota
+func (b *Buckets) UpdateQuota(bucketQuota model.Bucket) error {
+	if b.BucketExists(bucketQuota.Name) {
+		if _, ok := b.quota[fmt.Sprintf("%s/%s", bucketQuota.Name, bucketQuota.Namespace)]; ok {
+			b.quota[fmt.Sprintf("%s/%s", bucketQuota.Name, bucketQuota.Namespace)] = bucketQuota
 			return nil
 		}
 		return errors.New("not found quota")
