@@ -138,7 +138,7 @@ func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQu
 func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
 	req := client.Request{
 		Method:      http.MethodPut,
-		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketQuota.Name),
+		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketQuota.BucketName),
 		ContentType: client.ContentTypeXML,
 		Body:        bucketQuota,
 	}

@@ -265,8 +265,8 @@ func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQu
 	for _, bucket := range b.items {
 		if bucket.Name == bucketName {
 			return &model.BucketQuotaInfo{
-				BucketQuota: model.BucketQuota{
-					Name:             bucket.Name,
+				BucketName: bucket.Name,
+				Bucket: model.Bucket{
 					Namespace:        bucket.Namespace,
 					NotificationSize: bucket.NotificationSize,
 					BlockSize:        bucket.BlockSize,
@@ -280,7 +280,7 @@ func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQu
 // UpdateQuota updates the quota for the specified bucket.
 func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
 	for _, bucket := range b.items {
-		if bucket.Name == bucketQuota.Name {
+		if bucket.Name == bucketQuota.BucketName {
 			bucket.BlockSize = bucketQuota.BlockSize
 			bucket.NotificationSize = bucketQuota.NotificationSize
 			return nil
