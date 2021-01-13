@@ -261,17 +261,24 @@ func (b *Buckets) Delete(name string, namespace string) error {
 }
 
 // GetQuota gets the quota for the given bucket and namespace.
-func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.Bucket, error) {
+func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQuotaInfo, error) {
 	for _, bucket := range b.items {
 		if bucket.Name == bucketName {
-			return &bucket, nil
+			return &model.BucketQuotaInfo{
+				BucketQuota: model.BucketQuota{
+					Name:             bucket.Name,
+					Namespace:        bucket.Namespace,
+					NotificationSize: bucket.NotificationSize,
+					BlockSize:        bucket.BlockSize,
+				},
+			}, nil
 		}
 	}
 	return nil, errors.New("not found")
 }
 
 // UpdateQuota updates the quota for the specified bucket.
-func (b *Buckets) UpdateQuota(bucketQuota model.Bucket) error {
+func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
 	for _, bucket := range b.items {
 		if bucket.Name == bucketQuota.Name {
 			bucket.BlockSize = bucketQuota.BlockSize

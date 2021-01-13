@@ -18,6 +18,40 @@ type BucketCreate struct {
 	Bucket
 }
 
+// BucketQuotaUpdate is the quota updating with an alternate XML tag name
+type BucketQuotaUpdate struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"bucket_quota_param"`
+
+	BucketQuota
+}
+
+// BucketQuotaInfo is the quota infomation with an alternate XML tag name
+type BucketQuotaInfo struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"bucket_quota_details"`
+
+	BucketQuota
+}
+
+// BucketQuota is the quota struct specific field
+type BucketQuota struct {
+	XMLName xml.Name `xml:"bucket_quota"`
+
+	// BlockSize is the bucket size at which new object creations will be
+	// blocked
+	BlockSize int64 `xml:"blockSize,omit_empty,omitempty"`
+
+	// NotificationSize is the bucket size at which the users will be notified
+	NotificationSize int64 `xml:"notificationSize,omit_empty"`
+
+	// Name is the name of the cluster instance
+	Name string `xml:"bucketname"`
+
+	// Namespace is the namespace of the bucket
+	Namespace string `xml:"namespace,omitempty"`
+}
+
 // Bucket is an object storage bucket
 type Bucket struct {
 	// XMLName is the name of the xml tag used XML marshalling
