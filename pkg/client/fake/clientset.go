@@ -286,8 +286,8 @@ func (b *Buckets) UpdateQuota(bucketQuota model.Bucket) error {
 func (b *Buckets) DeleteQuota(bucketName string, namespace string) error {
 	for _, bucket := range b.items {
 		if bucket.Name == bucketName {
-			bucket.BlockSize = 0
-			bucket.NotificationSize = 0
+			bucket.BlockSize = -1
+			bucket.NotificationSize = -1
 			return nil
 		}
 	}
