@@ -18,6 +18,7 @@ type ClientSet struct {
 func NewClientSet(objs ...interface{}) *ClientSet {
 	var (
 		policy       = make(map[string]string)
+		quota        = make(map[string]*model.BucketQuotaInfo)
 		bucketList   []model.Bucket
 		blobUsers    []model.BlobUser
 		userSecrets  []UserSecret
@@ -27,6 +28,10 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		switch object := o.(type) {
 		case *model.Bucket:
 			bucketList = append(bucketList, *object)
+			quota[fmt.Sprintf("%s/%s", object.Name, object.Namespace)] = &model.BucketQuotaInfo{
+				BucketName: object.Name,
+				Bucket:     *object,
+			}
 		case *BucketPolicy:
 			policy[fmt.Sprintf("%s/%s", object.BucketName, object.Namespace)] = object.Policy
 		case *model.BlobUser:
@@ -44,6 +49,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		buckets: &Buckets{
 			items:  bucketList,
 			policy: policy,
+			quota:  quota,
 		},
 		objectUser: NewObjectUsers(blobUsers, userSecrets, userInfoList),
 	}
@@ -179,6 +185,7 @@ func (o *ObjectUsers) GetInfo(uid string, params map[string]string) (*model.Obje
 type Buckets struct {
 	items  []model.Bucket
 	policy map[string]string
+	quota  map[string]*model.BucketQuotaInfo
 }
 
 // List implements the buckets API
@@ -262,41 +269,28 @@ func (b *Buckets) Delete(name string, namespace string) error {
 
 // GetQuota gets the quota for the given bucket and namespace.
 func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQuotaInfo, error) {
-	for _, bucket := range b.items {
-		if bucket.Name == bucketName {
-			return &model.BucketQuotaInfo{
-				BucketName: bucket.Name,
-				Bucket: model.Bucket{
-					Namespace:        bucket.Namespace,
-					NotificationSize: bucket.NotificationSize,
-					BlockSize:        bucket.BlockSize,
-				},
-			}, nil
-		}
+	if quota, ok := b.quota[fmt.Sprintf("%s/%s", bucketName, namespace)]; ok {
+		return quota, nil
 	}
 	return nil, errors.New("not found")
 }
 
 // UpdateQuota updates the quota for the specified bucket.
 func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
-	for _, bucket := range b.items {
-		if bucket.Name == bucketQuota.BucketName {
-			bucket.BlockSize = bucketQuota.BlockSize
-			bucket.NotificationSize = bucketQuota.NotificationSize
-			return nil
-		}
+	if quota, ok := b.quota[fmt.Sprintf("%s/%s", bucketQuota.Name, bucketQuota.Namespace)]; ok {
+		quota.BlockSize = bucketQuota.BlockSize
+		quota.NotificationSize = bucketQuota.NotificationSize
+		return nil
 	}
 	return errors.New("not found")
 }
 
 // DeleteQuota deletes the quota setting for the given bucket and namespace.
 func (b *Buckets) DeleteQuota(bucketName string, namespace string) error {
-	for _, bucket := range b.items {
-		if bucket.Name == bucketName {
-			bucket.BlockSize = -1
-			bucket.NotificationSize = -1
-			return nil
-		}
+	if quota, ok := b.quota[fmt.Sprintf("%s/%s", bucketName, namespace)]; ok {
+		quota.BlockSize = -1
+		quota.NotificationSize = -1
+		return nil
 	}
 	return errors.New("not found")
 }
