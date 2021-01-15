@@ -265,8 +265,8 @@ func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQu
 	for _, bucket := range b.items {
 		if bucket.Name == bucketName {
 			return &model.BucketQuotaInfo{
-				BucketName: bucket.Name,
-				Bucket: model.Bucket{
+				BucketQuota: model.BucketQuota{
+					BucketName:       bucket.Name,
 					Namespace:        bucket.Namespace,
 					NotificationSize: bucket.NotificationSize,
 					BlockSize:        bucket.BlockSize,

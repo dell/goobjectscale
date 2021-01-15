@@ -18,26 +18,38 @@ type BucketCreate struct {
 	Bucket
 }
 
-// BucketQuotaUpdate is the quota updating with an alternate XML tag name
+// BucketQuotaUpdate is the struct of quota updating
 type BucketQuotaUpdate struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_quota_param"`
 
-	// Name is the name of the cluster instance
-	BucketName string `xml:"bucketname"`
-
-	Bucket
+	BucketQuota
 }
 
-// BucketQuotaInfo is the quota infomation with an alternate XML tag name
+// BucketQuotaInfo is the struct of quota information
 type BucketQuotaInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_quota_details"`
 
-	// Name is the name of the cluster instance
-	BucketName string `xml:"bucketname"`
+	BucketQuota
+}
 
-	Bucket
+// BucketQuota is quota struct
+type BucketQuota struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"bucket_quota"`
+
+	// Name is the name of the cluster instance
+	BucketName string `json:"bucketname,omitempty" xml:"bucketname"`
+
+	// Namespace is the namespace of the bucket
+	Namespace string `json:"namespace,omitempty" xml:"namespace,omitempty"`
+
+	// BlockSize is the bucket size at which new object creations will be blocked
+	BlockSize int64 `json:"blockSize,omit_empty,omitempty" xml:"blockSize,omit_empty,omitempty"`
+
+	// NotificationSize is the bucket size at which the users will be notified
+	NotificationSize int64 `json:"notificationSize,omit_empty" xml:"notificationSize,omit_empty"`
 }
 
 // Bucket is an object storage bucket
@@ -96,10 +108,16 @@ type Bucket struct {
 
 	// BlockSize is the bucket size at which new object creations will be
 	// blocked
-	BlockSize int64 `json:"block_size,omit_empty,omitempty" xml:"blockSize,omit_empty,omitempty"`
+	BlockSize int64 `json:"block_size,omit_empty,omitempty" xml:"block_size,omit_empty,omitempty"`
 
 	// NotificationSize is the bucket size at which the users will be notified
-	NotificationSize int64 `json:"notification_size,omit_empty" xml:"notificationSize,omit_empty"`
+	NotificationSize int64 `json:"notification_size,omit_empty" xml:"notification_size,omit_empty"`
+
+	// BlockSizeInput is the input of bucket size, support CreateBucket method
+	BlockSizeInput int64 `json:"blockSize,omit_empty,omitempty" xml:"blockSize,omit_empty,omitempty"`
+
+	// NotificationSizeInput is the input of notification size, support CreateBucket method
+	NotificationSizeInput int64 `json:"notificationSize,omit_empty" xml:"notificationSize,omit_empty"`
 
 	// Tags is a list of arbitrary metadata keys and values applied to the
 	// bucket
