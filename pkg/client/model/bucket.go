@@ -18,6 +18,40 @@ type BucketCreate struct {
 	Bucket
 }
 
+// BucketQuotaUpdate is the struct of quota updating
+type BucketQuotaUpdate struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"bucket_quota_param"`
+
+	BucketQuota
+}
+
+// BucketQuotaInfo is the struct of quota information
+type BucketQuotaInfo struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"bucket_quota_details"`
+
+	BucketQuota
+}
+
+// BucketQuota is quota struct
+type BucketQuota struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"bucket_quota"`
+
+	// Name is the name of the cluster instance
+	BucketName string `json:"bucketname,omitempty" xml:"bucketname"`
+
+	// Namespace is the namespace of the bucket
+	Namespace string `json:"namespace,omitempty" xml:"namespace,omitempty"`
+
+	// BlockSize is the bucket size at which new object creations will be blocked
+	BlockSize int64 `json:"blockSize,omit_empty,omitempty" xml:"blockSize,omit_empty,omitempty"`
+
+	// NotificationSize is the bucket size at which the users will be notified
+	NotificationSize int64 `json:"notificationSize,omit_empty" xml:"notificationSize,omit_empty"`
+}
+
 // Bucket is an object storage bucket
 type Bucket struct {
 	// XMLName is the name of the xml tag used XML marshalling
@@ -79,6 +113,12 @@ type Bucket struct {
 	// NotificationSize is the bucket size at which the users will be notified
 	NotificationSize int64 `json:"notification_size,omit_empty" xml:"notification_size,omit_empty"`
 
+	// BlockSizeInput is the input of bucket size, support CreateBucket method
+	BlockSizeInput int64 `json:"blockSize,omit_empty,omitempty" xml:"blockSize,omit_empty,omitempty"`
+
+	// NotificationSizeInput is the input of notification size, support CreateBucket method
+	NotificationSizeInput int64 `json:"notificationSize,omit_empty" xml:"notificationSize,omit_empty"`
+
 	// Tags is a list of arbitrary metadata keys and values applied to the
 	// bucket
 	Tags TagSet `json:"TagSet,omitempty" xml:"TagSet,omitempty"`
@@ -119,7 +159,6 @@ type Bucket struct {
 
 	// MinMaxGovenor enforces minimum and maximum retention for bucket objects
 	MinMaxGovenor `json:"min_max_govenor,omitempty" xml:"min_max_govenor,omitempty"`
-
 }
 
 // BucketList is a list of object storage buckets

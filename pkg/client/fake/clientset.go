@@ -259,3 +259,45 @@ func (b *Buckets) Delete(name string, namespace string) error {
 	}
 	return errors.New("not found")
 }
+
+// GetQuota gets the quota for the given bucket and namespace.
+func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQuotaInfo, error) {
+	for _, bucket := range b.items {
+		if bucket.Name == bucketName {
+			return &model.BucketQuotaInfo{
+				BucketQuota: model.BucketQuota{
+					BucketName:       bucket.Name,
+					Namespace:        bucket.Namespace,
+					NotificationSize: bucket.NotificationSize,
+					BlockSize:        bucket.BlockSize,
+				},
+			}, nil
+		}
+	}
+
+	return nil, errors.New("not found")
+}
+
+// UpdateQuota updates the quota for the specified bucket.
+func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
+	for i := 0; i < len(b.items); i++ {
+		if b.items[i].Name == bucketQuota.BucketName {
+			b.items[i].BlockSize = bucketQuota.BlockSize
+			b.items[i].NotificationSize = bucketQuota.NotificationSize
+			return nil
+		}
+	}
+	return errors.New("not found")
+}
+
+// DeleteQuota deletes the quota setting for the given bucket and namespace.
+func (b *Buckets) DeleteQuota(bucketName string, namespace string) error {
+	for i := 0; i < len(b.items); i++ {
+		if b.items[i].Name == bucketName {
+			b.items[i].BlockSize = -1
+			b.items[i].NotificationSize = -1
+			return nil
+		}
+	}
+	return errors.New("not found")
+}
