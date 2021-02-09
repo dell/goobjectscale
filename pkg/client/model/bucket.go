@@ -159,6 +159,9 @@ type Bucket struct {
 
 	// MinMaxGovenor enforces minimum and maximum retention for bucket objects
 	MinMaxGovenor `json:"min_max_govenor,omitempty" xml:"min_max_govenor,omitempty"`
+
+	// StoragePolicy is the default storage policy of the bucket
+	StoragePolicy string `json:"storagePolicy,omitempty" xml:"storage_policy,omitempty"`
 }
 
 // BucketList is a list of object storage buckets
