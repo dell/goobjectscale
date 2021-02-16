@@ -23,7 +23,7 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/account/info
       method: POST
-      body: ""
+      body: "<account_list><id>aaa</id><id>bbb</id><id>ccc</id></account_list>"
       form: { }
       headers: { }
     response:
@@ -36,7 +36,7 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/account/sample
       method: POST
-      body: ""
+      body: "<account_list><id>aaa</id><id>bbb</id><id>ccc</id></account_list>"
       form: { }
       headers: { }
     response:
@@ -49,7 +49,7 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/account/a12345/bucket/info
       method: POST
-      body: ""
+      body: "<bucket_list><id>aaa</id><id>bbb</id><id>ccc</id></bucket_list>"
       form: { }
       headers: { }
     response:
@@ -62,7 +62,7 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/account/a12345/bucket/sample
       method: POST
-      body: ""
+      body: "<bucket_list><id>aaa</id><id>bbb</id><id>ccc</id></bucket_list>"
       form: { }
       headers: { }
     response:
@@ -75,7 +75,7 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/account/a12345/bucket/perf
       method: POST
-      body: ""
+      body: "<bucket_list><id>aaa</id><id>bbb</id><id>ccc</id></bucket_list>"
       form: { }
       headers: { }
     response:
@@ -88,7 +88,7 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/account/a12345/replication/info
       method: POST
-      body: ""
+      body: "<replication_list><replication><src>a</src><dest>b</dest></replication><replication><src>c</src><dest>d</dest></replication></replication_list>"
       form: { }
       headers: { }
     response:
@@ -101,7 +101,7 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/account/a12345/replication/sample
       method: POST
-      body: ""
+      body: "<replication_list><replication><src>a</src><dest>b</dest></replication><replication><src>c</src><dest>d</dest></replication></replication_list>"
       form: { }
       headers: { }
     response:
@@ -114,7 +114,6 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/store/info
       method: GET
-      body: ""
       form: { }
       headers: { }
     response:
@@ -127,7 +126,6 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/store/sample
       method: GET
-      body: ""
       form: { }
       headers: { }
     response:
@@ -140,7 +138,7 @@ interactions:
   - request:
       url: https://testserver:443/object/mt/store/replication
       method: POST
-      body: ""
+      body: "<store_list><id>aaa</id><id>bbb</id><id>ccc</id></store_list>"
       form: { }
       headers: { }
     response:
