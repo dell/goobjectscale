@@ -45,11 +45,12 @@ func (c *ClientSet) Buckets() api.BucketsInterface {
 	return c.buckets
 }
 
-// Buckets implements the client API
+// ObjectUser implements the client API
 func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
 }
 
+// ObjMt implements the client API for objMT metrics
 func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objmt
 }
