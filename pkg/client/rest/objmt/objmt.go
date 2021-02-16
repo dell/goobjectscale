@@ -50,7 +50,7 @@ func (o *Objmt) GetBucketBillingInfo(account string, ids []string, params map[st
 	// TODO prepare request body with IDs
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/account/%s/bucket/info", account),
+		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/info", account),
 		ContentType: client.ContentTypeXML,
 		//Body:		 &body,
 		Params: params,
@@ -67,7 +67,7 @@ func (o *Objmt) GetBucketBillingSample(account string, ids []string, params map[
 	// TODO prepare request body with IDs
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/account/%s/bucket/sample", account),
+		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/sample", account),
 		ContentType: client.ContentTypeXML,
 		//Body:		 &body,
 		Params: params,
@@ -84,7 +84,7 @@ func (o *Objmt) GetBucketBillingPerf(account string, ids []string, params map[st
 	// TODO prepare request body with IDs
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/account/%s/bucket/perf", account),
+		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/perf", account),
 		ContentType: client.ContentTypeXML,
 		//Body:		 &body,
 		Params: params,
@@ -101,7 +101,7 @@ func (o *Objmt) GetReplicationInfo(account string, replicationPairs [][]string, 
 	// TODO prepare request body with IDs
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/account/%s/replication/info", account),
+		Path:        fmt.Sprintf("/object/mt/account/%s/replication/info", account),
 		ContentType: client.ContentTypeXML,
 		//Body:		 &body,
 		Params: params,
@@ -118,7 +118,7 @@ func (o *Objmt) GetReplicationSample(account string, replicationPairs [][]string
 	// TODO prepare request body with IDs
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/account/%s/replication/sample", account),
+		Path:        fmt.Sprintf("/object/mt/account/%s/replication/sample", account),
 		ContentType: client.ContentTypeXML,
 		//Body:		 &body,
 		Params: params,
@@ -131,14 +131,14 @@ func (o *Objmt) GetReplicationSample(account string, replicationPairs [][]string
 	return ret, nil
 }
 
-func (o *Objmt) GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfo, error) {
+func (o *Objmt) GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfoList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
-		Path:        fmt.Sprintf("/store/info"),
+		Path:        fmt.Sprintf("/object/mt/store/info"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
-	ret := &model.StoreBillingInfo{}
+	ret := &model.StoreBillingInfoList{}
 	err := o.Client.MakeRemoteCall(req, ret)
 	if err != nil {
 		return nil, err
@@ -149,7 +149,7 @@ func (o *Objmt) GetStoreBillingInfo(params map[string]string) (*model.StoreBilli
 func (o *Objmt) GetStoreBillingSample(params map[string]string) (*model.StoreBillingSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
-		Path:        fmt.Sprintf("/store/info"),
+		Path:        fmt.Sprintf("/object/mt/store/sample"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
@@ -165,7 +165,7 @@ func (o *Objmt) GetStoreReplicationData(ids []string, params map[string]string) 
 	// TODO prepare request body with IDs
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/store/replication"),
+		Path:        fmt.Sprintf("/object/mt/store/replication"),
 		ContentType: client.ContentTypeXML,
 		//Body:		 &body,
 		Params: params,

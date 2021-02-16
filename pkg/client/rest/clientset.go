@@ -7,6 +7,7 @@ import (
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objectuser"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objmt"
 )
 
 // ClientSet is a set of clients for each API section
@@ -14,6 +15,7 @@ type ClientSet struct {
 	client     *client.Client
 	buckets    api.BucketsInterface
 	objectUser api.ObjectUserInterface
+	objmt      api.ObjmtInterface
 }
 
 // Returns a new client set based on the provided REST client parameters
@@ -29,6 +31,7 @@ func NewClientSet(u string, p string, e string, h *http.Client, overrideHdr bool
 		client:     c,
 		buckets:    &buckets.Buckets{Client: c},
 		objectUser: &objectuser.ObjectUser{Client: c},
+		objmt:      &objmt.Objmt{Client: c},
 	}
 }
 
@@ -45,4 +48,8 @@ func (c *ClientSet) Buckets() api.BucketsInterface {
 // Buckets implements the client API
 func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
+}
+
+func (c *ClientSet) ObjectMt() api.ObjmtInterface {
+	return c.objmt
 }
