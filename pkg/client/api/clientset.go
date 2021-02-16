@@ -9,6 +9,7 @@ type ClientSet interface {
 	// Buckets returns a bucket client interface
 	Buckets() BucketsInterface
 	ObjectUser() ObjectUserInterface
+	Objmt() ObjmtInterface
 }
 
 // BucketsInterfaces represents a bucket resource client interface
@@ -60,4 +61,17 @@ type ObjectUserInterface interface {
 
 	// DeleteSecret delete a secret for an object user within the Objectscale object store
 	DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error
+}
+
+type ObjmtInterface interface {
+	GetAccountBillingInfo(ids []string, params map[string]string) (*model.AccountBillingInfoList, error)
+	GetAccountBillingSample(ids []string, params map[string]string) (*model.AccountBillingSampleList, error)
+	GetBucketBillingInfo(account string, ids []string, params map[string]string) (*model.BucketBillingInfoList, error)
+	GetBucketBillingSample(account string, ids []string, params map[string]string) (*model.BucketBillingSampleList, error)
+	GetBucketBillingPerf(account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error)
+	GetReplicationInfo(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error)
+	GetReplicationSample(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error)
+	GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfo, error)
+	GetStoreBillingSample(params map[string]string) (*model.StoreBillingSampleList, error)
+	GetStoreReplicationData(ids []string, params map[string]string) (*model.StoreReplicationDataList, error)
 }

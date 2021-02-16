@@ -263,7 +263,7 @@ type TopNBucket struct {
 	MetricNumber int64  `xml:"metric_number,omitempty" json:"metric_number,omitempty"`
 }
 
-type StoreReplicationData struct {
+type StoreReplicationDataList struct {
 	XMLName xml.Name `xml:"store_replication_list" json:"store_replication_list"`
 
 	Status    string `xml:"status,omitempty" json:"status,omitempty"`
