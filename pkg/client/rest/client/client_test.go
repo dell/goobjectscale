@@ -92,7 +92,7 @@ var _ = Describe("Rest client", func() {
 		})
 
 		It("should return an error", func() {
-			e := "parse :not:a:valid:url: missing protocol scheme"
+			e := "parse \":not:a:valid:url\": missing protocol scheme"
 			Expect(err.Error()).To(Equal(e))
 		})
 
