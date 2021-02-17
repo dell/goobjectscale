@@ -71,7 +71,7 @@ type ObjmtInterface interface {
 	GetBucketBillingPerf(account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error)
 	GetReplicationInfo(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error)
 	GetReplicationSample(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error)
-	GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfo, error)
+	GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfoList, error)
 	GetStoreBillingSample(params map[string]string) (*model.StoreBillingSampleList, error)
 	GetStoreReplicationData(ids []string, params map[string]string) (*model.StoreReplicationDataList, error)
 }

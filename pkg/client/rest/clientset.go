@@ -51,6 +51,6 @@ func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 }
 
 // ObjMt implements the client API for objMT metrics
-func (c *ClientSet) Objmt() api.ObjmtInterface {
+func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objmt
 }
