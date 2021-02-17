@@ -12,6 +12,7 @@ import (
 type ClientSet struct {
 	buckets    api.BucketsInterface
 	objectUser api.ObjectUserInterface
+	objectMt   api.ObjmtInterface
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -46,6 +47,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			policy: policy,
 		},
 		objectUser: NewObjectUsers(blobUsers, userSecrets, userInfoList),
+		objectMt:   nil,
 	}
 }
 
@@ -63,6 +65,11 @@ type BucketPolicy struct {
 // ObjectUser implements the client API.
 func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
+}
+
+// ObjectMt implements the client API for objMT metrics
+func (c *ClientSet) ObjectMt() api.ObjmtInterface {
+	return c.objectMt
 }
 
 // UserSecret make easiest passing secret about users.

@@ -9,7 +9,7 @@ type ClientSet interface {
 	// Buckets returns a bucket client interface
 	Buckets() BucketsInterface
 	ObjectUser() ObjectUserInterface
-	Objmt() ObjmtInterface
+	ObjectMt() ObjmtInterface
 }
 
 // BucketsInterfaces represents a bucket resource client interface

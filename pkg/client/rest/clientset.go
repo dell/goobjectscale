@@ -50,7 +50,7 @@ func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
 }
 
-// ObjMt implements the client API for objMT metrics
+// ObjectMt implements the client API for objMT metrics
 func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objmt
 }
