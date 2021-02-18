@@ -8,37 +8,37 @@ import (
 	"net/http"
 )
 
-type BucketIdsReqBody struct {
+type bucketIdsReqBody struct {
 	XMLName xml.Name `xml:"bucket_list"`
 	Ids     []string `xml:"id"`
 }
 
-type AccountIdsReqBody struct {
+type accountIdsReqBody struct {
 	XMLName xml.Name `xml:"account_list"`
 	Ids     []string `xml:"id"`
 }
 
-type StoreIdsReqBody struct {
+type storeIdsReqBody struct {
 	XMLName xml.Name `xml:"store_list"`
 	Ids     []string `xml:"id"`
 }
 
-type ReplicationPairsReqBody struct {
+type replicationPairsReqBody struct {
 	XMLName      xml.Name         `xml:"replication_list"`
-	Replications []ReplicationIds `xml:"replication"`
+	Replications []replicationIds `xml:"replication"`
 }
 
-type ReplicationIds struct {
+type replicationIds struct {
 	XMLName xml.Name `xml:"replication"`
 	Src     string   `xml:"src"`
 	Dest    string   `xml:"dest"`
 }
 
-func NewReplicationIds(ids [][]string) *ReplicationPairsReqBody {
-	ret := &ReplicationPairsReqBody{}
-	ret.Replications = []ReplicationIds{}
+func newReplicationIds(ids [][]string) *replicationPairsReqBody {
+	ret := &replicationPairsReqBody{}
+	ret.Replications = []replicationIds{}
 	for _, id := range ids {
-		ret.Replications = append(ret.Replications, ReplicationIds{Src: id[0], Dest: id[1]})
+		ret.Replications = append(ret.Replications, replicationIds{Src: id[0], Dest: id[1]})
 	}
 	return ret
 }
@@ -48,12 +48,13 @@ type Objmt struct {
 	Client *client.Client
 }
 
+// GetAccountBillingInfo returns billing info metrics for defined accounts
 func (o *Objmt) GetAccountBillingInfo(ids []string, params map[string]string) (*model.AccountBillingInfoList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/object/mt/account/info"),
+		Path:        "/object/mt/account/info",
 		ContentType: client.ContentTypeXML,
-		Body:        AccountIdsReqBody{Ids: ids},
+		Body:        accountIdsReqBody{Ids: ids},
 		Params:      params,
 	}
 	ret := &model.AccountBillingInfoList{}
@@ -64,12 +65,13 @@ func (o *Objmt) GetAccountBillingInfo(ids []string, params map[string]string) (*
 	return ret, nil
 }
 
+// GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts
 func (o *Objmt) GetAccountBillingSample(ids []string, params map[string]string) (*model.AccountBillingSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/object/mt/account/sample"),
+		Path:        "/object/mt/account/sample",
 		ContentType: client.ContentTypeXML,
-		Body:        AccountIdsReqBody{Ids: ids},
+		Body:        accountIdsReqBody{Ids: ids},
 		Params:      params,
 	}
 	ret := &model.AccountBillingSampleList{}
@@ -80,13 +82,14 @@ func (o *Objmt) GetAccountBillingSample(ids []string, params map[string]string) 
 	return ret, nil
 }
 
+// GetBucketBillingInfo returns billing info metrics for defined buckets and account
 func (o *Objmt) GetBucketBillingInfo(account string, ids []string, params map[string]string) (*model.BucketBillingInfoList, error) {
 	// TODO prepare request body with IDs
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/info", account),
 		ContentType: client.ContentTypeXML,
-		Body:        BucketIdsReqBody{Ids: ids},
+		Body:        bucketIdsReqBody{Ids: ids},
 		Params:      params,
 	}
 	ret := &model.BucketBillingInfoList{}
@@ -97,12 +100,13 @@ func (o *Objmt) GetBucketBillingInfo(account string, ids []string, params map[st
 	return ret, nil
 }
 
+// GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account
 func (o *Objmt) GetBucketBillingSample(account string, ids []string, params map[string]string) (*model.BucketBillingSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/sample", account),
 		ContentType: client.ContentTypeXML,
-		Body:        BucketIdsReqBody{Ids: ids},
+		Body:        bucketIdsReqBody{Ids: ids},
 		Params:      params,
 	}
 	ret := &model.BucketBillingSampleList{}
@@ -113,12 +117,13 @@ func (o *Objmt) GetBucketBillingSample(account string, ids []string, params map[
 	return ret, nil
 }
 
+// GetBucketBillingPerf returns performance metrics for defined buckets and account
 func (o *Objmt) GetBucketBillingPerf(account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/perf", account),
 		ContentType: client.ContentTypeXML,
-		Body:        BucketIdsReqBody{Ids: ids},
+		Body:        bucketIdsReqBody{Ids: ids},
 		Params:      params,
 	}
 	ret := &model.BucketPerfDataList{}
@@ -129,12 +134,13 @@ func (o *Objmt) GetBucketBillingPerf(account string, ids []string, params map[st
 	return ret, nil
 }
 
+// GetReplicationInfo returns billing info metrics for defined replication pairs and account
 func (o *Objmt) GetReplicationInfo(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/replication/info", account),
 		ContentType: client.ContentTypeXML,
-		Body:        NewReplicationIds(replicationPairs),
+		Body:        newReplicationIds(replicationPairs),
 		Params:      params,
 	}
 	ret := &model.BucketReplicationInfoList{}
@@ -145,12 +151,13 @@ func (o *Objmt) GetReplicationInfo(account string, replicationPairs [][]string, 
 	return ret, nil
 }
 
+// GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account
 func (o *Objmt) GetReplicationSample(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/replication/sample", account),
 		ContentType: client.ContentTypeXML,
-		Body:        NewReplicationIds(replicationPairs),
+		Body:        newReplicationIds(replicationPairs),
 		Params:      params,
 	}
 	ret := &model.BucketReplicationSampleList{}
@@ -161,10 +168,11 @@ func (o *Objmt) GetReplicationSample(account string, replicationPairs [][]string
 	return ret, nil
 }
 
+// GetStoreBillingInfo returns billing info metrics for object store
 func (o *Objmt) GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfoList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
-		Path:        fmt.Sprintf("/object/mt/store/info"),
+		Path:        "/object/mt/store/info",
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
@@ -176,10 +184,11 @@ func (o *Objmt) GetStoreBillingInfo(params map[string]string) (*model.StoreBilli
 	return ret, nil
 }
 
+// GetStoreBillingSample returns billing sample (time-window) metrics for object store
 func (o *Objmt) GetStoreBillingSample(params map[string]string) (*model.StoreBillingSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
-		Path:        fmt.Sprintf("/object/mt/store/sample"),
+		Path:        "/object/mt/store/sample",
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
@@ -191,12 +200,13 @@ func (o *Objmt) GetStoreBillingSample(params map[string]string) (*model.StoreBil
 	return ret, nil
 }
 
+// GetStoreReplicationData returns CRR metrics for defined object stores
 func (o *Objmt) GetStoreReplicationData(ids []string, params map[string]string) (*model.StoreReplicationDataList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        fmt.Sprintf("/object/mt/store/replication"),
+		Path:        "/object/mt/store/replication",
 		ContentType: client.ContentTypeXML,
-		Body:        StoreIdsReqBody{Ids: ids},
+		Body:        storeIdsReqBody{Ids: ids},
 		Params:      params,
 	}
 	ret := &model.StoreReplicationDataList{}

@@ -3,7 +3,6 @@ package fake
 import (
 	"errors"
 	"fmt"
-
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 )
@@ -18,11 +17,21 @@ type ClientSet struct {
 // NewClientSet returns a new client set based on the provided REST client parameters
 func NewClientSet(objs ...interface{}) *ClientSet {
 	var (
-		policy       = make(map[string]string)
-		bucketList   []model.Bucket
-		blobUsers    []model.BlobUser
-		userSecrets  []UserSecret
-		userInfoList []UserInfo
+		policy                      = make(map[string]string)
+		bucketList                  []model.Bucket
+		blobUsers                   []model.BlobUser
+		userSecrets                 []UserSecret
+		userInfoList                []UserInfo
+		accountBillingInfoList      *model.AccountBillingInfoList
+		accountBillingSampleList    *model.AccountBillingSampleList
+		bucketBillingInfoList       *model.BucketBillingInfoList
+		bucketBillingSampleList     *model.BucketBillingSampleList
+		bucketBillingPerfList       *model.BucketPerfDataList
+		bucketReplicationInfoList   *model.BucketReplicationInfoList
+		bucketReplicationSampleList *model.BucketReplicationSampleList
+		storeBillingInfoList        *model.StoreBillingInfoList
+		storeBillingSampleList      *model.StoreBillingSampleList
+		storeReplicationDataList    *model.StoreReplicationDataList
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -36,6 +45,26 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			userSecrets = append(userSecrets, *object)
 		case *UserInfo:
 			userInfoList = append(userInfoList, *object)
+		case *model.AccountBillingInfoList:
+			accountBillingInfoList = object
+		case *model.AccountBillingSampleList:
+			accountBillingSampleList = object
+		case *model.BucketBillingInfoList:
+			bucketBillingInfoList = object
+		case *model.BucketBillingSampleList:
+			bucketBillingSampleList = object
+		case *model.BucketPerfDataList:
+			bucketBillingPerfList = object
+		case *model.BucketReplicationInfoList:
+			bucketReplicationInfoList = object
+		case *model.BucketReplicationSampleList:
+			bucketReplicationSampleList = object
+		case *model.StoreBillingInfoList:
+			storeBillingInfoList = object
+		case *model.StoreBillingSampleList:
+			storeBillingSampleList = object
+		case *model.StoreReplicationDataList:
+			storeReplicationDataList = object
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -47,7 +76,18 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			policy: policy,
 		},
 		objectUser: NewObjectUsers(blobUsers, userSecrets, userInfoList),
-		objectMt:   nil,
+		objectMt: &Objmt{
+			accountBillingInfoList:      accountBillingInfoList,
+			accountBillingSampleList:    accountBillingSampleList,
+			bucketBillingInfoList:       bucketBillingInfoList,
+			bucketBillingSampleList:     bucketBillingSampleList,
+			bucketBillingPerfList:       bucketBillingPerfList,
+			bucketReplicationInfoList:   bucketReplicationInfoList,
+			bucketReplicationSampleList: bucketReplicationSampleList,
+			storeBillingInfoList:        storeBillingInfoList,
+			storeBillingSampleList:      storeBillingSampleList,
+			storeReplicationDataList:    storeReplicationDataList,
+		},
 	}
 }
 
@@ -307,4 +347,68 @@ func (b *Buckets) DeleteQuota(bucketName string, namespace string) error {
 		}
 	}
 	return errors.New("not found")
+}
+
+// Objmt is a fake (mocked) implementation of the Objmt interface
+type Objmt struct {
+	accountBillingInfoList      *model.AccountBillingInfoList
+	accountBillingSampleList    *model.AccountBillingSampleList
+	bucketBillingInfoList       *model.BucketBillingInfoList
+	bucketBillingSampleList     *model.BucketBillingSampleList
+	bucketBillingPerfList       *model.BucketPerfDataList
+	bucketReplicationInfoList   *model.BucketReplicationInfoList
+	bucketReplicationSampleList *model.BucketReplicationSampleList
+	storeBillingInfoList        *model.StoreBillingInfoList
+	storeBillingSampleList      *model.StoreBillingSampleList
+	storeReplicationDataList    *model.StoreReplicationDataList
+}
+
+// GetStoreBillingInfo returns billing info metrics for object store
+func (mt *Objmt) GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfoList, error) {
+	return mt.storeBillingInfoList, nil
+}
+
+// GetStoreBillingSample returns billing sample (time-window) metrics for object store
+func (mt *Objmt) GetStoreBillingSample(params map[string]string) (*model.StoreBillingSampleList, error) {
+	return mt.storeBillingSampleList, nil
+}
+
+// GetStoreReplicationData returns CRR metrics for defined object stores
+func (mt *Objmt) GetStoreReplicationData(ids []string, params map[string]string) (*model.StoreReplicationDataList, error) {
+	return mt.storeReplicationDataList, nil
+}
+
+// GetAccountBillingInfo returns billing info metrics for defined accounts
+func (mt *Objmt) GetAccountBillingInfo(ids []string, params map[string]string) (*model.AccountBillingInfoList, error) {
+	return mt.accountBillingInfoList, nil
+}
+
+// GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts
+func (mt *Objmt) GetAccountBillingSample(ids []string, params map[string]string) (*model.AccountBillingSampleList, error) {
+	return mt.accountBillingSampleList, nil
+}
+
+// GetBucketBillingInfo returns billing info metrics for defined buckets and account
+func (mt *Objmt) GetBucketBillingInfo(account string, ids []string, params map[string]string) (*model.BucketBillingInfoList, error) {
+	return mt.bucketBillingInfoList, nil
+}
+
+// GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account
+func (mt *Objmt) GetBucketBillingSample(account string, ids []string, params map[string]string) (*model.BucketBillingSampleList, error) {
+	return mt.bucketBillingSampleList, nil
+}
+
+// GetBucketBillingPerf returns performance metrics for defined buckets and account
+func (mt *Objmt) GetBucketBillingPerf(account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error) {
+	return mt.bucketBillingPerfList, nil
+}
+
+// GetReplicationInfo returns billing info metrics for defined replication pairs and account
+func (mt *Objmt) GetReplicationInfo(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error) {
+	return mt.bucketReplicationInfoList, nil
+}
+
+// GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account
+func (mt *Objmt) GetReplicationSample(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error) {
+	return mt.bucketReplicationSampleList, nil
 }
