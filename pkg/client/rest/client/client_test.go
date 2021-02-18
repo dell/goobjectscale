@@ -39,6 +39,7 @@ var _ = Describe("Rest client", func() {
 				"changme",
 				"https://host",
 				newTestHTTPClient(captures, false),
+				false,
 			)
 			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,
@@ -81,6 +82,7 @@ var _ = Describe("Rest client", func() {
 				"changme",
 				":not:a:valid:url",
 				newTestHTTPClient(captures, false),
+				true,
 			)
 			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,
@@ -90,7 +92,7 @@ var _ = Describe("Rest client", func() {
 		})
 
 		It("should return an error", func() {
-			e := "parse :not:a:valid:url: missing protocol scheme"
+			e := "parse \":not:a:valid:url\": missing protocol scheme"
 			Expect(err.Error()).To(Equal(e))
 		})
 
@@ -114,6 +116,7 @@ var _ = Describe("Rest client", func() {
 				"changme",
 				"https://host",
 				newTestHTTPClient(captures, false),
+				false,
 			)
 			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,
@@ -153,6 +156,7 @@ var _ = Describe("Rest client", func() {
 				"changme",
 				"https://host",
 				newTestHTTPClient(captures, true),
+				false,
 			)
 			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,

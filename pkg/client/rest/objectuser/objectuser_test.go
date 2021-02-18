@@ -41,6 +41,7 @@ func TestMain(m *testing.M) {
 		"ChangeMe",
 		"https://testserver:443",
 		httpClient,
+		false,
 	)
 	defer func() {
 		if err := r.Stop(); err != nil {
