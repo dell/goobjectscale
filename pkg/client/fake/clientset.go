@@ -68,6 +68,11 @@ type BucketPolicy struct {
 }
 
 // ObjectUser implements the client API.
+func (c *ClientSet) Tenants() api.TenantsInterface {
+	return c.tenants
+}
+
+// ObjectUser implements the client API.
 func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
 }
