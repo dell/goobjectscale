@@ -12,6 +12,7 @@ import (
 type ClientSet struct {
 	buckets    api.BucketsInterface
 	objectUser api.ObjectUserInterface
+	tenants    api.TenantsInterface
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -22,6 +23,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		blobUsers    []model.BlobUser
 		userSecrets  []UserSecret
 		userInfoList []UserInfo
+		tenantList   []model.Tenant
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -35,6 +37,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			userSecrets = append(userSecrets, *object)
 		case *UserInfo:
 			userInfoList = append(userInfoList, *object)
+		case *model.Tenant:
+			tenantList = append(tenantList, *object)
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -46,6 +50,9 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			policy: policy,
 		},
 		objectUser: NewObjectUsers(blobUsers, userSecrets, userInfoList),
+		tenants: &Tenants{
+			items: tenantList,
+		},
 	}
 }
 
@@ -58,6 +65,11 @@ type BucketPolicy struct {
 	BucketName string
 	Policy     string
 	Namespace  string
+}
+
+// ObjectUser implements the client API.
+func (c *ClientSet) Tenants() api.TenantsInterface {
+	return c.tenants
 }
 
 // ObjectUser implements the client API.
@@ -173,6 +185,15 @@ func (o *ObjectUsers) GetInfo(uid string, params map[string]string) (*model.Obje
 		return nil, fmt.Errorf("info for %s is not found", uid)
 	}
 	return o.InfoList[uid], nil
+}
+
+// Tenants implements the tenants API
+type Tenants struct {
+	items []model.Tenant
+}
+
+func (t *Tenants) List(params map[string]string) (*model.TenantList, error) {
+	return &model.TenantList{Items: t.items}, nil
 }
 
 // Buckets implements the buckets API
