@@ -3,6 +3,7 @@ package fake
 import (
 	"errors"
 	"fmt"
+
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 )
@@ -11,12 +12,19 @@ import (
 type ClientSet struct {
 	buckets    api.BucketsInterface
 	objectUser api.ObjectUserInterface
+	tenants    api.TenantsInterface
 	objectMt   api.ObjmtInterface
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
 func NewClientSet(objs ...interface{}) *ClientSet {
 	var (
+		policy                      = make(map[string]string)
+		bucketList                  []model.Bucket
+		blobUsers                   []model.BlobUser
+		userSecrets                 []UserSecret
+		userInfoList                []UserInfo
+		tenantList                  []model.Tenant
 		policy                      = make(map[string]string)
 		bucketList                  []model.Bucket
 		blobUsers                   []model.BlobUser
@@ -45,6 +53,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			userSecrets = append(userSecrets, *object)
 		case *UserInfo:
 			userInfoList = append(userInfoList, *object)
+		case *model.Tenant:
+			tenantList = append(tenantList, *object)
 		case *model.AccountBillingInfoList:
 			accountBillingInfoList = object
 		case *model.AccountBillingSampleList:
@@ -76,6 +86,9 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			policy: policy,
 		},
 		objectUser: NewObjectUsers(blobUsers, userSecrets, userInfoList),
+		tenants: &Tenants{
+			items: tenantList,
+		},
 		objectMt: &Objmt{
 			accountBillingInfoList:      accountBillingInfoList,
 			accountBillingSampleList:    accountBillingSampleList,
@@ -100,6 +113,11 @@ type BucketPolicy struct {
 	BucketName string
 	Policy     string
 	Namespace  string
+}
+
+// Tenants implements the client API.
+func (c *ClientSet) Tenants() api.TenantsInterface {
+	return c.tenants
 }
 
 // ObjectUser implements the client API.
@@ -220,6 +238,15 @@ func (o *ObjectUsers) GetInfo(uid string, params map[string]string) (*model.Obje
 		return nil, fmt.Errorf("info for %s is not found", uid)
 	}
 	return o.InfoList[uid], nil
+}
+
+// Tenants implements the tenants API
+type Tenants struct {
+	items []model.Tenant
+}
+
+func (t *Tenants) List(params map[string]string) (*model.TenantList, error) {
+	return &model.TenantList{Items: t.items}, nil
 }
 
 // Buckets implements the buckets API

@@ -7,6 +7,7 @@ import (
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objectuser"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/tenants"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objmt"
 )
 
@@ -15,6 +16,7 @@ type ClientSet struct {
 	client     *client.Client
 	buckets    api.BucketsInterface
 	objectUser api.ObjectUserInterface
+	tenants    api.TenantsInterface
 	objmt      api.ObjmtInterface
 }
 
@@ -31,6 +33,7 @@ func NewClientSet(u string, p string, e string, h *http.Client, overrideHdr bool
 		client:     c,
 		buckets:    &buckets.Buckets{Client: c},
 		objectUser: &objectuser.ObjectUser{Client: c},
+		tenants:    &tenants.Tenants{Client: c},
 		objmt:      &objmt.Objmt{Client: c},
 	}
 }
@@ -48,6 +51,11 @@ func (c *ClientSet) Buckets() api.BucketsInterface {
 // ObjectUser implements the client API
 func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
+}
+
+// Tenants implements the client API
+func (c *ClientSet) Tenants() api.TenantsInterface {
+	return c.tenants
 }
 
 // ObjectMt implements the client API for objMT metrics

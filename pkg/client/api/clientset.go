@@ -9,6 +9,7 @@ type ClientSet interface {
 	// Buckets returns a bucket client interface
 	Buckets() BucketsInterface
 	ObjectUser() ObjectUserInterface
+	Tenants() TenantsInterface
 	ObjectMt() ObjmtInterface
 }
 
@@ -61,6 +62,12 @@ type ObjectUserInterface interface {
 
 	// DeleteSecret delete a secret for an object user within the Objectscale object store
 	DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error
+}
+
+// TenantsInterface represents an tenant resource client interface.
+type TenantsInterface interface {
+	// List returns a list of tenants within the ObjectScale object store.
+	List(params map[string]string) (*model.TenantList, error)
 }
 
 // ObjectUserInterface represents an interface for objMT service metrics.

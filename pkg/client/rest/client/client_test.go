@@ -82,7 +82,7 @@ var _ = Describe("Rest client", func() {
 				"changme",
 				":not:a:valid:url",
 				newTestHTTPClient(captures, false),
-				false,
+				true,
 			)
 			err = clientset.Client().MakeRemoteCall(client.Request{
 				Method:      http.MethodGet,
