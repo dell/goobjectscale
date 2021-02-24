@@ -25,11 +25,6 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		userSecrets                 []UserSecret
 		userInfoList                []UserInfo
 		tenantList                  []model.Tenant
-		policy                      = make(map[string]string)
-		bucketList                  []model.Bucket
-		blobUsers                   []model.BlobUser
-		userSecrets                 []UserSecret
-		userInfoList                []UserInfo
 		accountBillingInfoList      *model.AccountBillingInfoList
 		accountBillingSampleList    *model.AccountBillingSampleList
 		bucketBillingInfoList       *model.BucketBillingInfoList
