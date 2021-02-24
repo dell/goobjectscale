@@ -10,6 +10,7 @@ type ClientSet interface {
 	Buckets() BucketsInterface
 	ObjectUser() ObjectUserInterface
 	Tenants() TenantsInterface
+	ObjectMt() ObjmtInterface
 }
 
 // BucketsInterfaces represents a bucket resource client interface
@@ -67,4 +68,37 @@ type ObjectUserInterface interface {
 type TenantsInterface interface {
 	// List returns a list of tenants within the ObjectScale object store.
 	List(params map[string]string) (*model.TenantList, error)
+}
+
+// ObjectUserInterface represents an interface for objMT service metrics.
+type ObjmtInterface interface {
+	// GetAccountBillingInfo returns billing info metrics for defined accounts
+	GetAccountBillingInfo(ids []string, params map[string]string) (*model.AccountBillingInfoList, error)
+
+	// GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts
+	GetAccountBillingSample(ids []string, params map[string]string) (*model.AccountBillingSampleList, error)
+
+	// GetBucketBillingInfo returns billing info metrics for defined buckets and account
+	GetBucketBillingInfo(account string, ids []string, params map[string]string) (*model.BucketBillingInfoList, error)
+
+	// GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account
+	GetBucketBillingSample(account string, ids []string, params map[string]string) (*model.BucketBillingSampleList, error)
+
+	// GetBucketBillingPerf returns performance metrics for defined buckets and account
+	GetBucketBillingPerf(account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error)
+
+	// GetReplicationInfo returns billing info metrics for defined replication pairs and account
+	GetReplicationInfo(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error)
+
+	// GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account
+	GetReplicationSample(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error)
+
+	// GetStoreBillingInfo returns billing info metrics for object store
+	GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfoList, error)
+
+	// GetStoreBillingSample returns billing sample (time-window) metrics for object store
+	GetStoreBillingSample(params map[string]string) (*model.StoreBillingSampleList, error)
+
+	// GetStoreReplicationData returns CRR metrics for defined object stores
+	GetStoreReplicationData(ids []string, params map[string]string) (*model.StoreReplicationDataList, error)
 }
