@@ -15,7 +15,7 @@ type AccountBillingInfoList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
 	// Info list of billing metrics objects for each user
@@ -30,8 +30,8 @@ type AccountBillingInfo struct {
 	// AccountId IAM user account ID used for request
 	AccountId string `xml:"account_id,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2007-04-05T14:30:55Z))
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// TotalUserObjectMetric total object logical and physical size, count per user
 	TotalUserObjectMetric []StorageClassBasedCountSize `xml:"total_user_object_metric>storage_class_counts,omitempty"`
@@ -54,13 +54,13 @@ type AccountBillingSampleList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
-	// StartTime is a start of time window for data selection
+	// StartTime is a start of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	StartTime string `xml:"start_time,omitempty" json:"start_time,omitempty"`
 
-	// EndTime is an end of time window for data selection
+	// EndTime is an end of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	EndTime string `xml:"end_time,omitempty" json:"end_time,omitempty"`
 
 	// Samples list of time range based billing metrics objects for each user
@@ -75,17 +75,17 @@ type AccountBillingSample struct {
 	// AccountId IAM user account ID used for request
 	AccountId string `xml:"account_id,omitempty"`
 
-	// StartTime is a start of time window for data selection
+	// StartTime is a start of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	StartTime string `xml:"start_time,omitempty"`
 
-	// EndTime is an end of time window for data selection
+	// EndTime is an end of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	EndTime string `xml:"end_time,omitempty"`
 
 	// SampleTimeRange time window in UTC format
 	SampleTimeRange int64 `xml:"sample_time_range,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp in ISO 8601 format (2007-04-05T14:30:55Z)
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// AccountBillingInfo contains latest billing metrics info for the user
 	AccountBillingInfo AccountBillingInfo `xml:"account_billing_objmt_info,omitempty"`
@@ -150,7 +150,7 @@ type BucketBillingInfoList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
 	// Info list of billing metrics objects for each bucket
@@ -168,8 +168,8 @@ type BucketBillingInfo struct {
 	// CompressionRatio float value of compression ratio in bucket
 	CompressionRatio float64 `xml:"compression_ratio,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp in ISO 8601 format (2007-04-05T14:30:55Z)
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// TotalUserObjectMetric total object logical and physical size, count per bucket
 	TotalUserObjectMetric []StorageClassBasedCountSize `xml:"total_user_object_metric>storage_class_counts"`
@@ -192,13 +192,13 @@ type BucketBillingSampleList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
-	// StartTime is a start of time window for data selection
+	// StartTime is a start of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	StartTime string `xml:"start_time,omitempty" json:"start_time,omitempty"`
 
-	// EndTime is an end of time window for data selection
+	// EndTime is an end of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	EndTime string `xml:"end_time,omitempty" json:"end_time,omitempty"`
 
 	// Samples list of time range based billing metrics objects for each bucket
@@ -216,8 +216,8 @@ type BucketBillingSample struct {
 	// SampleTimeRange time window in UTC format
 	SampleTimeRange int64 `xml:"sample_time_range,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp in ISO 8601 format (2007-04-05T14:30:55Z)
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// BucketBillingInfo contains latest billing metrics info for the bucket
 	BucketBillingInfo BucketBillingInfo `xml:"bucket_billing_objmt_info,omitempty"`
@@ -270,13 +270,13 @@ type BucketPerfDataList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
-	// StartTime is a start of time window for data selection
+	// StartTime is a start of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	StartTime string `xml:"start_time,omitempty" json:"start_time,omitempty"`
 
-	// EndTime is an end of time window for data selection
+	// EndTime is an end of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	EndTime string `xml:"end_time,omitempty" json:"end_time,omitempty"`
 
 	// Sample list of metrics per each bucket
@@ -291,8 +291,8 @@ type BucketPerfSample struct {
 	// SampleTimeRange time window in UTC format BucketName      string `xml:"bucket_name,omitempty"`
 	SampleTimeRange int64 `xml:"sample_time_range,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp in ISO 8601 format (2007-04-05T14:30:55Z)
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// IngressLatency ingress latency value for bucket in requested time window
 	IngressLatency int64 `xml:"ingress_latency,omitempty"`
@@ -321,13 +321,13 @@ type BucketReplicationSampleList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
-	// StartTime is a start of time window for data selection
+	// StartTime is a start of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	StartTime string `xml:"start_time,omitempty" json:"start_time,omitempty"`
 
-	// EndTime is an end of time window for data selection
+	// EndTime is an end of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	EndTime string `xml:"end_time,omitempty" json:"end_time,omitempty"`
 
 	// Samples list of replication metrics per each bucket
@@ -348,8 +348,8 @@ type BucketReplicationSample struct {
 	// SampleTimeRange time window in UTC format
 	SampleTimeRange int64 `xml:"sample_time_range,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2020-01-27T14:30:55Z))
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	ReplicationBillingInfo ReplicationBillingInfo `xml:"replication_billing_info,omitempty"`
 
@@ -374,7 +374,7 @@ type BucketReplicationInfoList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
 	// Info list of replication metrics per each bucket
@@ -392,8 +392,8 @@ type ReplicationBillingInfo struct {
 	// DestinationBucket name of replication destination bucket
 	DestinationBucket string `xml:"replication_source_destination>destination_bucket_arn,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2020-01-27T14:30:55Z))
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// PendingToReplicate metrics of data pending replication per storage class
 	PendingToReplicate []StorageClassBasedCountSize `xml:"pending_to_replicate>storage_class_counts,omitempty"`
@@ -410,7 +410,7 @@ type StoreBillingInfoList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
 	// StoreBillingInfo object store latest billing info metrics
@@ -425,8 +425,8 @@ type StoreBillingInfo struct {
 	// CompressionRatio float value of compression ratio in object store
 	CompressionRatio float64 `xml:"compression_ratio,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2020-01-27T14:30:55Z))
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// TotalUserObjectMetric total object logical and physical size, count in object store
 	TotalUserObjectMetric []StorageClassBasedCountSize `xml:"total_user_object_metric>storage_class_counts,omitempty"`
@@ -455,13 +455,13 @@ type StoreBillingSampleList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
-	// StartTime is a start of time window for data selection
+	// StartTime is a start of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	StartTime string `xml:"start_time,omitempty" json:"start_time,omitempty"`
 
-	// EndTime is an end of time window for data selection
+	// EndTime is an end of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	EndTime string `xml:"end_time,omitempty" json:"end_time,omitempty"`
 
 	// Samples list of object store billing metrics
@@ -476,8 +476,8 @@ type StoreBillingSample struct {
 	// SampleTimeRange time window in UTC format
 	SampleTimeRange int64 `xml:"sample_time_range,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2020-01-27T14:30:55Z))
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// Info object store latest billing info metrics
 	Info StoreBillingInfo `xml:"store_billing_info,omitempty" json:"store_billing_info,omitempty"`
@@ -524,13 +524,13 @@ type StoreReplicationDataList struct {
 	// SizeUnit size unit of metric values
 	SizeUnit string `xml:"size_unit,omitempty" json:"size_unit,omitempty"`
 
-	// DateTime request time
+	// DateTime request time (ISO 8601 format (2020-01-27T14:30:55Z))
 	DateTime string `xml:"date_time,omitempty" json:"date_time,omitempty"`
 
-	// StartTime is a start of time window for data selection
+	// StartTime is a start of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	StartTime string `xml:"start_time,omitempty" json:"start_time,omitempty"`
 
-	// EndTime is an end of time window for data selection
+	// EndTime is an end of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	EndTime string `xml:"end_time,omitempty" json:"end_time,omitempty"`
 
 	// Samples list of replication data metrics in object stores
@@ -545,8 +545,8 @@ type StoreReplicationThroughputRto struct {
 	// SampleTimeRange time window in UTC format
 	SampleTimeRange int64 `xml:"sample_time_range,omitempty"`
 
-	// ConsistentTime metrics collection timestamp in UTC format
-	ConsistentTime int64 `xml:"consistent_time,omitempty"`
+	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2020-01-27T14:30:55Z))
+	ConsistentTime string `xml:"consistent_time,omitempty"`
 
 	// DestinationStore object store URN identifier
 	DestinationStore string `xml:"destination_store,omitempty" json:"destination_store,omitempty"`
