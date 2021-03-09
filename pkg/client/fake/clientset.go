@@ -164,12 +164,12 @@ func NewObjectUsers(blobUsers []model.BlobUser, userSecrets []UserSecret, userIn
 }
 
 // List returns a list of object users.
-func (o *ObjectUsers) List(params map[string]string) (*model.ObjectUserList, error) {
+func (o *ObjectUsers) List(_ map[string]string) (*model.ObjectUserList, error) {
 	return o.Users, nil
 }
 
 // GetSecret returns information about object user secrets.
-func (o *ObjectUsers) GetSecret(uid string, params map[string]string) (*model.ObjectUserSecret, error) {
+func (o *ObjectUsers) GetSecret(uid string, _ map[string]string) (*model.ObjectUserSecret, error) {
 	if _, ok := o.Secrets[uid]; !ok {
 		return nil, fmt.Errorf("secret for %s is not found", uid)
 	}
@@ -177,7 +177,7 @@ func (o *ObjectUsers) GetSecret(uid string, params map[string]string) (*model.Ob
 }
 
 // CreateSecret will create a specific secret
-func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
+func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCreateReq, _ map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
 	if _, ok := o.Secrets[uid]; !ok {
 		o.Secrets[uid] = &model.ObjectUserSecret{
 			SecretKey1: req.SecretKey,
@@ -189,7 +189,7 @@ func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCrea
 
 	switch {
 	case o.Secrets[uid].SecretKey1 != "" && o.Secrets[uid].SecretKey2 != "":
-		return nil, fmt.Errorf("User %s already has 2 valid keys", uid)
+		return nil, fmt.Errorf("user %s already has 2 valid keys", uid)
 	case o.Secrets[uid].SecretKey1 != "":
 		o.Secrets[uid].SecretKey2 = req.SecretKey
 		return &model.ObjectUserSecretKeyCreateRes{
@@ -204,9 +204,9 @@ func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCrea
 }
 
 // DeleteSecret will delete a specific secret
-func (o *ObjectUsers) DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error {
+func (o *ObjectUsers) DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, _ map[string]string) error {
 	if _, ok := o.Secrets[uid]; !ok {
-		return fmt.Errorf("User %s not found", uid)
+		return fmt.Errorf("user %s not found", uid)
 	}
 	switch req.SecretKey {
 	case o.Secrets[uid].SecretKey1:
@@ -217,7 +217,7 @@ func (o *ObjectUsers) DeleteSecret(uid string, req model.ObjectUserSecretKeyDele
 		clearSecretKey2(o.Secrets[uid])
 		return nil
 	default:
-		return fmt.Errorf("User %s secret key not found", uid)
+		return fmt.Errorf("user %s secret key not found", uid)
 	}
 }
 
@@ -228,7 +228,7 @@ func clearSecretKey2(key *model.ObjectUserSecret) {
 }
 
 // GetSecret returns information about object user secrets.
-func (o *ObjectUsers) GetInfo(uid string, params map[string]string) (*model.ObjectUserInfo, error) {
+func (o *ObjectUsers) GetInfo(uid string, _ map[string]string) (*model.ObjectUserInfo, error) {
 	if _, ok := o.InfoList[uid]; !ok {
 		return nil, fmt.Errorf("info for %s is not found", uid)
 	}
@@ -240,7 +240,18 @@ type Tenants struct {
 	items []model.Tenant
 }
 
-func (t *Tenants) List(params map[string]string) (*model.TenantList, error) {
+// Get implements the tenants API
+func (t *Tenants) Get(id string, _ map[string]string) (*model.Tenant, error) {
+	for _, tenant := range t.items {
+		if tenant.ID == id {
+			return &tenant, nil
+		}
+	}
+	return nil, errors.New("not found")
+}
+
+// Get implements the tenants API
+func (t *Tenants) List(_ map[string]string) (*model.TenantList, error) {
 	return &model.TenantList{Items: t.items}, nil
 }
 
@@ -251,12 +262,12 @@ type Buckets struct {
 }
 
 // List implements the buckets API
-func (b *Buckets) List(params map[string]string) (*model.BucketList, error) {
+func (b *Buckets) List(_ map[string]string) (*model.BucketList, error) {
 	return &model.BucketList{Items: b.items}, nil
 }
 
 // Get implements the buckets API
-func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, error) {
+func (b *Buckets) Get(name string, _ map[string]string) (*model.Bucket, error) {
 	for _, bucket := range b.items {
 		if bucket.Name == name {
 			return &bucket, nil
@@ -330,7 +341,7 @@ func (b *Buckets) Delete(name string, namespace string) error {
 }
 
 // GetQuota gets the quota for the given bucket and namespace.
-func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQuotaInfo, error) {
+func (b *Buckets) GetQuota(bucketName string, _ string) (*model.BucketQuotaInfo, error) {
 	for _, bucket := range b.items {
 		if bucket.Name == bucketName {
 			return &model.BucketQuotaInfo{
@@ -360,7 +371,7 @@ func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
 }
 
 // DeleteQuota deletes the quota setting for the given bucket and namespace.
-func (b *Buckets) DeleteQuota(bucketName string, namespace string) error {
+func (b *Buckets) DeleteQuota(bucketName string, _ string) error {
 	for i := 0; i < len(b.items); i++ {
 		if b.items[i].Name == bucketName {
 			b.items[i].BlockSize = -1
@@ -386,51 +397,51 @@ type Objmt struct {
 }
 
 // GetStoreBillingInfo returns billing info metrics for object store
-func (mt *Objmt) GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfoList, error) {
+func (mt *Objmt) GetStoreBillingInfo(_ map[string]string) (*model.StoreBillingInfoList, error) {
 	return mt.storeBillingInfoList, nil
 }
 
 // GetStoreBillingSample returns billing sample (time-window) metrics for object store
-func (mt *Objmt) GetStoreBillingSample(params map[string]string) (*model.StoreBillingSampleList, error) {
+func (mt *Objmt) GetStoreBillingSample(_ map[string]string) (*model.StoreBillingSampleList, error) {
 	return mt.storeBillingSampleList, nil
 }
 
 // GetStoreReplicationData returns CRR metrics for defined object stores
-func (mt *Objmt) GetStoreReplicationData(ids []string, params map[string]string) (*model.StoreReplicationDataList, error) {
+func (mt *Objmt) GetStoreReplicationData(_ []string, _ map[string]string) (*model.StoreReplicationDataList, error) {
 	return mt.storeReplicationDataList, nil
 }
 
 // GetAccountBillingInfo returns billing info metrics for defined accounts
-func (mt *Objmt) GetAccountBillingInfo(ids []string, params map[string]string) (*model.AccountBillingInfoList, error) {
+func (mt *Objmt) GetAccountBillingInfo(_ []string, _ map[string]string) (*model.AccountBillingInfoList, error) {
 	return mt.accountBillingInfoList, nil
 }
 
 // GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts
-func (mt *Objmt) GetAccountBillingSample(ids []string, params map[string]string) (*model.AccountBillingSampleList, error) {
+func (mt *Objmt) GetAccountBillingSample(_ []string, _ map[string]string) (*model.AccountBillingSampleList, error) {
 	return mt.accountBillingSampleList, nil
 }
 
 // GetBucketBillingInfo returns billing info metrics for defined buckets and account
-func (mt *Objmt) GetBucketBillingInfo(account string, ids []string, params map[string]string) (*model.BucketBillingInfoList, error) {
+func (mt *Objmt) GetBucketBillingInfo(_ string, _ []string, _ map[string]string) (*model.BucketBillingInfoList, error) {
 	return mt.bucketBillingInfoList, nil
 }
 
 // GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account
-func (mt *Objmt) GetBucketBillingSample(account string, ids []string, params map[string]string) (*model.BucketBillingSampleList, error) {
+func (mt *Objmt) GetBucketBillingSample(_ string, _ []string, _ map[string]string) (*model.BucketBillingSampleList, error) {
 	return mt.bucketBillingSampleList, nil
 }
 
 // GetBucketBillingPerf returns performance metrics for defined buckets and account
-func (mt *Objmt) GetBucketBillingPerf(account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error) {
+func (mt *Objmt) GetBucketBillingPerf(_ string, _ []string, _ map[string]string) (*model.BucketPerfDataList, error) {
 	return mt.bucketBillingPerfList, nil
 }
 
 // GetReplicationInfo returns billing info metrics for defined replication pairs and account
-func (mt *Objmt) GetReplicationInfo(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error) {
+func (mt *Objmt) GetReplicationInfo(_ string, _ [][]string, _ map[string]string) (*model.BucketReplicationInfoList, error) {
 	return mt.bucketReplicationInfoList, nil
 }
 
 // GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account
-func (mt *Objmt) GetReplicationSample(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error) {
+func (mt *Objmt) GetReplicationSample(_ string, _ [][]string, _ map[string]string) (*model.BucketReplicationSampleList, error) {
 	return mt.bucketReplicationSampleList, nil
 }
