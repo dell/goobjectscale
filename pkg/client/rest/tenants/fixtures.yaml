@@ -91,3 +91,26 @@ interactions:
     status: 200 OK
     code: 200
     duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/tenants/tenant/10d9817c-3696-4625-854e-82b21d8c0795
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><tenant><id>10d9817c-3696-4625-854e-82b21d8c0795</id><default_bucket_block_size>-1</default_bucket_block_size><is_compliance_enabled>false</is_compliance_enabled><is_encryption_enabled>false</is_encryption_enabled><default_data_services_vpool>urn:storageos:ReplicationGroupInfo:0618ee4c-7ede-444b-8fc5-7289b2951875:global</default_data_services_vpool></tenant>
+    headers:
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration: ""

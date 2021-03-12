@@ -68,6 +68,9 @@ type ObjectUserInterface interface {
 type TenantsInterface interface {
 	// List returns a list of tenants within the ObjectScale object store.
 	List(params map[string]string) (*model.TenantList, error)
+
+	// Get returns an account tenant in the ObjectScale object store
+	Get(name string, params map[string]string) (*model.Tenant, error)
 }
 
 // ObjectUserInterface represents an interface for objMT service metrics.

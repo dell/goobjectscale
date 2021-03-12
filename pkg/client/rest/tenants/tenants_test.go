@@ -74,6 +74,21 @@ var _ = Describe("Tenants", func() {
 			})
 		})
 	})
+
+	Context("#Get", func() {
+		Context("with no params", func() {
+			var (
+				tenant *model.Tenant
+				err    error
+			)
+
+			It("should have the requested tenant", func() {
+				tenant, err = clientset.Tenants().Get("10d9817c-3696-4625-854e-82b21d8c0795", map[string]string{})
+				Expect(err).ToNot(HaveOccurred())
+				Expect(tenant.ID).To(Equal("10d9817c-3696-4625-854e-82b21d8c0795"))
+			})
+		})
+	})
 })
 
 func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
