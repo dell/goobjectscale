@@ -2,11 +2,6 @@ package model
 
 import "encoding/xml"
 
-type CRRInfo struct{
-	XMLName xml.Name `xml:"ReplicationAdminConfiguration"`
-
-	CRR
-}
 
 type CRR struct {
 	XMLName xml.Name `xml:"ReplicationAdminConfiguration"`

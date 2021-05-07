@@ -1,14 +1,15 @@
 package rest
 
 import (
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 	"net/http"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objectuser"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/tenants"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objmt"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/tenants"
 )
 
 // ClientSet is a set of clients for each API section
@@ -18,6 +19,7 @@ type ClientSet struct {
 	objectUser api.ObjectUserInterface
 	tenants    api.TenantsInterface
 	objmt      api.ObjmtInterface
+	crr        api.CRRInterface
 }
 
 // Returns a new client set based on the provided REST client parameters
@@ -35,6 +37,7 @@ func NewClientSet(u string, p string, e string, h *http.Client, overrideHdr bool
 		objectUser: &objectuser.ObjectUser{Client: c},
 		tenants:    &tenants.Tenants{Client: c},
 		objmt:      &objmt.Objmt{Client: c},
+		crr:        &crr.CRR{Client: c},
 	}
 }
 
@@ -61,4 +64,9 @@ func (c *ClientSet) Tenants() api.TenantsInterface {
 // ObjectMt implements the client API for objMT metrics
 func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objmt
+}
+
+// ObjectMt implements the client API for objMT metrics
+func (c *ClientSet) CRR() api.CRRInterface {
+	return c.crr
 }
