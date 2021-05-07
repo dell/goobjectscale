@@ -112,13 +112,11 @@ var _ = Describe("CRR", func() {
 		BeforeEach(func() {
 			crr, err = clientset.CRR().Get("test-objectscale", "test-objectstore", map[string]string{})
 		})
+		
 
-		It("shouldn't error", func() {
+		It("should return the bucket successfully", func() {
 			Expect(err).ToNot(HaveOccurred())
-		})
-
-		It("should return the bucket", func() {
-			Expect(crr).ToNot(BeNil())
+			Expect(crr.DestObjectStore).To(Equal("test-objectstore"))
 		})
 	})
 
