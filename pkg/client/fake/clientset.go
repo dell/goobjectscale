@@ -469,7 +469,7 @@ func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, d
 }
 
 // SuspendReplication implements the CRR API
-func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string, param map[string]string) error {
+func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.config.DestObjectScale = destObjectScale
 	c.config.DestObjectStore = destObjectStore
 	c.config.SuspendStartMills = int(time.Millisecond)
@@ -477,7 +477,7 @@ func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string,
 }
 
 // ResumeReplication implements the CRR API
-func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
+func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.config.DestObjectScale = destObjectScale
 	c.config.DestObjectStore = destObjectStore
 	c.config.PauseEndMills = int(time.Millisecond)
@@ -485,7 +485,7 @@ func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, 
 }
 
 // ThrottleReplication implements the CRR API
-func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, param map[string]string) error {
+func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, _ map[string]string) error {
 	c.config.DestObjectScale = destObjectScale
 	c.config.DestObjectStore = destObjectStore
 	c.config.ThrottleBandwidth = mbPerSecond
@@ -493,6 +493,8 @@ func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string
 }
 
 // Get implements the CRR API
-func (c *CRR) Get(destObjectScale string, destObjectStore string, param map[string]string) (*model.CRR, error) {
+func (c *CRR) Get(destObjectScale string, destObjectStore string, _ map[string]string) (*model.CRR, error) {
+	c.config.DestObjectScale = destObjectScale
+	c.config.DestObjectStore = destObjectStore
 	return c.config, nil
 }
