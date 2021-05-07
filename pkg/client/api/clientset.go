@@ -11,6 +11,12 @@ type ClientSet interface {
 	ObjectUser() ObjectUserInterface
 	Tenants() TenantsInterface
 	ObjectMt() ObjmtInterface
+	CRR() CRRInterface
+}
+
+type CRRInterface interface {
+	// Pause source and destination destination object stores' replication communication for provided milliseconds
+	PauseReplication(destObjectScale string, destObjectStore string, durationMills int, param map[string]string) error
 }
 
 // BucketsInterfaces represents a bucket resource client interface

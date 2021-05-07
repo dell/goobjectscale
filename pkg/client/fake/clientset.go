@@ -3,6 +3,7 @@ package fake
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
@@ -14,6 +15,7 @@ type ClientSet struct {
 	objectUser api.ObjectUserInterface
 	tenants    api.TenantsInterface
 	objectMt   api.ObjmtInterface
+	crr        api.CRRInterface
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -35,6 +37,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		storeBillingInfoList        *model.StoreBillingInfoList
 		storeBillingSampleList      *model.StoreBillingSampleList
 		storeReplicationDataList    *model.StoreReplicationDataList
+		crrList                     []model.CRR
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -70,6 +73,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeBillingSampleList = object
 		case *model.StoreReplicationDataList:
 			storeReplicationDataList = object
+		case *model.CRR:
+			crrList = append(crrList, *object)
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -95,6 +100,9 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeBillingInfoList:        storeBillingInfoList,
 			storeBillingSampleList:      storeBillingSampleList,
 			storeReplicationDataList:    storeReplicationDataList,
+		},
+		crr: &CRR{
+			items: crrList,
 		},
 	}
 }
@@ -444,4 +452,20 @@ func (mt *Objmt) GetReplicationInfo(_ string, _ [][]string, _ map[string]string)
 // GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account
 func (mt *Objmt) GetReplicationSample(_ string, _ [][]string, _ map[string]string) (*model.BucketReplicationSampleList, error) {
 	return mt.bucketReplicationSampleList, nil
+}
+
+// CRR implements the crr API
+type CRR struct {
+	items []model.CRR
+}
+
+// PauseReplication implements the CRR API
+func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, durationMills int, params map[string]string) error {
+	for _, item := range c.items {
+		item.DestObjectScale = destObjectScale
+		item.DestObjectStore = destObjectStore
+		item.PauseStartMills = int(time.Millisecond)
+		item.PauseEndMills = item.PauseStartMills + durationMills
+	}
+	return nil
 }
