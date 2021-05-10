@@ -110,17 +110,17 @@ type ObjmtInterface interface {
 
 // CRRInterface represents an interface for Cross Region Replication (CRR)
 type CRRInterface interface {
-	// PauseReplication temporarily pauses source and destination destination object stores' replication communication
+	// PauseReplication temporarily pauses source and destination object stores' replication communication
 	// pauses for the provided milliseconds
 	PauseReplication(destObjectScale string, destObjectStore string, durationMills int, param map[string]string) error
 
-	// SuspendReplication suspends source and destination destination object stores' replication communication
+	// SuspendReplication suspends source and destination object stores' replication communication
 	SuspendReplication(destObjectScale string, destObjectStore string, param map[string]string) error
 
-	// ResumeReplication resumes source and destination destination object stores' replication communication
+	// ResumeReplication resumes source and destination object stores' replication communication
 	ResumeReplication(destObjectScale string, destObjectStore string, param map[string]string) error
 
-	// ThrottleReplication throttles source and destination destination object stores' replication communication
+	// ThrottleReplication throttles source and destination object stores' replication communication
 	// throttles the provided MB per second
 	ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, param map[string]string) error
 
