@@ -1,11 +1,12 @@
 package crr
 
 import (
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 	"net/http"
 	"path"
 	"strconv"
+
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
 
 // CRR is a REST implementation of the CRR interface
