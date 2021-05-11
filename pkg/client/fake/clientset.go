@@ -102,9 +102,14 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeReplicationDataList:    storeReplicationDataList,
 		},
 		crr: &CRR{
-			config: crr,
+			Config: crr,
 		},
 	}
+}
+
+// CRR implements the client API
+func (c *ClientSet) CRR() api.CRRInterface {
+	return c.crr
 }
 
 // Buckets implements the client API
@@ -456,45 +461,45 @@ func (mt *Objmt) GetReplicationSample(_ string, _ [][]string, _ map[string]strin
 
 // CRR implements the crr API
 type CRR struct {
-	config *model.CRR
+	Config *model.CRR
 }
 
 // PauseReplication implements the CRR API
-func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, durationMills int, params map[string]string) error {
-	c.config.DestObjectScale = destObjectScale
-	c.config.DestObjectStore = destObjectStore
-	c.config.PauseStartMills = int(time.Millisecond)
-	c.config.PauseEndMills = c.config.PauseStartMills + durationMills
+func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, durationMills int, _ map[string]string) error {
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	c.Config.PauseStartMills = int(time.Millisecond)
+	c.Config.PauseEndMills = c.Config.PauseStartMills + durationMills
 	return nil
 }
 
 // SuspendReplication implements the CRR API
 func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
-	c.config.DestObjectScale = destObjectScale
-	c.config.DestObjectStore = destObjectStore
-	c.config.SuspendStartMills = int(time.Millisecond)
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	c.Config.SuspendStartMills = int(time.Millisecond)
 	return nil
 }
 
 // ResumeReplication implements the CRR API
 func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
-	c.config.DestObjectScale = destObjectScale
-	c.config.DestObjectStore = destObjectStore
-	c.config.PauseEndMills = int(time.Millisecond)
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	c.Config.PauseEndMills = int(time.Millisecond)
 	return nil
 }
 
 // ThrottleReplication implements the CRR API
 func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, _ map[string]string) error {
-	c.config.DestObjectScale = destObjectScale
-	c.config.DestObjectStore = destObjectStore
-	c.config.ThrottleBandwidth = mbPerSecond
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	c.Config.ThrottleBandwidth = mbPerSecond
 	return nil
 }
 
 // Get implements the CRR API
 func (c *CRR) Get(destObjectScale string, destObjectStore string, _ map[string]string) (*model.CRR, error) {
-	c.config.DestObjectScale = destObjectScale
-	c.config.DestObjectStore = destObjectStore
-	return c.config, nil
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	return c.Config, nil
 }
