@@ -485,7 +485,7 @@ func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string,
 func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
-	c.Config.PauseEndMills = int(time.Millisecond)
+	c.Config.SuspendStartMills = 0
 	return nil
 }
 
