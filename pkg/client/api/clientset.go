@@ -11,7 +11,9 @@ type ClientSet interface {
 	ObjectUser() ObjectUserInterface
 	Tenants() TenantsInterface
 	ObjectMt() ObjmtInterface
+	CRR() CRRInterface
 }
+
 
 // BucketsInterfaces represents a bucket resource client interface
 type BucketsInterface interface {
@@ -104,4 +106,24 @@ type ObjmtInterface interface {
 
 	// GetStoreReplicationData returns CRR metrics for defined object stores
 	GetStoreReplicationData(ids []string, params map[string]string) (*model.StoreReplicationDataList, error)
+}
+
+// CRRInterface represents an interface for Cross Region Replication (CRR)
+type CRRInterface interface {
+	// PauseReplication temporarily pauses source and destination object stores' replication communication
+	// pauses for the provided milliseconds
+	PauseReplication(destObjectScale string, destObjectStore string, durationMills int, param map[string]string) error
+
+	// SuspendReplication suspends source and destination object stores' replication communication
+	SuspendReplication(destObjectScale string, destObjectStore string, param map[string]string) error
+
+	// ResumeReplication resumes source and destination object stores' replication communication
+	ResumeReplication(destObjectScale string, destObjectStore string, param map[string]string) error
+
+	// ThrottleReplication throttles source and destination object stores' replication communication
+	// throttles the provided MB per second
+	ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, param map[string]string) error
+
+	// Get returns the replication configuration regarding pause/resume/suspend/throttle information
+	Get(destObjectScale string, destObjectStore string, param map[string]string) (*model.CRR, error)
 }

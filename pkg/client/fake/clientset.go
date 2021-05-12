@@ -3,6 +3,7 @@ package fake
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
@@ -14,6 +15,7 @@ type ClientSet struct {
 	objectUser api.ObjectUserInterface
 	tenants    api.TenantsInterface
 	objectMt   api.ObjmtInterface
+	crr        api.CRRInterface
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -35,6 +37,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		storeBillingInfoList        *model.StoreBillingInfoList
 		storeBillingSampleList      *model.StoreBillingSampleList
 		storeReplicationDataList    *model.StoreReplicationDataList
+		crr                         *model.CRR
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -70,6 +73,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeBillingSampleList = object
 		case *model.StoreReplicationDataList:
 			storeReplicationDataList = object
+		case *model.CRR:
+			crr = object
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -96,7 +101,15 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeBillingSampleList:      storeBillingSampleList,
 			storeReplicationDataList:    storeReplicationDataList,
 		},
+		crr: &CRR{
+			Config: crr,
+		},
 	}
+}
+
+// CRR implements the client API
+func (c *ClientSet) CRR() api.CRRInterface {
+	return c.crr
 }
 
 // Buckets implements the client API
@@ -444,4 +457,49 @@ func (mt *Objmt) GetReplicationInfo(_ string, _ [][]string, _ map[string]string)
 // GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account
 func (mt *Objmt) GetReplicationSample(_ string, _ [][]string, _ map[string]string) (*model.BucketReplicationSampleList, error) {
 	return mt.bucketReplicationSampleList, nil
+}
+
+// CRR implements the crr API
+type CRR struct {
+	Config *model.CRR
+}
+
+// PauseReplication implements the CRR API
+func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, durationMills int, _ map[string]string) error {
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	c.Config.PauseStartMills = int(time.Millisecond)
+	c.Config.PauseEndMills = c.Config.PauseStartMills + durationMills
+	return nil
+}
+
+// SuspendReplication implements the CRR API
+func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	c.Config.SuspendStartMills = int(time.Millisecond)
+	return nil
+}
+
+// ResumeReplication implements the CRR API
+func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	c.Config.SuspendStartMills = 0
+	return nil
+}
+
+// ThrottleReplication implements the CRR API
+func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, _ map[string]string) error {
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	c.Config.ThrottleBandwidth = mbPerSecond
+	return nil
+}
+
+// Get implements the CRR API
+func (c *CRR) Get(destObjectScale string, destObjectStore string, _ map[string]string) (*model.CRR, error) {
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
+	return c.Config, nil
 }
