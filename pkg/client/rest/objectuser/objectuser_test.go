@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/dnaeon/go-vcr/cassette"
@@ -49,6 +50,7 @@ func TestMain(m *testing.M) {
 		}
 	}()
 	m.Run()
+	os.Exit(0)
 }
 
 func TestObjectUser_List(t *testing.T) {

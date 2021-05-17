@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/dnaeon/go-vcr/cassette"
@@ -61,6 +62,7 @@ func TestMain(m *testing.M) {
 		}
 	}()
 	m.Run()
+	os.Exit(0)
 }
 
 func TestAccountInfo_List(t *testing.T) {

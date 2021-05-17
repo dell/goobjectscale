@@ -253,6 +253,19 @@ type Tenants struct {
 	items []model.Tenant
 }
 
+var _ api.TenantsInterface = &Tenants{}
+
+func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
+	newtenant := &model.Tenant{
+		ID:                payload.AccountID,
+		EncryptionEnabled: payload.EncryptionEnabled,
+		ComplianceEnabled: payload.ComplianceEnabled,
+		BucketBlockSize:   payload.BucketBlockSize,
+	}
+	t.items = append(t.items, *newtenant)
+	return newtenant, nil
+}
+
 // Get implements the tenants API
 func (t *Tenants) Get(id string, _ map[string]string) (*model.Tenant, error) {
 	for _, tenant := range t.items {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
@@ -12,6 +13,8 @@ import (
 type Tenants struct {
 	Client *client.Client
 }
+
+var _ api.TenantsInterface = &Tenants{}
 
 // List implements the tenants interface
 func (t *Tenants) List(params map[string]string) (*model.TenantList, error) {
@@ -36,6 +39,22 @@ func (t *Tenants) Get(tenantID string, params map[string]string) (*model.Tenant,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s", tenantID),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
+	}
+	tenant := &model.Tenant{}
+	err := t.Client.MakeRemoteCall(req, tenant)
+	if err != nil {
+		return nil, err
+	}
+	return tenant, nil
+}
+
+// Create implements the tenants interface
+func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
+	req := client.Request{
+		Method:      http.MethodPost,
+		Path:        "object/tenants/tenant/",
+		ContentType: client.ContentTypeXML,
+		Body: payload,
 	}
 	tenant := &model.Tenant{}
 	err := t.Client.MakeRemoteCall(req, tenant)
