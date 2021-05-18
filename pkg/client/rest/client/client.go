@@ -30,7 +30,7 @@ type Client struct {
 	authRetries int
 
 	// Should X-EMC-Override header be added into the request
-	OverrideHeader bool 
+	OverrideHeader bool
 }
 
 func (c *Client) login() error {

@@ -46,10 +46,10 @@ type BucketQuota struct {
 	Namespace string `json:"namespace,omitempty" xml:"namespace,omitempty"`
 
 	// BlockSize is the bucket size at which new object creations will be blocked
-	BlockSize int64 `json:"blockSize,omit_empty,omitempty" xml:"blockSize,omit_empty,omitempty"`
+	BlockSize int64 `json:"blockSize,omitempty" xml:"blockSize,omitempty"`
 
 	// NotificationSize is the bucket size at which the users will be notified
-	NotificationSize int64 `json:"notificationSize,omit_empty" xml:"notificationSize,omit_empty"`
+	NotificationSize int64 `json:"notificationSize,omitempty" xml:"notificationSize,omitempty"`
 }
 
 // Bucket is an object storage bucket
@@ -104,20 +104,20 @@ type Bucket struct {
 	TSOReadOnly bool `json:"is_tso_read_only,omitempty" xml:"is_tso_read_only,omitempty"`
 
 	// DefaultRetention is the default retention period for objects in bucket
-	DefaultRetention int64 `json:"default_retention,omit_empty,omitempty" xml:"default_retention,omit_empty,omitempty"`
+	DefaultRetention int64 `json:"default_retention,omitempty" xml:"default_retention,omitempty"`
 
 	// BlockSize is the bucket size at which new object creations will be
 	// blocked
-	BlockSize int64 `json:"block_size,omit_empty,omitempty" xml:"block_size,omit_empty,omitempty"`
+	BlockSize int64 `json:"block_size,omitempty" xml:"block_size,omitempty"`
 
 	// NotificationSize is the bucket size at which the users will be notified
-	NotificationSize int64 `json:"notification_size,omit_empty" xml:"notification_size,omit_empty"`
+	NotificationSize int64 `json:"notification_size,omitempty" xml:"notification_size,omitempty"`
 
 	// BlockSizeInput is the input of bucket size, support CreateBucket method
-	BlockSizeInput int64 `json:"blockSize,omit_empty,omitempty" xml:"blockSize,omit_empty,omitempty"`
+	BlockSizeInput int64 `json:"blockSize,omitempty" xml:"blockSize,omitempty"`
 
 	// NotificationSizeInput is the input of notification size, support CreateBucket method
-	NotificationSizeInput int64 `json:"notificationSize,omit_empty" xml:"notificationSize,omit_empty"`
+	NotificationSizeInput int64 `json:"notificationSize,omitempty" xml:"notificationSize,omitempty"`
 
 	// Tags is a list of arbitrary metadata keys and values applied to the
 	// bucket
@@ -151,7 +151,7 @@ type Bucket struct {
 	DefaultGroupDirWritePermission bool `json:"default_group_dir_write_permission,omitempty" xml:"default_group_dir_write_permission,omitempty"`
 
 	// DefaultGroup is the bucket's default group
-	DefaultGroup string `json:"default_group,omitempty,omitempty" xml:"default_group,omitempty,omitempty"`
+	DefaultGroup string `json:"default_group,omitempty" xml:"default_group,omitempty"`
 
 	// SearchMetadata is the custom metadata for enabled for querying on the
 	// bucket
@@ -173,17 +173,17 @@ type BucketList struct {
 	Items []Bucket `json:"object_bucket" xml:"object_bucket"`
 
 	// MaxBuckets is the maximum number of buckets requested in the listing
-	MaxBuckets int `json:"max_buckets,omit_empty" xml:"max_buckets,omit_empty"`
+	MaxBuckets int `json:"max_buckets,omitempty" xml:"max_buckets,omitempty"`
 
 	// NextMarker is a reference object to receive the next set of buckets
-	NextMarker string `json:"next_marker,omit_empty" xml:"next_marker,omit_empty"`
+	NextMarker string `json:"next_marker,omitempty" xml:"next_marker,omitempty"`
 
 	// Filter is a string query used to limit the returned buckets in the
 	// listing
-	Filter string `json:"Filter,omit_empty" xml:"Filter,omit_empty"`
+	Filter string `json:"Filter,omitempty" xml:"Filter,omitempty"`
 
 	// NextPageLink is a hyperlink to the next page in the bucket listing
-	NextPageLink string `json:"next_page_link,omit_empty" xml:"next_page_link,omit_empty"`
+	NextPageLink string `json:"next_page_link,omitempty" xml:"next_page_link,omitempty"`
 }
 
 // MinMaxGovenor enforces minimum and maximum retention for bucket objects

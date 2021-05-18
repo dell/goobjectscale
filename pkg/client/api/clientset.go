@@ -73,6 +73,9 @@ type TenantsInterface interface {
 
 	// Get returns an account tenant in the ObjectScale object store
 	Get(name string, params map[string]string) (*model.Tenant, error)
+
+	// Create creates a tenant and returns it
+	Create(payload model.TenantCreate) (*model.Tenant, error)
 }
 
 // ObjectUserInterface represents an interface for objMT service metrics.
