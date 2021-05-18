@@ -29,6 +29,13 @@ type Tenant struct {
 
 	// BucketBlockSize is the default bucket size at which new object creations will be blocked
 	BucketBlockSize int64 `json:"default_bucket_block_size,omitempty" xml:"default_bucket_block_size,omitempty"`
+
+	RetentionClasses         string `xml:"retention_classes"`
+	NotificationSize         string `xml:"notificationSize"`
+	BlockSize                string `xml:"blockSize"`
+	BlockSizeInCount         string `xml:"blockSizeInCount"`
+	NotificationSizeInCount  string `xml:"notificationSizeInCount"`
+	Alias                    string `xml:"alias"`
 }
 
 // TenantCreate is an object store tenant creation input
@@ -37,7 +44,7 @@ type TenantCreate struct {
 	XMLName xml.Name `xml:"tenant_create"`
 
 	// Alias is the tenant alias to set
-	Alias                    string   `xml:"alias"`
+	Alias string `xml:"alias"`
 	// ID is the id of the tenant scoped to the cluster instance
 	AccountID string `json:"account_id" xml:"account_id"`
 
@@ -59,4 +66,3 @@ type TenantList struct {
 	// Items is the list of tenants in the list
 	Items []Tenant `json:"tenant" xml:"tenant"`
 }
-
