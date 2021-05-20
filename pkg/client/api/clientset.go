@@ -76,6 +76,9 @@ type TenantsInterface interface {
 
 	// Create creates a tenant and returns it
 	Create(payload model.TenantCreate) (*model.Tenant, error)
+
+	// Delete deletes a tenant and returns it
+	Delete(name string) error
 }
 
 // ObjectUserInterface represents an interface for objMT service metrics.
