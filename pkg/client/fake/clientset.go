@@ -266,6 +266,16 @@ func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
 	return newtenant, nil
 }
 
+func (t *Tenants) Delete(tenantID string) error {
+	for i, tenant := range t.items {
+		if tenant.ID == tenantID {
+			t.items = append(t.items[:i], t.items[i+1:]...)
+			return nil
+		}
+	}
+	return errors.New("tenant not found")
+}
+
 // Get implements the tenants API
 func (t *Tenants) Get(id string, _ map[string]string) (*model.Tenant, error) {
 	for _, tenant := range t.items {

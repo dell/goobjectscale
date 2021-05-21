@@ -1,6 +1,7 @@
 package tenants_test
 
 import (
+	"encoding/xml"
 	"log"
 	"net/http"
 	"testing"
@@ -86,6 +87,48 @@ var _ = Describe("Tenants", func() {
 				tenant, err = clientset.Tenants().Get("10d9817c-3696-4625-854e-82b21d8c0795", map[string]string{})
 				Expect(err).ToNot(HaveOccurred())
 				Expect(tenant.ID).To(Equal("10d9817c-3696-4625-854e-82b21d8c0795"))
+			})
+		})
+	})
+
+	Context("#Create", func() {
+		Context("with no params", func() {
+			var (
+				tenant *model.Tenant
+				err    error
+			)
+
+			BeforeEach(func() {
+				payload := model.TenantCreate{
+					XMLName:           xml.Name{},
+					Alias:             "",
+					AccountID:         "test-account",
+					EncryptionEnabled: false,
+					ComplianceEnabled: false,
+					BucketBlockSize:   0,
+				}
+				tenant, err = clientset.Tenants().Create(payload)
+			})
+
+			It("should have the requested tenant", func() {
+				Expect(err).ToNot(HaveOccurred())
+				Expect(tenant.ID).To(Equal("test-account"))
+			})
+		})
+	})
+
+	Context("#Delete", func() {
+		Context("with no params", func() {
+			var (
+				err    error
+			)
+
+			BeforeEach(func() {
+				err = clientset.Tenants().Delete("test-account")
+			})
+
+			It("should not error", func() {
+				Expect(err).ToNot(HaveOccurred())
 			})
 		})
 	})

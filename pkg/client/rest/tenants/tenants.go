@@ -63,3 +63,18 @@ func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
 	}
 	return tenant, nil
 }
+
+// Create implements the tenants interface
+func (t *Tenants) Delete(tenantID string) error {
+	req := client.Request{
+		Method:      http.MethodPost,
+		Path:        fmt.Sprintf("object/tenants/tenant/%s/delete/", tenantID),
+		ContentType: client.ContentTypeXML,
+	}
+	tenant := &model.Tenant{}
+	err := t.Client.MakeRemoteCall(req, tenant)
+	if err != nil {
+		return err
+	}
+	return nil
+}
