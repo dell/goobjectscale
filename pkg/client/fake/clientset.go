@@ -277,10 +277,10 @@ func (t *Tenants) Delete(tenantID string) error {
 }
 
 func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
-	for _, tenant := range t.items {
+	for i, tenant := range t.items {
 		if tenant.ID == tenantID {
-			tenant.Alias = payload.Alias
-			tenant.BucketBlockSize = payload.BucketBlockSize
+			t.items[i].BucketBlockSize = payload.BucketBlockSize
+			t.items [i].Alias = payload.Alias
 			return nil
 		}
 	}
