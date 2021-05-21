@@ -270,6 +270,7 @@ func (t *Tenants) Delete(tenantID string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == tenantID {
 			t.items = append(t.items[:i], t.items[i+1:]...)
+			return nil
 		}
 	}
 	return errors.New("tenant not found")
