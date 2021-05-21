@@ -77,7 +77,7 @@ type TenantsInterface interface {
 	// Create creates a tenant and returns it
 	Create(payload model.TenantCreate) (*model.Tenant, error)
 
-	// Delete deletes a tenant and returns it
+	// Delete deletes a tenant
 	Delete(name string) error
 }
 
