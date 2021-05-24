@@ -86,7 +86,7 @@ type TenantQuota struct {
 // TenantQuotaSet is an object store tenant quota
 type TenantQuotaSet struct {
 	// XMLName is the name of the xml tag used XML marshalling
-	XMLName xml.Name `xml:"tenant_set_quota"`
+	XMLName xml.Name `xml:"tenant_quota_details"`
 
 	BlockSize string `xml:"blockSize"`
 
