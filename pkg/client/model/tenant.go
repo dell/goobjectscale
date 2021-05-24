@@ -67,10 +67,10 @@ type TenantList struct {
 	Items []Tenant `json:"tenant" xml:"tenant"`
 }
 
-// Quota is an object store tenant quota
-type Quota struct {
+// TenantQuota is an object store tenant quota
+type TenantQuota struct {
 	// XMLName is the name of the xml tag used XML marshalling
-	XMLName xml.Name `xml:"tenant_quota"`
+	XMLName xml.Name `xml:"tenant_quota_details"`
 
 	BlockSize string `xml:"blockSize"`
 
@@ -83,8 +83,8 @@ type Quota struct {
 	ID string `json:"id,omitempty" xml:"id,omitempty"`
 }
 
-// SetQuota is an object store tenant quota
-type SetQuota struct {
+// TenantQuotaSet is an object store tenant quota
+type TenantQuotaSet struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"tenant_set_quota"`
 

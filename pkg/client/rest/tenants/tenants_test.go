@@ -132,6 +132,64 @@ var _ = Describe("Tenants", func() {
 			})
 		})
 	})
+
+
+	Context("#Get Quota", func() {
+		Context("with no params", func() {
+			var (
+				err    error
+			)
+
+			BeforeEach(func() {
+				payload := model.TenantQuotaSet{
+					XMLName:                 xml.Name{},
+					BlockSize:               "5",
+					NotificationSize:        "6",
+					BlockSizeInCount:        "7",
+					NotificationSizeInCount: "8",
+				}
+				err = clientset.Tenants().SetQuota("test-account", payload)
+			})
+
+			It("should not error", func() {
+				Expect(err).ToNot(HaveOccurred())
+			})
+		})
+	})
+
+	Context("#Get Quota", func() {
+		Context("with no params", func() {
+			var (
+				err    error
+				quota *model.TenantQuota
+			)
+
+			BeforeEach(func() {
+				quota, err = clientset.Tenants().GetQuota("test-account", nil)
+			})
+
+			It("should not error", func() {
+				Expect(err).ToNot(HaveOccurred())
+				Expect(quota.BlockSize).To(Equal("5"))
+			})
+		})
+	})
+
+	Context("#Delete Quota", func() {
+		Context("with no params", func() {
+			var (
+				err    error
+			)
+
+			BeforeEach(func() {
+				err = clientset.Tenants().DeleteQuota("test-account")
+			})
+
+			It("should not error", func() {
+				Expect(err).ToNot(HaveOccurred())
+			})
+		})
+	})
 })
 
 func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
