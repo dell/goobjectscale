@@ -280,7 +280,7 @@ func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == tenantID {
 			t.items[i].BucketBlockSize = payload.BucketBlockSize
-			t.items [i].Alias = payload.Alias
+			t.items[i].Alias = payload.Alias
 			return nil
 		}
 	}
