@@ -30,12 +30,12 @@ type Tenant struct {
 	// BucketBlockSize is the default bucket size at which new object creations will be blocked
 	BucketBlockSize int64 `json:"default_bucket_block_size,omitempty" xml:"default_bucket_block_size,omitempty"`
 
-	RetentionClasses         string `xml:"retention_classes"`
-	NotificationSize         string `xml:"notificationSize"`
-	BlockSize                string `xml:"blockSize"`
-	BlockSizeInCount         string `xml:"blockSizeInCount"`
-	NotificationSizeInCount  string `xml:"notificationSizeInCount"`
-	Alias                    string `xml:"alias"`
+	RetentionClasses        string `xml:"retention_classes"`
+	NotificationSize        string `xml:"notificationSize"`
+	BlockSize               string `xml:"blockSize"`
+	BlockSizeInCount        string `xml:"blockSizeInCount"`
+	NotificationSizeInCount string `xml:"notificationSizeInCount"`
+	Alias                   string `xml:"alias"`
 }
 
 // TenantCreate is an object store tenant creation input
@@ -65,4 +65,34 @@ type TenantList struct {
 
 	// Items is the list of tenants in the list
 	Items []Tenant `json:"tenant" xml:"tenant"`
+}
+
+// Quota is an object store tenant quota
+type Quota struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"tenant_quota"`
+
+	BlockSize string `xml:"blockSize"`
+
+	NotificationSize string `xml:"notificationSize"`
+
+	BlockSizeInCount string `xml:"blockSizeInCount"`
+
+	NotificationSizeInCount string `xml:"notificationSizeInCount"`
+
+	ID string `json:"id,omitempty" xml:"id,omitempty"`
+}
+
+// SetQuota is an object store tenant quota
+type SetQuota struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `xml:"tenant_set_quota"`
+
+	BlockSize string `xml:"blockSize"`
+
+	NotificationSize string `xml:"notificationSize"`
+
+	BlockSizeInCount string `xml:"blockSizeInCount"`
+
+	NotificationSizeInCount string `xml:"notificationSizeInCount"`
 }
