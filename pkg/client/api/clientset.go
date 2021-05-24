@@ -79,6 +79,15 @@ type TenantsInterface interface {
 
 	// Delete deletes a tenant
 	Delete(name string) error
+
+	// GetQuota gets the quota of a tenant
+	GetQuota(name string, params map[string]string) (*model.Quota, error)
+
+	// DeleteQuota deletes the quota of a tenant
+	DeleteQuota(name string) error
+
+	// SetQuota sets the quota of a tenant
+	SetQuota(name string) error
 }
 
 // ObjectUserInterface represents an interface for objMT service metrics.

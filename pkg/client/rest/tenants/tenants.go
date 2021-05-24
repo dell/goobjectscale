@@ -54,7 +54,7 @@ func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
 		Method:      http.MethodPost,
 		Path:        "object/tenants/tenant/",
 		ContentType: client.ContentTypeXML,
-		Body: payload,
+		Body:        payload,
 	}
 	tenant := &model.Tenant{}
 	err := t.Client.MakeRemoteCall(req, tenant)
@@ -73,6 +73,53 @@ func (t *Tenants) Delete(tenantID string) error {
 	}
 	tenant := &model.Tenant{}
 	err := t.Client.MakeRemoteCall(req, tenant)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// GetQuota implements the tenants interface
+func (t *Tenants) GetQuota(tenantID string, params map[string]string) (*model.Quota, error) {
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        fmt.Sprintf("object/tenants/tenant/%s/quota", tenantID),
+		ContentType: client.ContentTypeXML,
+		Params:      params,
+	}
+	quota := &model.Quota{}
+	err := t.Client.MakeRemoteCall(req, quota)
+	if err != nil {
+		return nil, err
+	}
+	return quota, nil
+}
+
+// DeleteQuota implements the tenants interface
+func (t *Tenants) DeleteQuota(tenantID string) error {
+	req := client.Request{
+		Method:      http.MethodDelete,
+		Path:        fmt.Sprintf("object/tenants/tenant/%s/quota", tenantID),
+		ContentType: client.ContentTypeXML,
+	}
+	quota := &model.Quota{}
+	err := t.Client.MakeRemoteCall(req, quota)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetQuota implements the tenants interface
+func (t *Tenants) SetQuota(payload model.SetQuota, tenantID string) error {
+	req := client.Request{
+		Method:      http.MethodPut,
+		Path:        fmt.Sprintf("object/tenants/tenant/%s/quota", tenantID),
+		ContentType: client.ContentTypeXML,
+		Body: payload,
+	}
+	quota := &model.Quota{}
+	err := t.Client.MakeRemoteCall(req, quota)
 	if err != nil {
 		return err
 	}
