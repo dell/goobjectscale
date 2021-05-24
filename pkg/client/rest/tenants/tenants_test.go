@@ -132,6 +132,28 @@ var _ = Describe("Tenants", func() {
 			})
 		})
 	})
+
+
+	Context("#Update", func() {
+		Context("with no params", func() {
+			var (
+				err    error
+			)
+
+			BeforeEach(func() {
+				payload := model.TenantUpdate{
+					Alias:             "test-alias",
+					BucketBlockSize:   100,
+				}
+				err = clientset.Tenants().Update(payload, "test-account")
+			})
+
+			It("should not error", func() {
+				Expect(err).ToNot(HaveOccurred())
+			})
+
+		})
+	})
 })
 
 func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
