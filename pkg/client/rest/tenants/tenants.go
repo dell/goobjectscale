@@ -117,10 +117,7 @@ func (t *Tenants) DeleteQuota(tenantID string) error {
 	}
 	quota := &model.TenantQuota{}
 	err := t.Client.MakeRemoteCall(req, quota)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 // SetQuota implements the tenants interface
