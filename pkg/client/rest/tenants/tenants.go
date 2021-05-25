@@ -133,8 +133,5 @@ func (t *Tenants) SetQuota(tenantID string, payload model.TenantQuotaSet) error 
 	}
 	quota := &model.TenantQuota{}
 	err := t.Client.MakeRemoteCall(req, quota)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
