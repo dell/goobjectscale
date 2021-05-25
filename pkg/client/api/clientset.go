@@ -80,6 +80,9 @@ type TenantsInterface interface {
 	// Delete deletes a tenant
 	Delete(name string) error
 
+	// Update updates a specific tenant (currently only default bucket block size and alias fields supported)
+	Update(payload model.TenantUpdate, name string) error
+
 	// GetQuota gets the quota of a tenant
 	GetQuota(name string, params map[string]string) (*model.TenantQuota, error)
 

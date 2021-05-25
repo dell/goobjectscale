@@ -58,6 +58,15 @@ type TenantCreate struct {
 	BucketBlockSize int64 `json:"default_bucket_block_size,omitempty" xml:"default_bucket_block_size"`
 }
 
+// TenantCreate is an object store tenant creation input
+type TenantUpdate struct {
+	// Alias is the tenant alias to set
+	Alias string `xml:"alias"`
+
+	// BucketBlockSize is the default bucket size at which new object creations will be blocked
+	BucketBlockSize int64 `json:"default_bucket_block_size,omitempty" xml:"default_bucket_block_size"`
+}
+
 // TenantList is a list of object store tenants
 type TenantList struct {
 	// XMLName is the name of the xml tag used XML marshalling

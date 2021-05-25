@@ -133,8 +133,27 @@ var _ = Describe("Tenants", func() {
 		})
 	})
 
+	Context("#Update", func() {
+		Context("with no params", func() {
+			var (
+				err    error
+			)
 
-	Context("#Get Quota", func() {
+			BeforeEach(func() {
+				payload := model.TenantUpdate{
+					Alias:             "test-alias",
+					BucketBlockSize:   100,
+				}
+				err = clientset.Tenants().Update(payload, "test-account")
+			})
+
+			It("should not error", func() {
+				Expect(err).ToNot(HaveOccurred())
+			})
+		})
+	})
+
+	Context("#Set Quota", func() {
 		Context("with no params", func() {
 			var (
 				err    error
