@@ -297,10 +297,57 @@ func (t *Tenants) Get(id string, _ map[string]string) (*model.Tenant, error) {
 	return nil, errors.New("not found")
 }
 
-// Get implements the tenants API
+// List implements the tenants API
 func (t *Tenants) List(_ map[string]string) (*model.TenantList, error) {
 	return &model.TenantList{Items: t.items}, nil
 }
+
+// GetQuota retrieves the quota settings for the given tenant
+func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, error){
+	for _, tenant := range t.items {
+		if tenant.ID == id {
+			return &model.TenantQuota{
+				XMLName:                 tenant.XMLName,
+				BlockSize:               tenant.BlockSize,
+				NotificationSize:        tenant.NotificationSize,
+				BlockSizeInCount:        tenant.BlockSizeInCount,
+				NotificationSizeInCount: tenant.NotificationSizeInCount,
+				ID:                      tenant.ID,
+			}, nil
+		}
+	}
+	return nil, errors.New("not found")
+}
+
+// SetQuota updates the quota settings for the given tenant
+func (t *Tenants) SetQuota(id string, tenantQuota model.TenantQuotaSet) error{
+	for i, tenant := range t.items {
+		if tenant.ID == id {
+			t.items[i].BlockSize = tenantQuota.BlockSize
+			t.items[i].BlockSizeInCount = tenantQuota.BlockSizeInCount
+			t.items[i].NotificationSize = tenantQuota.NotificationSize
+			t.items[i].NotificationSizeInCount = tenantQuota.NotificationSizeInCount
+			return nil
+		}
+	}
+
+	return errors.New("not found")
+}
+
+// DeleteQuota deletes the quota settings for the given tenant
+func (t *Tenants) DeleteQuota(id string) error {
+	for i, tenant := range t.items {
+		if tenant.ID == id {
+			t.items[i].BlockSize = ""
+			t.items[i].BlockSizeInCount = ""
+			t.items[i].NotificationSize = ""
+			t.items[i].NotificationSizeInCount = ""
+			return nil
+		}
+	}
+	return errors.New("not found")
+}
+
 
 // Buckets implements the buckets API
 type Buckets struct {

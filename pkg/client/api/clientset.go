@@ -82,6 +82,15 @@ type TenantsInterface interface {
 
 	// Update updates a specific tenant (currently only default bucket block size and alias fields supported)
 	Update(payload model.TenantUpdate, name string) error
+
+	// GetQuota gets the quota of a tenant
+	GetQuota(name string, params map[string]string) (*model.TenantQuota, error)
+
+	// DeleteQuota deletes the quota of a tenant
+	DeleteQuota(name string) error
+
+	// SetQuota sets the quota of a tenant
+	SetQuota(name string, payload model.TenantQuotaSet) error
 }
 
 // ObjectUserInterface represents an interface for objMT service metrics.
