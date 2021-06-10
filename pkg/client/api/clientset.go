@@ -9,11 +9,11 @@ type ClientSet interface {
 	// Buckets returns a bucket client interface
 	Buckets() BucketsInterface
 	ObjectUser() ObjectUserInterface
+	ServiceProvider() ServiceProviderInterface
 	Tenants() TenantsInterface
 	ObjectMt() ObjmtInterface
 	CRR() CRRInterface
 }
-
 
 // BucketsInterfaces represents a bucket resource client interface
 type BucketsInterface interface {
@@ -64,6 +64,18 @@ type ObjectUserInterface interface {
 
 	// DeleteSecret delete a secret for an object user within the Objectscale object store
 	DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error
+}
+
+// ServiceProviderInterface represents a service provider resource client interface.
+type ServiceProviderInterface interface {
+	// Get returns the Service Provider
+	Get(params map[string]string) (*model.ServiceProvider, error)
+
+	// Create creates a ServiceProvider and returns it
+	Create(payload model.ServiceProviderCreate) (*model.ServiceProvider, error)
+
+	// Delete deletes a Service Provider
+	Delete() error
 }
 
 // TenantsInterface represents an tenant resource client interface.

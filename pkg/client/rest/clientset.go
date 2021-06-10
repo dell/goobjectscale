@@ -1,25 +1,28 @@
 package rest
 
 import (
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 	"net/http"
+
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objectuser"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objmt"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/serviceprovider"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/tenants"
 )
 
 // ClientSet is a set of clients for each API section
 type ClientSet struct {
-	client     *client.Client
-	buckets    api.BucketsInterface
-	objectUser api.ObjectUserInterface
-	tenants    api.TenantsInterface
-	objmt      api.ObjmtInterface
-	crr        api.CRRInterface
+	client          *client.Client
+	buckets         api.BucketsInterface
+	objectUser      api.ObjectUserInterface
+	serviceProvider api.ServiceProviderInterface
+	tenants         api.TenantsInterface
+	objmt           api.ObjmtInterface
+	crr             api.CRRInterface
 }
 
 // Returns a new client set based on the provided REST client parameters
@@ -32,12 +35,13 @@ func NewClientSet(u string, p string, e string, h *http.Client, overrideHdr bool
 		OverrideHeader: overrideHdr,
 	}
 	return &ClientSet{
-		client:     c,
-		buckets:    &buckets.Buckets{Client: c},
-		objectUser: &objectuser.ObjectUser{Client: c},
-		tenants:    &tenants.Tenants{Client: c},
-		objmt:      &objmt.Objmt{Client: c},
-		crr:        &crr.CRR{Client: c},
+		client:          c,
+		buckets:         &buckets.Buckets{Client: c},
+		objectUser:      &objectuser.ObjectUser{Client: c},
+		serviceProvider: &serviceprovider.ServiceProvider{Client: c},
+		tenants:         &tenants.Tenants{Client: c},
+		objmt:           &objmt.Objmt{Client: c},
+		crr:             &crr.CRR{Client: c},
 	}
 }
 
@@ -54,6 +58,11 @@ func (c *ClientSet) Buckets() api.BucketsInterface {
 // ObjectUser implements the client API
 func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
+}
+
+// ServiceProvider implements the client API
+func (c *ClientSet) ServiceProvider() api.ServiceProviderInterface {
+	return c.serviceProvider
 }
 
 // Tenants implements the client API

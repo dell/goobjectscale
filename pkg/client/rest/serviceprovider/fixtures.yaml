@@ -1,0 +1,131 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers: {}
+    url: https://testserver/login
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><loggedIn><user>130820808912778549-admin</user></loggedIn>
+    headers:
+      Content-Length:
+      - "113"
+      Content-Type:
+      - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/xml
+      Content-Type:
+      - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/ecs-service-provider
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><CreateServiceProviderResponse><ResponseMetadata><RequestId>0af9f5b8:17178fe9282:224de:2a</RequestId></ResponseMetadata><CreateServiceProviderResult><service_provider><create_time>2020-04-16T19:42:02Z</create_time><dns>127.0.0.1</dns><etag>0000000000000000</etag><java_keystore>/u3+7QAAAAIAAAABAAAAAQAE.../java_keystore><key_alias>saml</key_alias><key_password>pass123</key_password><unique_id>48eef7e9-aadc-3a01-813b-54b06abb8d80</unique_id><uuid>25e0e516-a30f-49b0-bcbc-b2fb9ee96c90</uuid></service_provider></CreateServiceProviderResult></CreateServiceProviderResponse>
+    headers:
+      Content-Length:
+        - "627"
+      Content-Type:
+      - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers: {}
+    url: https://testserver/login
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><loggedIn><user>130820808912778549-admin</user></loggedIn>
+    headers:
+      Content-Length:
+      - "113"
+      Content-Type:
+      - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/ecs-service-provider
+    method: POST
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><CreateServiceProviderResponse><ResponseMetadata><RequestId>0af9f5b8:17178fe9282:224de:2a</RequestId></ResponseMetadata><CreateServiceProviderResult><service_provider><create_time>2020-04-16T19:42:02Z</create_time><dns>127.0.0.1</dns><etag>0000000000000000</etag><java_keystore>/u3+7QAAAAIAAAABAAAAAQAE.../java_keystore><key_alias>saml</key_alias><key_password>pass123</key_password><unique_id>48eef7e9-aadc-3a01-813b-54b06abb8d80</unique_id><uuid>25e0e516-a30f-49b0-bcbc-b2fb9ee96c90</uuid></service_provider></CreateServiceProviderResult></CreateServiceProviderResponse>
+    headers:
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers: {}
+    url: https://testserver/login
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><loggedIn><user>130820808912778549-admin</user></loggedIn>
+    headers:
+      Content-Length:
+      - "113"
+      Content-Type:
+      - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/ecs-service-provider
+    method: DELETE
+  response:
+    body: ""
+    headers:
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration: ""

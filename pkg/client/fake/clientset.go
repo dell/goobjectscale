@@ -11,11 +11,12 @@ import (
 
 // ClientSet is a set of clients for each API section
 type ClientSet struct {
-	buckets    api.BucketsInterface
-	objectUser api.ObjectUserInterface
-	tenants    api.TenantsInterface
-	objectMt   api.ObjmtInterface
-	crr        api.CRRInterface
+	buckets         api.BucketsInterface
+	objectUser      api.ObjectUserInterface
+	serviceProvider api.ServiceProviderInterface
+	tenants         api.TenantsInterface
+	objectMt        api.ObjmtInterface
+	crr             api.CRRInterface
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -38,6 +39,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		storeBillingSampleList      *model.StoreBillingSampleList
 		storeReplicationDataList    *model.StoreReplicationDataList
 		crr                         *model.CRR
+		serviceProvider             *model.ServiceProvider
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -75,6 +77,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeReplicationDataList = object
 		case *model.CRR:
 			crr = object
+		case *model.ServiceProvider:
+			serviceProvider = object
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -104,12 +108,20 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		crr: &CRR{
 			Config: crr,
 		},
+		serviceProvider: &ServiceProvider{
+			ServiceProvider: serviceProvider,
+		},
 	}
 }
 
 // CRR implements the client API
 func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
+}
+
+// ServiceProvider implements the client API
+func (c *ClientSet) ServiceProvider() api.ServiceProviderInterface {
+	return c.serviceProvider
 }
 
 // Buckets implements the client API
@@ -303,7 +315,7 @@ func (t *Tenants) List(_ map[string]string) (*model.TenantList, error) {
 }
 
 // GetQuota retrieves the quota settings for the given tenant
-func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, error){
+func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, error) {
 	for _, tenant := range t.items {
 		if tenant.ID == id {
 			return &model.TenantQuota{
@@ -320,7 +332,7 @@ func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, 
 }
 
 // SetQuota updates the quota settings for the given tenant
-func (t *Tenants) SetQuota(id string, tenantQuota model.TenantQuotaSet) error{
+func (t *Tenants) SetQuota(id string, tenantQuota model.TenantQuotaSet) error {
 	for i, tenant := range t.items {
 		if tenant.ID == id {
 			t.items[i].BlockSize = tenantQuota.BlockSize
@@ -347,7 +359,6 @@ func (t *Tenants) DeleteQuota(id string) error {
 	}
 	return errors.New("not found")
 }
-
 
 // Buckets implements the buckets API
 type Buckets struct {
@@ -583,4 +594,36 @@ func (c *CRR) Get(destObjectScale string, destObjectStore string, _ map[string]s
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 	return c.Config, nil
+}
+
+// ServiceProvider implements the crr API
+type ServiceProvider struct {
+	ServiceProvider *model.ServiceProvider
+}
+
+// Get implements the ServiceProvider API
+func (sp *ServiceProvider) Get(_ map[string]string) (*model.ServiceProvider, error) {
+	return sp.ServiceProvider, nil
+}
+
+// Create implements the ServiceProvider API
+func (sp *ServiceProvider) Create(payload model.ServiceProviderCreate) (*model.ServiceProvider, error) {
+	sp.ServiceProvider.CreateTime = payload.ServiceProvider.CreateTime
+	sp.ServiceProvider.DNS = payload.ServiceProvider.DNS
+	sp.ServiceProvider.Etag = payload.ServiceProvider.Etag
+	sp.ServiceProvider.JavaKeystore = payload.ServiceProvider.JavaKeystore
+	sp.ServiceProvider.KeyAlias = payload.ServiceProvider.KeyAlias
+	sp.ServiceProvider.KeyPassword = payload.ServiceProvider.KeyPassword
+	sp.ServiceProvider.UniqueID = payload.ServiceProvider.UniqueID
+	sp.ServiceProvider.UUID = payload.ServiceProvider.UUID
+	return sp.ServiceProvider, nil
+}
+
+// Delete implements the ServiceProvider API
+func (sp *ServiceProvider) Delete() error {
+	if len(sp.ServiceProvider.JavaKeystore) > 0 {
+		sp.ServiceProvider = &model.ServiceProvider{}
+		return nil
+	}
+	return errors.New("Service Provider not found")
 }
