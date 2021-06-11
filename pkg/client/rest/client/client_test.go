@@ -38,6 +38,7 @@ var _ = Describe("Rest client", func() {
 				"root",
 				"changme",
 				"https://host",
+				"https://testgateway",
 				newTestHTTPClient(captures, false),
 				false,
 			)
@@ -81,6 +82,7 @@ var _ = Describe("Rest client", func() {
 				"root",
 				"changme",
 				":not:a:valid:url",
+				"https://testgateway",
 				newTestHTTPClient(captures, false),
 				true,
 			)
@@ -115,6 +117,7 @@ var _ = Describe("Rest client", func() {
 				"root",
 				"changme",
 				"https://host",
+				"https://testgateway",
 				newTestHTTPClient(captures, false),
 				false,
 			)
@@ -155,6 +158,7 @@ var _ = Describe("Rest client", func() {
 				"root",
 				"changme",
 				"https://host",
+				"https://testgateway",
 				newTestHTTPClient(captures, true),
 				false,
 			)

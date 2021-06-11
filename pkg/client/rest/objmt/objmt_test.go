@@ -3,12 +3,13 @@ package objmt_test
 import (
 	"bytes"
 	"crypto/tls"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"testing"
+
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
@@ -53,6 +54,7 @@ func TestMain(m *testing.M) {
 		"root",
 		"ChangeMe",
 		"https://testserver:443",
+		"https://testgateway",
 		httpClient,
 		false,
 	)
