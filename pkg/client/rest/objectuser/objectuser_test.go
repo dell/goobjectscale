@@ -41,6 +41,7 @@ func TestMain(m *testing.M) {
 		"root",
 		"ChangeMe",
 		"https://testserver:443",
+		"https://testgateway",
 		httpClient,
 		false,
 	)

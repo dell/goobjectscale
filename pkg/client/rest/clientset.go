@@ -1,8 +1,9 @@
 package rest
 
 import (
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 	"net/http"
+
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
@@ -23,11 +24,12 @@ type ClientSet struct {
 }
 
 // Returns a new client set based on the provided REST client parameters
-func NewClientSet(u string, p string, e string, h *http.Client, overrideHdr bool) *ClientSet {
+func NewClientSet(u, p, e, g string, h *http.Client, overrideHdr bool) *ClientSet {
 	c := &client.Client{
 		Username:       u,
 		Password:       p,
 		Endpoint:       e,
+		Gateway:        g,
 		HTTPClient:     h,
 		OverrideHeader: overrideHdr,
 	}

@@ -43,6 +43,7 @@ var _ = Describe("Tenants", func() {
 			"root",
 			"ChangeMe",
 			"https://testserver",
+			"https://testgateway",
 			newRecordedHTTPClient(r),
 			false,
 		)
@@ -120,7 +121,7 @@ var _ = Describe("Tenants", func() {
 	Context("#Delete", func() {
 		Context("with no params", func() {
 			var (
-				err    error
+				err error
 			)
 
 			BeforeEach(func() {
@@ -136,13 +137,13 @@ var _ = Describe("Tenants", func() {
 	Context("#Update", func() {
 		Context("with no params", func() {
 			var (
-				err    error
+				err error
 			)
 
 			BeforeEach(func() {
 				payload := model.TenantUpdate{
-					Alias:             "test-alias",
-					BucketBlockSize:   100,
+					Alias:           "test-alias",
+					BucketBlockSize: 100,
 				}
 				err = clientset.Tenants().Update(payload, "test-account")
 			})
@@ -156,7 +157,7 @@ var _ = Describe("Tenants", func() {
 	Context("#Set Quota", func() {
 		Context("with no params", func() {
 			var (
-				err    error
+				err error
 			)
 
 			BeforeEach(func() {
@@ -179,7 +180,7 @@ var _ = Describe("Tenants", func() {
 	Context("#Get Quota", func() {
 		Context("with no params", func() {
 			var (
-				err    error
+				err   error
 				quota *model.TenantQuota
 			)
 
@@ -197,7 +198,7 @@ var _ = Describe("Tenants", func() {
 	Context("#Delete Quota", func() {
 		Context("with no params", func() {
 			var (
-				err    error
+				err error
 			)
 
 			BeforeEach(func() {

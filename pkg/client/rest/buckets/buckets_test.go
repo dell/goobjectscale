@@ -42,6 +42,7 @@ var _ = Describe("Buckets", func() {
 			"root",
 			"ChangeMe",
 			"https://testserver",
+			"https://testgateway",
 			newRecordedHTTPClient(r),
 			false,
 		)
