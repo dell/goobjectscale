@@ -9,9 +9,9 @@ type ClientSet interface {
 	// Buckets returns a bucket client interface
 	Buckets() BucketsInterface
 	ObjectUser() ObjectUserInterface
-	ServiceProvider() ServiceProviderInterface
 	Tenants() TenantsInterface
 	ObjectMt() ObjmtInterface
+	AlertPolicies() AlertPoliciesInterface
 	CRR() CRRInterface
 }
 
@@ -66,16 +66,22 @@ type ObjectUserInterface interface {
 	DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error
 }
 
-// ServiceProviderInterface represents a service provider resource client interface.
-type ServiceProviderInterface interface {
-	// Get returns the Service Provider
-	Get(params map[string]string) (*model.ServiceProvider, error)
+// AlertPolicyInterface represents a alert policy resource client interface.
+type AlertPoliciesInterface interface {
+	// List returns a list of alert policies within the ObjectScale object store.
+	List(params map[string]string) (*model.AlertPolicies, error)
 
-	// Create creates a ServiceProvider and returns it
-	Create(payload model.ServiceProviderCreate) (*model.ServiceProvider, error)
+	// Get returns the Alert Policy
+	Get(policyName string) (*model.AlertPolicy, error)
 
-	// Delete deletes a Service Provider
-	Delete() error
+	// Create creates an Alert Policy and returns it
+	Create(payload model.AlertPolicy) (*model.AlertPolicy, error)
+
+	// Delete deletes an Alert Policy
+	Delete(policyName string) error
+
+	// Update updates an Alert Policy and returns it
+	Update(payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error)
 }
 
 // TenantsInterface represents an tenant resource client interface.

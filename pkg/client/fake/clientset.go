@@ -11,12 +11,12 @@ import (
 
 // ClientSet is a set of clients for each API section
 type ClientSet struct {
-	buckets         api.BucketsInterface
-	objectUser      api.ObjectUserInterface
-	serviceProvider api.ServiceProviderInterface
-	tenants         api.TenantsInterface
-	objectMt        api.ObjmtInterface
-	crr             api.CRRInterface
+	buckets       api.BucketsInterface
+	objectUser    api.ObjectUserInterface
+	alertPolicies api.AlertPoliciesInterface
+	tenants       api.TenantsInterface
+	objectMt      api.ObjmtInterface
+	crr           api.CRRInterface
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -39,7 +39,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		storeBillingSampleList      *model.StoreBillingSampleList
 		storeReplicationDataList    *model.StoreReplicationDataList
 		crr                         *model.CRR
-		serviceProvider             *model.ServiceProvider
+		alertPolicies               []model.AlertPolicy
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -77,8 +77,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeReplicationDataList = object
 		case *model.CRR:
 			crr = object
-		case *model.ServiceProvider:
-			serviceProvider = object
+		case *model.AlertPolicy:
+			alertPolicies = append(alertPolicies, *object)
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -108,8 +108,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		crr: &CRR{
 			Config: crr,
 		},
-		serviceProvider: &ServiceProvider{
-			ServiceProvider: serviceProvider,
+		alertPolicies: &AlertPolicies{
+			items: alertPolicies,
 		},
 	}
 }
@@ -119,9 +119,9 @@ func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
 }
 
-// ServiceProvider implements the client API
-func (c *ClientSet) ServiceProvider() api.ServiceProviderInterface {
-	return c.serviceProvider
+// AlertPolicies implements the client API
+func (c *ClientSet) AlertPolicies() api.AlertPoliciesInterface {
+	return c.alertPolicies
 }
 
 // Buckets implements the client API
@@ -596,34 +596,82 @@ func (c *CRR) Get(destObjectScale string, destObjectStore string, _ map[string]s
 	return c.Config, nil
 }
 
-// ServiceProvider implements the crr API
-type ServiceProvider struct {
-	ServiceProvider *model.ServiceProvider
+// AlertPolicy implements the AlertPolicy API
+type AlertPolicy struct {
+	AlertPolicy *model.AlertPolicy
 }
 
-// Get implements the ServiceProvider API
-func (sp *ServiceProvider) Get(_ map[string]string) (*model.ServiceProvider, error) {
-	return sp.ServiceProvider, nil
+// AlertPolicies implements the AlertPolicies API
+type AlertPolicies struct {
+	items []model.AlertPolicy
 }
 
-// Create implements the ServiceProvider API
-func (sp *ServiceProvider) Create(payload model.ServiceProviderCreate) (*model.ServiceProvider, error) {
-	sp.ServiceProvider.CreateTime = payload.ServiceProvider.CreateTime
-	sp.ServiceProvider.DNS = payload.ServiceProvider.DNS
-	sp.ServiceProvider.Etag = payload.ServiceProvider.Etag
-	sp.ServiceProvider.JavaKeystore = payload.ServiceProvider.JavaKeystore
-	sp.ServiceProvider.KeyAlias = payload.ServiceProvider.KeyAlias
-	sp.ServiceProvider.KeyPassword = payload.ServiceProvider.KeyPassword
-	sp.ServiceProvider.UniqueID = payload.ServiceProvider.UniqueID
-	sp.ServiceProvider.UUID = payload.ServiceProvider.UUID
-	return sp.ServiceProvider, nil
-}
-
-// Delete implements the ServiceProvider API
-func (sp *ServiceProvider) Delete() error {
-	if len(sp.ServiceProvider.JavaKeystore) > 0 {
-		sp.ServiceProvider = &model.ServiceProvider{}
-		return nil
+// Get implements the AlertPolicy API
+func (ap *AlertPolicies) Get(policyName string) (*model.AlertPolicy, error) {
+	for _, AlertPolicy := range ap.items {
+		if AlertPolicy.PolicyName == policyName {
+			return &AlertPolicy, nil
+		}
 	}
-	return errors.New("Service Provider not found")
+	return nil, errors.New("not found")
+}
+
+// List implements the buckets API
+func (ap *AlertPolicies) List(_ map[string]string) (*model.AlertPolicies, error) {
+	return &model.AlertPolicies{Items: ap.items}, nil
+}
+
+// Create implements the AlertPolicy API
+func (ap *AlertPolicies) Create(payload model.AlertPolicy) (*model.AlertPolicy, error) {
+	newAlertPolicy := &model.AlertPolicy{
+		PolicyName:           payload.PolicyName,
+		MetricType:           payload.MetricType,
+		MetricName:           payload.MetricName,
+		CreatedBy:            payload.CreatedBy,
+		IsEnabled:            payload.IsEnabled,
+		IsPerInstanceMetric:  payload.IsPerInstanceMetric,
+		Period:               payload.Period,
+		PeriodUnits:          payload.PeriodUnits,
+		DatapointsToConsider: payload.DatapointsToConsider,
+		DatapointsToAlert:    payload.DatapointsToAlert,
+		Statistic:            payload.Statistic,
+		Operator:             payload.Operator,
+		Condition:            payload.Condition,
+	}
+	ap.items = append(ap.items, *newAlertPolicy)
+	return newAlertPolicy, nil
+}
+
+// Delete implements the AlertPolicy API
+func (ap *AlertPolicies) Delete(policyName string) error {
+	for i, alertpolicy := range ap.items {
+		if alertpolicy.PolicyName == policyName {
+			ap.items = append(ap.items[:i], ap.items[i+1:]...)
+			return nil
+		}
+	}
+	return errors.New("alert policy not found")
+}
+
+// Update implements the AlertPolicy API
+func (ap *AlertPolicies) Update(payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
+	for i, alertpolicy := range ap.items {
+		if alertpolicy.PolicyName == policyName {
+			ap.items[i].PolicyName = payload.PolicyName
+			ap.items[i].MetricType = payload.MetricType
+			ap.items[i].MetricName = payload.MetricName
+			ap.items[i].CreatedBy = payload.CreatedBy
+			ap.items[i].IsEnabled = payload.IsEnabled
+			ap.items[i].IsPerInstanceMetric = payload.IsPerInstanceMetric
+			ap.items[i].Period = payload.Period
+			ap.items[i].PeriodUnits = payload.PeriodUnits
+			ap.items[i].DatapointsToConsider = payload.DatapointsToConsider
+			ap.items[i].DatapointsToAlert = payload.DatapointsToAlert
+			ap.items[i].Statistic = payload.Statistic
+			ap.items[i].Operator = payload.Operator
+			ap.items[i].Condition = payload.Condition
+			return &alertpolicy, nil
+		}
+	}
+	return nil, errors.New("alert policy not found")
 }

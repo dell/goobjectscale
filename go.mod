@@ -1,6 +1,6 @@
 module github.com/emcecs/objectscale-management-go-sdk
 
-go 1.12
+go 1.14
 
 require (
 	github.com/dnaeon/go-vcr v1.0.1
