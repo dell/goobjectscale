@@ -40,6 +40,7 @@ var _ = Describe("CRR", func() {
 			"root",
 			"ChangeMe",
 			"https://testserver",
+			"https://testgateway",
 			newRecordedHTTPClient(r),
 			false,
 		)
@@ -112,7 +113,6 @@ var _ = Describe("CRR", func() {
 		BeforeEach(func() {
 			crr, err = clientset.CRR().Get("test-objectscale", "test-objectstore", map[string]string{})
 		})
-
 
 		It("should return the bucket successfully", func() {
 			Expect(err).ToNot(HaveOccurred())
