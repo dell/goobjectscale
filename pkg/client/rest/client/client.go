@@ -25,6 +25,9 @@ type Client struct {
 	// Endpoint is the URL of the management API
 	Endpoint string `json:"endpoint"`
 
+	// Gateway is the auth endpoint
+	Gateway string `json:"gateway"`
+
 	token       string
 	HTTPClient  *http.Client
 	authRetries int
@@ -34,11 +37,11 @@ type Client struct {
 }
 
 func (c *Client) login() error {
-	u, err := url.Parse(c.Endpoint)
+	u, err := url.Parse(c.Gateway)
 	if err != nil {
 		return err
 	}
-	u.Path = "/login"
+	u.Path = "/mgmt/login"
 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
