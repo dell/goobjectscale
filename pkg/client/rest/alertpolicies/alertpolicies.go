@@ -77,3 +77,19 @@ func (ap *AlertPolicies) Delete(policyName string) error {
 	}
 	return nil
 }
+
+// Update implements the AlertPolicy interface
+func (ap *AlertPolicies) Update(payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
+	req := client.Request{
+		Method:      http.MethodPut,
+		Path:        path.Join("vdc", "alertpolicy", policyName),
+		ContentType: client.ContentTypeXML,
+		Body:        &payload,
+	}
+	alertpolicy := &model.AlertPolicy{}
+	err := ap.Client.MakeRemoteCall(req, alertpolicy)
+	if err != nil {
+		return nil, err
+	}
+	return alertpolicy, nil
+}
