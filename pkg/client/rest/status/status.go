@@ -1,9 +1,10 @@
 package status
 
 import (
+	"net/http"
+
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
-	"net/http"
 )
 
 // Status is a REST implementation of the Status interface

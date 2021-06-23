@@ -1,16 +1,15 @@
 package rest
 
 import (
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/status"
 	"net/http"
-
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objectuser"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objmt"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/status"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/tenants"
 )
 
