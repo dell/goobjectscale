@@ -10,10 +10,10 @@ type AlertPolicy struct {
 	CreatedBy            string   `json:"createdBy" xml:"createdBy"`
 	IsEnabled            string   `json:"isEnabled" xml:"isEnabled"`
 	IsPerInstanceMetric  string   `json:"isPerInstanceMetric" xml:"isPerInstanceMetric"`
-	Period               string   `json:"period" xml:"period"`
+	Period               int      `json:"period" xml:"period"`
 	PeriodUnits          string   `json:"periodUnits" xml:"periodUnits"`
-	DatapointsToConsider string   `json:"datapointsToConsider" xml:"datapointsToConsider"`
-	DatapointsToAlert    string   `json:"datapointsToAlert" xml:"datapointsToAlert"`
+	DatapointsToConsider int      `json:"datapointsToConsider" xml:"datapointsToConsider"`
+	DatapointsToAlert    int      `json:"datapointsToAlert" xml:"datapointsToAlert"`
 	Statistic            string   `json:"statistic" xml:"statistic"`
 	Operator             string   `json:"operator" xml:"operator"`
 	Condition            struct {

@@ -43,6 +43,7 @@ var _ = Describe("AlertPolicies", func() {
 			"root",
 			"ChangeMe",
 			"https://testserver",
+			"https://testgateway",
 			newRecordedHTTPClient(r),
 			false,
 		)
