@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/status"
 	"net/http"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
@@ -21,6 +22,7 @@ type ClientSet struct {
 	tenants    api.TenantsInterface
 	objmt      api.ObjmtInterface
 	crr        api.CRRInterface
+	status     api.StatusInterfaces
 }
 
 // Returns a new client set based on the provided REST client parameters
@@ -40,6 +42,7 @@ func NewClientSet(u, p, e, g string, h *http.Client, overrideHdr bool) *ClientSe
 		tenants:    &tenants.Tenants{Client: c},
 		objmt:      &objmt.Objmt{Client: c},
 		crr:        &crr.CRR{Client: c},
+		status:     &status.Status{Client: c},
 	}
 }
 
@@ -71,4 +74,9 @@ func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 // ObjectMt implements the client API for objMT metrics
 func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
+}
+
+// Status implements the client API
+func (c *ClientSet) Status() api.StatusInterfaces {
+	return c.status
 }

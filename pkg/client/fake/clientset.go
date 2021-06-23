@@ -16,6 +16,7 @@ type ClientSet struct {
 	tenants    api.TenantsInterface
 	objectMt   api.ObjmtInterface
 	crr        api.CRRInterface
+	status     api.StatusInterfaces
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -38,6 +39,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		storeBillingSampleList      *model.StoreBillingSampleList
 		storeReplicationDataList    *model.StoreReplicationDataList
 		crr                         *model.CRR
+		rebuildInfo                 *model.RebuildInfo
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -75,6 +77,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeReplicationDataList = object
 		case *model.CRR:
 			crr = object
+		case *model.RebuildInfo:
+			rebuildInfo = object
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -103,6 +107,9 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		},
 		crr: &CRR{
 			Config: crr,
+		},
+		status: &Status{
+			RebuildInfo: rebuildInfo,
 		},
 	}
 }
@@ -303,7 +310,7 @@ func (t *Tenants) List(_ map[string]string) (*model.TenantList, error) {
 }
 
 // GetQuota retrieves the quota settings for the given tenant
-func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, error){
+func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, error) {
 	for _, tenant := range t.items {
 		if tenant.ID == id {
 			return &model.TenantQuota{
@@ -320,7 +327,7 @@ func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, 
 }
 
 // SetQuota updates the quota settings for the given tenant
-func (t *Tenants) SetQuota(id string, tenantQuota model.TenantQuotaSet) error{
+func (t *Tenants) SetQuota(id string, tenantQuota model.TenantQuotaSet) error {
 	for i, tenant := range t.items {
 		if tenant.ID == id {
 			t.items[i].BlockSize = tenantQuota.BlockSize
@@ -347,7 +354,6 @@ func (t *Tenants) DeleteQuota(id string) error {
 	}
 	return errors.New("not found")
 }
-
 
 // Buckets implements the buckets API
 type Buckets struct {
@@ -583,4 +589,15 @@ func (c *CRR) Get(destObjectScale string, destObjectStore string, _ map[string]s
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 	return c.Config, nil
+}
+
+// Status implements the Status API
+type Status struct {
+	RebuildInfo *model.RebuildInfo
+}
+
+func (s *Status) GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
+	s.RebuildInfo.TotalBytes = 2048
+	s.RebuildInfo.RemainingBytes = 1024
+	return s.RebuildInfo, nil
 }
