@@ -114,6 +114,11 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 	}
 }
 
+// Status implements the client API
+func (c *ClientSet) Status() api.StatusInterfaces {
+	return c.status
+}
+
 // CRR implements the client API
 func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
