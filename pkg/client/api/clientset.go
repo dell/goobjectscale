@@ -12,8 +12,14 @@ type ClientSet interface {
 	Tenants() TenantsInterface
 	ObjectMt() ObjmtInterface
 	CRR() CRRInterface
+	Status() StatusInterfaces
 }
 
+// StatusInterfaces represents status resource client interface
+type StatusInterfaces interface {
+	// GetRebuildStatus returns rebuild status of an ObjectScale object store
+	GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error)
+}
 
 // BucketsInterfaces represents a bucket resource client interface
 type BucketsInterface interface {

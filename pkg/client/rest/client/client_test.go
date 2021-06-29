@@ -191,7 +191,7 @@ func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.
 	return testutils.NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
-		case "https://host/login":
+		case "https://testgateway/mgmt/login":
 			testutils.IncrCapture(captures, "login")
 			switch authFailure {
 			case true:
@@ -201,7 +201,7 @@ func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.
 					Header:     header,
 				}
 			default:
-				header.Set("X-SDS-AUTH-TOKEN", "TESTTOKEN")
+				header.Set("X-Sds-Auth-Token", "TESTTOKEN")
 				return &http.Response{
 					StatusCode: 200,
 					Body:       ioutil.NopCloser(bytes.NewReader([]byte("OK"))),

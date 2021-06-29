@@ -5,7 +5,7 @@ interactions:
       body: ""
       form: { }
       headers: { }
-      url: https://testserver:443/login
+      url: https://testgateway/mgmt/login
       method: GET
     response:
       status: 200 OK

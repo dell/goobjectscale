@@ -5,7 +5,7 @@ interactions:
       body: ""
       form: {}
       headers: {}
-      url: https://testserver/login
+      url: https://testgateway/mgmt/login
       method: GET
     response:
       body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><loggedIn><user>130820808912778549-admin</user></loggedIn>
