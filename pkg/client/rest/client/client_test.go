@@ -36,7 +36,7 @@ var _ = Describe("Rest client", func() {
 			captures = map[string]interface{}{}
 			clientset = rest.NewClientSet(
 				"root",
-				"changme",
+				"ChangeMe",
 				"https://host",
 				"https://testgateway",
 				newTestHTTPClient(captures, false),

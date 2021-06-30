@@ -3,6 +3,7 @@ package fake
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
@@ -11,12 +12,13 @@ import (
 
 // ClientSet is a set of clients for each API section
 type ClientSet struct {
-	buckets    api.BucketsInterface
-	objectUser api.ObjectUserInterface
-	tenants    api.TenantsInterface
-	objectMt   api.ObjmtInterface
-	crr        api.CRRInterface
-	status     api.StatusInterfaces
+	buckets               api.BucketsInterface
+	objectUser            api.ObjectUserInterface
+	tenants               api.TenantsInterface
+	objectMt              api.ObjmtInterface
+	crr                   api.CRRInterface
+	status                api.StatusInterfaces
+	federatedobjectstores api.FederatedObjectStoresInterface
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -40,6 +42,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		storeReplicationDataList    *model.StoreReplicationDataList
 		crr                         *model.CRR
 		rebuildInfo                 *model.RebuildInfo
+		federatedObjectStoreList    []model.FederatedObjectStore
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -79,6 +82,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			crr = object
 		case *model.RebuildInfo:
 			rebuildInfo = object
+		case *model.FederatedObjectStore:
+			federatedObjectStoreList = append(federatedObjectStoreList, *object)
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -111,6 +116,9 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		status: &Status{
 			RebuildInfo: rebuildInfo,
 		},
+		federatedobjectstores: &FederatedObjectStores{
+			items: federatedObjectStoreList,
+		},
 	}
 }
 
@@ -133,6 +141,11 @@ type BucketPolicy struct {
 	BucketName string
 	Policy     string
 	Namespace  string
+}
+
+// Tenants implements the client API.
+func (c *ClientSet) FederatedObjectStores() api.FederatedObjectStoresInterface {
+	return c.federatedobjectstores
 }
 
 // Tenants implements the client API.
@@ -258,6 +271,16 @@ func (o *ObjectUsers) GetInfo(uid string, _ map[string]string) (*model.ObjectUse
 		return nil, fmt.Errorf("info for %s is not found", uid)
 	}
 	return o.InfoList[uid], nil
+}
+
+// FederatedObjectStores implements the federated object stores API
+type FederatedObjectStores struct {
+	items []model.FederatedObjectStore
+}
+
+// List implements the tenants API
+func (f *FederatedObjectStores) List(_ map[string]string) (*model.FederatedObjectStoreList, error) {
+	return &model.FederatedObjectStoreList{Items: f.items}, nil
 }
 
 // Tenants implements the tenants API
@@ -557,11 +580,13 @@ type CRR struct {
 }
 
 // PauseReplication implements the CRR API
-func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, durationMills int, _ map[string]string) error {
+func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
+	//resume, _ := strconv.Atoi(params["pauseEndMills"])
+	resume, _ := strconv.ParseInt(params["pauseEndMills"], 10, 64)
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
-	c.Config.PauseStartMills = int(time.Millisecond)
-	c.Config.PauseEndMills = c.Config.PauseStartMills + durationMills
+	c.Config.PauseStartMills = int64(time.Millisecond)
+	c.Config.PauseEndMills = resume
 	return nil
 }
 
@@ -569,7 +594,6 @@ func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, d
 func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
-	c.Config.SuspendStartMills = int(time.Millisecond)
 	return nil
 }
 
@@ -577,15 +601,22 @@ func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string,
 func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
-	c.Config.SuspendStartMills = 0
+	return nil
+}
+
+// UnthrottleReplication implements the CRR API
+func (c *CRR) UnthrottleReplication(destObjectScale string, destObjectStore string, _ map[string]string) error {
+	c.Config.DestObjectScale = destObjectScale
+	c.Config.DestObjectStore = destObjectStore
 	return nil
 }
 
 // ThrottleReplication implements the CRR API
-func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, _ map[string]string) error {
+func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, param map[string]string) error {
+	throttle, _ := strconv.Atoi(param["throttleMBPerSecond"])
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
-	c.Config.ThrottleBandwidth = mbPerSecond
+	c.Config.ThrottleBandwidth = throttle
 	return nil
 }
 
