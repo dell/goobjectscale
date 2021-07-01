@@ -63,16 +63,10 @@ var _ = Describe("AlertPolicies", func() {
 		)
 
 		Context("with no params", func() {
-			BeforeEach(func() {
-				alertPolicies, err = clientset.AlertPolicies().List(map[string]string{})
-			})
-
-			It("shouldn't error", func() {
-				Expect(err).ToNot(HaveOccurred())
-			})
-
 			It("should have alertPolicies", func() {
-				Expect(len(alertPolicies.Items)).To(Equal(1))
+				alertPolicies, err = clientset.AlertPolicies().List(map[string]string{})
+				Expect(err).ToNot(HaveOccurred())
+				Expect(len(alertPolicies.Items)).To(Equal(3))
 			})
 		})
 	})
@@ -133,7 +127,6 @@ var _ = Describe("AlertPolicies", func() {
 	Context("#Update", func() {
 		Context("with no params", func() {
 			var (
-				alertPolicy *model.AlertPolicy
 				err         error
 			)
 
@@ -141,16 +134,11 @@ var _ = Describe("AlertPolicies", func() {
 				payload := model.AlertPolicy{
 					PolicyName: "testPolicy",
 				}
-				alertPolicy, err = clientset.AlertPolicies().Update(payload, "testPolicy")
+				_, err = clientset.AlertPolicies().Update(payload, "testPolicy")
 			})
 
 			It("should not error", func() {
 				Expect(err).ToNot(HaveOccurred())
-			})
-
-			It("should have the requested alertPolicy", func() {
-				Expect(err).ToNot(HaveOccurred())
-				Expect(alertPolicy.PolicyName).To(Equal("testPolicy"))
 			})
 
 		})

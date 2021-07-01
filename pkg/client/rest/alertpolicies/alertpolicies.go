@@ -44,6 +44,7 @@ func (ap *AlertPolicies) List(params map[string]string) (*model.AlertPolicies, e
 	if err != nil {
 		return nil, err
 	}
+
 	return alertpolicies, nil
 }
 
@@ -66,7 +67,7 @@ func (ap *AlertPolicies) Create(payload model.AlertPolicy) (*model.AlertPolicy, 
 // Delete implements the AlertPolicy interface
 func (ap *AlertPolicies) Delete(policyName string) error {
 	req := client.Request{
-		Method:      http.MethodPost,
+		Method:      http.MethodDelete,
 		Path:        path.Join("vdc", "alertpolicy", policyName),
 		ContentType: client.ContentTypeXML,
 	}

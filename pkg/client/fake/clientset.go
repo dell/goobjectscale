@@ -11,12 +11,13 @@ import (
 
 // ClientSet is a set of clients for each API section
 type ClientSet struct {
-	buckets       api.BucketsInterface
-	objectUser    api.ObjectUserInterface
-	alertPolicies api.AlertPoliciesInterface
-	tenants       api.TenantsInterface
-	objectMt      api.ObjmtInterface
-	crr           api.CRRInterface
+	buckets         api.BucketsInterface
+	objectUser      api.ObjectUserInterface
+	tenants         api.TenantsInterface
+	objectMt        api.ObjmtInterface
+	crr             api.CRRInterface
+	alertPolicies   api.AlertPoliciesInterface
+	status          api.StatusInterfaces
 }
 
 // NewClientSet returns a new client set based on the provided REST client parameters
@@ -40,6 +41,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		storeReplicationDataList    *model.StoreReplicationDataList
 		crr                         *model.CRR
 		alertPolicies               []model.AlertPolicy
+		rebuildInfo                 *model.RebuildInfo
 	)
 	for _, o := range objs {
 		switch object := o.(type) {
@@ -79,6 +81,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			crr = object
 		case *model.AlertPolicy:
 			alertPolicies = append(alertPolicies, *object)
+		case *model.RebuildInfo:
+			rebuildInfo = object
 		default:
 			panic(fmt.Sprintf("Fake client set doesn't support %T type", o))
 		}
@@ -108,10 +112,19 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		crr: &CRR{
 			Config: crr,
 		},
+
 		alertPolicies: &AlertPolicies{
 			items: alertPolicies,
 		},
+		status: &Status{
+			RebuildInfo: rebuildInfo,
+		},
 	}
+}
+
+// Status implements the client API
+func (c *ClientSet) Status() api.StatusInterfaces {
+	return c.status
 }
 
 // CRR implements the client API
@@ -674,4 +687,15 @@ func (ap *AlertPolicies) Update(payload model.AlertPolicy, policyName string) (*
 		}
 	}
 	return nil, errors.New("alert policy not found")
+}
+
+// Status implements the Status API
+type Status struct {
+	RebuildInfo *model.RebuildInfo
+}
+
+func (s *Status) GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
+	s.RebuildInfo.TotalBytes = 2048
+	s.RebuildInfo.RemainingBytes = 1024
+	return s.RebuildInfo, nil
 }

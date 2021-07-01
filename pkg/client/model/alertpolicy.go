@@ -25,8 +25,11 @@ type AlertPolicy struct {
 
 // AlertPolicies is a list of alert policies
 type AlertPolicies struct {
+	// XMLName is the name of the xml tag used XML marshalling
+	XMLName xml.Name `json:"alert_policies" xml:"alert_policies"`
+
 	// Items is the list of alert policies
-	Items []AlertPolicy `json:"alert_policies" xml:"alert_policies"`
+	Items []AlertPolicy `json:"alert_policy" xml:"alert_policy"`
 
 	// MaxBuckets is the maximum number of alert policies requested in the listing
 	MaxPolicies int `json:"MaxPolicies,omitempty" xml:"MaxPolicies"`

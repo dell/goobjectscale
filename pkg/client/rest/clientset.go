@@ -3,26 +3,27 @@ package rest
 import (
 	"net/http"
 
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/alertpolicies"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
-
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
+    "github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/alertpolicies"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objectuser"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/objmt"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/status"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/tenants"
 )
 
 // ClientSet is a set of clients for each API section
 type ClientSet struct {
-	client        *client.Client
-	buckets       api.BucketsInterface
-	objectUser    api.ObjectUserInterface
+	client     *client.Client
+	buckets    api.BucketsInterface
+	objectUser api.ObjectUserInterface
+	tenants    api.TenantsInterface
+	objmt      api.ObjmtInterface
+	crr        api.CRRInterface
 	alertPolicies api.AlertPoliciesInterface
-	tenants       api.TenantsInterface
-	objmt         api.ObjmtInterface
-	crr           api.CRRInterface
+	status     api.StatusInterfaces
 }
 
 // Returns a new client set based on the provided REST client parameters
@@ -36,13 +37,14 @@ func NewClientSet(u, p, e, g string, h *http.Client, overrideHdr bool) *ClientSe
 		OverrideHeader: overrideHdr,
 	}
 	return &ClientSet{
-		client:        c,
-		buckets:       &buckets.Buckets{Client: c},
-		objectUser:    &objectuser.ObjectUser{Client: c},
+		client:     c,
+		buckets:    &buckets.Buckets{Client: c},
+		objectUser: &objectuser.ObjectUser{Client: c},
+		tenants:    &tenants.Tenants{Client: c},
+		objmt:      &objmt.Objmt{Client: c},
+		crr:        &crr.CRR{Client: c},
 		alertPolicies: &alertpolicies.AlertPolicies{Client: c},
-		tenants:       &tenants.Tenants{Client: c},
-		objmt:         &objmt.Objmt{Client: c},
-		crr:           &crr.CRR{Client: c},
+		status:     &status.Status{Client: c},
 	}
 }
 
@@ -79,4 +81,9 @@ func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 // ObjectMt implements the client API for objMT metrics
 func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
+}
+
+// Status implements the client API
+func (c *ClientSet) Status() api.StatusInterfaces {
+	return c.status
 }
