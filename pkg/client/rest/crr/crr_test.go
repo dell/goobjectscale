@@ -58,7 +58,7 @@ var _ = Describe("CRR", func() {
 			err error
 		)
 		BeforeEach(func() {
-			err = clientset.CRR().PauseReplication("test-objectscale", "test-objectstore", 3000, map[string]string{})
+			err = clientset.CRR().PauseReplication("test-objectscale", "test-objectstore", map[string]string{"pauseEndMills": "3000"})
 		})
 
 		It("shouldn't error", func() {
@@ -92,12 +92,25 @@ var _ = Describe("CRR", func() {
 		})
 	})
 
+	Context("#Unthrottle", func() {
+		var (
+			err error
+		)
+		BeforeEach(func() {
+			err = clientset.CRR().UnthrottleReplication("test-objectscale", "test-objectstore", map[string]string{})
+		})
+
+		It("shouldn't error", func() {
+			Expect(err).ToNot(HaveOccurred())
+		})
+	})
+
 	Context("#Throttle", func() {
 		var (
 			err error
 		)
 		BeforeEach(func() {
-			err = clientset.CRR().ThrottleReplication("test-objectscale", "test-objectstore", 3000, map[string]string{})
+			err = clientset.CRR().ThrottleReplication("test-objectscale", "test-objectstore", map[string]string{"throttleMBPerSecond": "3000"})
 		})
 
 		It("shouldn't error", func() {

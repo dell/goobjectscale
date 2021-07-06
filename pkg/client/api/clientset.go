@@ -13,12 +13,19 @@ type ClientSet interface {
 	ObjectMt() ObjmtInterface
 	CRR() CRRInterface
 	Status() StatusInterfaces
+	FederatedObjectStores() FederatedObjectStoresInterface
 }
 
 // StatusInterfaces represents status resource client interface
 type StatusInterfaces interface {
 	// GetRebuildStatus returns rebuild status of an ObjectScale object store
 	GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error)
+}
+
+// FederatedObjectStoresInterface represents a replication store client interface
+type FederatedObjectStoresInterface interface {
+	// List returns a list of federated object stores
+	List(params map[string]string) (*model.FederatedObjectStoreList, error)
 }
 
 // BucketsInterfaces represents a bucket resource client interface
@@ -135,8 +142,8 @@ type ObjmtInterface interface {
 // CRRInterface represents an interface for Cross Region Replication (CRR)
 type CRRInterface interface {
 	// PauseReplication temporarily pauses source and destination object stores' replication communication
-	// pauses for the provided milliseconds
-	PauseReplication(destObjectScale string, destObjectStore string, durationMills int, param map[string]string) error
+	// pauses for the provided future epoch time in milliseconds
+	PauseReplication(destObjectScale string, destObjectStore string, param map[string]string) error
 
 	// SuspendReplication suspends source and destination object stores' replication communication
 	SuspendReplication(destObjectScale string, destObjectStore string, param map[string]string) error
@@ -144,9 +151,12 @@ type CRRInterface interface {
 	// ResumeReplication resumes source and destination object stores' replication communication
 	ResumeReplication(destObjectScale string, destObjectStore string, param map[string]string) error
 
+	// UnthrottleReplication resumes resumes replication sans any configured throttle cap
+	UnthrottleReplication(destObjectScale string, destObjectStore string, param map[string]string) error
+
 	// ThrottleReplication throttles source and destination object stores' replication communication
 	// throttles the provided MB per second
-	ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, param map[string]string) error
+	ThrottleReplication(destObjectScale string, destObjectStore string, param map[string]string) error
 
 	// Get returns the replication configuration regarding pause/resume/suspend/throttle information
 	Get(destObjectScale string, destObjectStore string, param map[string]string) (*model.CRR, error)

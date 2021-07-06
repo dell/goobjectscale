@@ -3,7 +3,6 @@ package crr
 import (
 	"net/http"
 	"path"
-	"strconv"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
@@ -15,10 +14,10 @@ type CRR struct {
 }
 
 // PauseReplication implements the CRR interface
-func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, durationMills int, params map[string]string) error {
+func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "pause?pauseEndMills=", strconv.Itoa(durationMills)),
+		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "pause"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
@@ -47,11 +46,22 @@ func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, 
 	return c.Client.MakeRemoteCall(req, nil)
 }
 
-// ThrottleReplication implements the CRR interface
-func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, mbPerSecond int, params map[string]string) error {
+// ResumeReplication implements the CRR interface
+func (c *CRR) UnthrottleReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
-		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "throttle?throttleMBPerSecond=", strconv.Itoa(mbPerSecond)),
+		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "unthrottle"),
+		ContentType: client.ContentTypeXML,
+		Params:      params,
+	}
+	return c.Client.MakeRemoteCall(req, nil)
+}
+
+// ThrottleReplication implements the CRR interface
+func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
+	req := client.Request{
+		Method:      http.MethodPost,
+		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "throttle"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
@@ -59,7 +69,7 @@ func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string
 }
 
 // Get implements the CRR interface
-func (c *CRR)  Get(destObjectScale string, destObjectStore string, params map[string]string) (*model.CRR, error) {
+func (c *CRR) Get(destObjectScale string, destObjectStore string, params map[string]string) (*model.CRR, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        path.Join("replication", "control", destObjectScale, destObjectStore),
