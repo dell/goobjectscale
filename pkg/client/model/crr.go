@@ -2,19 +2,18 @@ package model
 
 import "encoding/xml"
 
-
 type CRR struct {
 	XMLName xml.Name `xml:"ReplicationAdminConfiguration"`
 
-	DestObjectScale string `xml:"DestinationObjectScale"`
+	DestObjectScale string `xml:"destinationObjectScale"`
 
-	DestObjectStore string `xml:"DestinationObjectStore"`
+	DestObjectStore string `xml:"destinationObjectStore"`
 
-	PauseStartMills int `xml:"PauseStartMills"`
+	PauseStartMills int64 `xml:"pauseStartMills"`
 
-	PauseEndMills int `xml:"PauseEndMills"`
+	PauseEndMills int64 `xml:"pauseEndMills"`
 
-	SuspendStartMills int `xml:"SuspendStartMills"`
+	SuspendStartMills int64 `xml:"suspendStartMills"`
 
-	ThrottleBandwidth int `xml:"ThrottleBandwidth"`
+	ThrottleBandwidth int `xml:"throttleBandwidth"`
 }

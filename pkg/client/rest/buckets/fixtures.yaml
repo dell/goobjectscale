@@ -139,6 +139,32 @@ interactions:
     headers:
       Accept:
       - application/xml
+      Content-Type:
+      - application/xml
+      Authorization: 
+      - Basic cm9vdDpDaGFuZ2VNZQ==
+    url: https://testgateway/mgmt/login
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><loggedIn><user>root</user></loggedIn>
+    headers:
+      Content-Length:
+      - "93"
+      Content-Type:
+      - application/xml
+      Date:
+      - Mon, 10 Jun 2019 21:04:53 GMT
+      X-Sds-Auth-Token:
+      - OSTOKEN-eyJ4NXUiOiJkdW1teVVybCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJyb290Iiwib3Nfcm9sIjpbIlNZU1RFTV9BRE1JTiIsIlNZU1RFTV9NT05JVE9SIiwiU0VDVVJJVFlfQURNSU4iXSwiaWF0IjoxNjI0NTU3OTg1LCJleHAiOjE2MjQ1NjE1ODUsImlzcyI6ImZlZHN2YyIsImp0aSI6ImYzNzMwZTU5LTY3YTQtNGFhNS04Mjg1LTc1MGY1MTBhZjYxZSJ9.No6nH4Q8BYNZnwuxyYkIcknrbVGAeAP8Xh8wFkaXHKp1dLf_4ffOpMgRCYqIu2Q6slB4Iqw1KQo1V5_9QG1bWuAvAJWrNgZAH0iRGezaQjASjh6KTT9wDV4jmgLYJxsyD8QcKMeI41R6iloci0z6k6mWVvPuVLv0Oi73vU9tP6Qx-_ohVnj5Kj7JcXk4mpjZIi_bZfTlhJpow65yOpDDu-issGdfIHPNezZ2AN3WHVHAB_AHLjQ_BzxjTymqLkno5X7fEROb6XC5fcR6FUpUnOxoGdfdKQ2CYK_yJ6oJhEc8h7tcFgs2rbxtvDVxfJPOl-TpHBUIIUAhiIJ0Zgh0NA
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/xml
       - application/xml
       Content-Type:
       - application/xml
