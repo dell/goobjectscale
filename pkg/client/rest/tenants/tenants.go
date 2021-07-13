@@ -85,7 +85,7 @@ func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s/", tenantID),
 		ContentType: client.ContentTypeXML,
-		Body: payload,
+		Body:        payload,
 	}
 	tenant := &model.Tenant{}
 	err := t.Client.MakeRemoteCall(req, tenant)

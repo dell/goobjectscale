@@ -11,6 +11,7 @@ type ClientSet interface {
 	ObjectUser() ObjectUserInterface
 	Tenants() TenantsInterface
 	ObjectMt() ObjmtInterface
+	AlertPolicies() AlertPoliciesInterface
 	CRR() CRRInterface
 	Status() StatusInterfaces
 	FederatedObjectStores() FederatedObjectStoresInterface
@@ -77,6 +78,24 @@ type ObjectUserInterface interface {
 
 	// DeleteSecret delete a secret for an object user within the Objectscale object store
 	DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error
+}
+
+// AlertPolicyInterface represents a alert policy resource client interface.
+type AlertPoliciesInterface interface {
+	// List returns a list of alert policies within the ObjectScale object store.
+	List(params map[string]string) (*model.AlertPolicies, error)
+
+	// Get returns the Alert Policy
+	Get(policyName string) (*model.AlertPolicy, error)
+
+	// Create creates an Alert Policy and returns it
+	Create(payload model.AlertPolicy) (*model.AlertPolicy, error)
+
+	// Delete deletes an Alert Policy
+	Delete(policyName string) error
+
+	// Update updates an Alert Policy and returns it
+	Update(payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error)
 }
 
 // TenantsInterface represents an tenant resource client interface.

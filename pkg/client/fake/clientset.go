@@ -17,6 +17,7 @@ type ClientSet struct {
 	tenants               api.TenantsInterface
 	objectMt              api.ObjmtInterface
 	crr                   api.CRRInterface
+	alertPolicies         api.AlertPoliciesInterface
 	status                api.StatusInterfaces
 	federatedobjectstores api.FederatedObjectStoresInterface
 }
@@ -41,6 +42,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		storeBillingSampleList      *model.StoreBillingSampleList
 		storeReplicationDataList    *model.StoreReplicationDataList
 		crr                         *model.CRR
+		alertPolicies               []model.AlertPolicy
 		rebuildInfo                 *model.RebuildInfo
 		federatedObjectStoreList    []model.FederatedObjectStore
 	)
@@ -80,6 +82,8 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 			storeReplicationDataList = object
 		case *model.CRR:
 			crr = object
+		case *model.AlertPolicy:
+			alertPolicies = append(alertPolicies, *object)
 		case *model.RebuildInfo:
 			rebuildInfo = object
 		case *model.FederatedObjectStore:
@@ -113,6 +117,10 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		crr: &CRR{
 			Config: crr,
 		},
+
+		alertPolicies: &AlertPolicies{
+			items: alertPolicies,
+		},
 		status: &Status{
 			RebuildInfo: rebuildInfo,
 		},
@@ -130,6 +138,11 @@ func (c *ClientSet) Status() api.StatusInterfaces {
 // CRR implements the client API
 func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
+}
+
+// AlertPolicies implements the client API
+func (c *ClientSet) AlertPolicies() api.AlertPoliciesInterface {
+	return c.alertPolicies
 }
 
 // Buckets implements the client API
@@ -625,6 +638,86 @@ func (c *CRR) Get(destObjectScale string, destObjectStore string, _ map[string]s
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 	return c.Config, nil
+}
+
+// AlertPolicy implements the AlertPolicy API
+type AlertPolicy struct {
+	AlertPolicy *model.AlertPolicy
+}
+
+// AlertPolicies implements the AlertPolicies API
+type AlertPolicies struct {
+	items []model.AlertPolicy
+}
+
+// Get implements the AlertPolicy API
+func (ap *AlertPolicies) Get(policyName string) (*model.AlertPolicy, error) {
+	for _, AlertPolicy := range ap.items {
+		if AlertPolicy.PolicyName == policyName {
+			return &AlertPolicy, nil
+		}
+	}
+	return nil, errors.New("not found")
+}
+
+// List implements the buckets API
+func (ap *AlertPolicies) List(_ map[string]string) (*model.AlertPolicies, error) {
+	return &model.AlertPolicies{Items: ap.items}, nil
+}
+
+// Create implements the AlertPolicy API
+func (ap *AlertPolicies) Create(payload model.AlertPolicy) (*model.AlertPolicy, error) {
+	newAlertPolicy := &model.AlertPolicy{
+		PolicyName:           payload.PolicyName,
+		MetricType:           payload.MetricType,
+		MetricName:           payload.MetricName,
+		CreatedBy:            payload.CreatedBy,
+		IsEnabled:            payload.IsEnabled,
+		IsPerInstanceMetric:  payload.IsPerInstanceMetric,
+		Period:               payload.Period,
+		PeriodUnits:          payload.PeriodUnits,
+		DatapointsToConsider: payload.DatapointsToConsider,
+		DatapointsToAlert:    payload.DatapointsToAlert,
+		Statistic:            payload.Statistic,
+		Operator:             payload.Operator,
+		Condition:            payload.Condition,
+	}
+	ap.items = append(ap.items, *newAlertPolicy)
+	return newAlertPolicy, nil
+}
+
+// Delete implements the AlertPolicy API
+func (ap *AlertPolicies) Delete(policyName string) error {
+	for i, alertpolicy := range ap.items {
+		if alertpolicy.PolicyName == policyName {
+			ap.items = append(ap.items[:i], ap.items[i+1:]...)
+			return nil
+		}
+	}
+	return errors.New("alert policy not found")
+}
+
+// Update implements the AlertPolicy API
+func (ap *AlertPolicies) Update(payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
+	for i, alertpolicy := range ap.items {
+		if alertpolicy.PolicyName == policyName {
+			ap.items[i].PolicyName = payload.PolicyName
+			ap.items[i].MetricType = payload.MetricType
+			ap.items[i].MetricName = payload.MetricName
+			ap.items[i].CreatedBy = payload.CreatedBy
+			ap.items[i].IsEnabled = payload.IsEnabled
+			ap.items[i].IsPerInstanceMetric = payload.IsPerInstanceMetric
+			ap.items[i].Period = payload.Period
+			ap.items[i].PeriodUnits = payload.PeriodUnits
+			ap.items[i].DatapointsToConsider = payload.DatapointsToConsider
+			ap.items[i].DatapointsToAlert = payload.DatapointsToAlert
+			ap.items[i].Statistic = payload.Statistic
+			ap.items[i].Operator = payload.Operator
+			ap.items[i].Condition = payload.Condition
+			return &alertpolicy, nil
+		}
+	}
+	return nil, errors.New("alert policy not found")
 }
 
 // Status implements the Status API

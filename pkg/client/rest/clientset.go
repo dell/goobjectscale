@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/alertpolicies"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
@@ -23,6 +24,7 @@ type ClientSet struct {
 	objmt                 api.ObjmtInterface
 	crr                   api.CRRInterface
 	status                api.StatusInterfaces
+	alertPolicies         api.AlertPoliciesInterface
 	federatedObjectStores api.FederatedObjectStoresInterface
 }
 
@@ -43,6 +45,7 @@ func NewClientSet(u, p, e, g string, h *http.Client, overrideHdr bool) *ClientSe
 		tenants:               &tenants.Tenants{Client: c},
 		objmt:                 &objmt.Objmt{Client: c},
 		crr:                   &crr.CRR{Client: c},
+		alertPolicies:         &alertpolicies.AlertPolicies{Client: c},
 		status:                &status.Status{Client: c},
 		federatedObjectStores: &federatedobjectstores.FederatedObjectStores{Client: c},
 	}
@@ -61,6 +64,11 @@ func (c *ClientSet) Buckets() api.BucketsInterface {
 // ObjectUser implements the client API
 func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
+}
+
+// AlertPolicies implements the client API
+func (c *ClientSet) AlertPolicies() api.AlertPoliciesInterface {
+	return c.alertPolicies
 }
 
 // Tenants implements the client API
