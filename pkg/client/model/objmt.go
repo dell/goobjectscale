@@ -568,5 +568,5 @@ type StoreReplicationThroughputRto struct {
 	ReplicatedDelta []StorageClassBasedCountSize `xml:"replicated_delta>storage_class_counts,omitempty"`
 
 	// ReplicatedFailedDelta metrics of failed replicated data in object store per storage classes
-	ReplicatedFailedDelta []StorageClassBasedCountSize `xml:"replicated_failed_delta>storage_class_counts,omitempty"`
+	ReplicatedFailedDelta []StorageClassBasedCountSize `xml:"replicate_failed_delta>storage_class_counts,omitempty"`
 }
