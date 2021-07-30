@@ -3,24 +3,26 @@ package model
 import "encoding/xml"
 
 type AlertPolicy struct {
-	XMLName              xml.Name `xml:"alert_policy"`
-	PolicyName           string   `json:"policyName" xml:"policyName"`
-	MetricType           string   `json:"metricType" xml:"metricType"`
-	MetricName           string   `json:"metricName" xml:"metricName"`
-	CreatedBy            string   `json:"createdBy" xml:"createdBy"`
-	IsEnabled            string   `json:"isEnabled" xml:"isEnabled"`
-	IsPerInstanceMetric  string   `json:"isPerInstanceMetric" xml:"isPerInstanceMetric"`
-	Period               int      `json:"period" xml:"period"`
-	PeriodUnits          string   `json:"periodUnits" xml:"periodUnits"`
-	DatapointsToConsider int      `json:"datapointsToConsider" xml:"datapointsToConsider"`
-	DatapointsToAlert    int      `json:"datapointsToAlert" xml:"datapointsToAlert"`
-	Statistic            string   `json:"statistic" xml:"statistic"`
-	Operator             string   `json:"operator" xml:"operator"`
-	Condition            struct {
-		ThresholdUnits string `json:"thresholdUnits" xml:"thresholdUnits"`
-		ThresholdValue string `json:"thresholdValue" xml:"thresholdValue"`
-		SeverityType   string `json:"severityType" xml:"severityType"`
-	} `json:"condition" xml:"condition"`
+	XMLName              xml.Name             `xml:"alert_policy"`
+	PolicyName           string               `json:"policyName" xml:"policyName"`
+	MetricType           string               `json:"metricType" xml:"metricType"`
+	MetricName           string               `json:"metricName" xml:"metricName"`
+	CreatedBy            string               `json:"createdBy" xml:"createdBy"`
+	IsEnabled            string               `json:"isEnabled" xml:"isEnabled"`
+	IsPerInstanceMetric  string               `json:"isPerInstanceMetric" xml:"isPerInstanceMetric"`
+	Period               int                  `json:"period" xml:"period"`
+	PeriodUnits          string               `json:"periodUnits" xml:"periodUnits"`
+	DatapointsToConsider int                  `json:"datapointsToConsider" xml:"datapointsToConsider"`
+	DatapointsToAlert    int                  `json:"datapointsToAlert" xml:"datapointsToAlert"`
+	Statistic            string               `json:"statistic" xml:"statistic"`
+	Operator             string               `json:"operator" xml:"operator"`
+	Condition            AlertPolicyCondition `json:"condition" xml:"condition"`
+}
+
+type AlertPolicyCondition struct {
+	ThresholdUnits string `json:"thresholdUnits" xml:"thresholdUnits"`
+	ThresholdValue string `json:"thresholdValue" xml:"thresholdValue"`
+	SeverityType   string `json:"severityType" xml:"severityType"`
 }
 
 // AlertPolicies is a list of alert policies
