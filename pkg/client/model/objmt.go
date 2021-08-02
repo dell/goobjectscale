@@ -171,6 +171,9 @@ type BucketBillingInfo struct {
 	// ConsistentTime metrics collection UTC timestamp in ISO 8601 format (2007-04-05T14:30:55Z)
 	ConsistentTime string `xml:"consistent_time,omitempty"`
 
+	// ObjectDistribution metrics collection of objects grouped by size
+	ObjectDistribution string `xml:"object_distribution,omitempty"`
+
 	// TotalUserObjectMetric total object logical and physical size, count per bucket
 	TotalUserObjectMetric []StorageClassBasedCountSize `xml:"total_user_object_metric>storage_class_counts"`
 
