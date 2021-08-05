@@ -20,9 +20,9 @@ type AlertPolicy struct {
 }
 
 type AlertPolicyCondition struct {
-	ThresholdUnits string `json:"thresholdUnits" xml:"thresholdUnits"`
-	ThresholdValue string `json:"thresholdValue" xml:"thresholdValue"`
-	SeverityType   string `json:"severityType" xml:"severityType"`
+	ThresholdUnits string `json:"thresholdUnits,omitempty" xml:"thresholdUnits,omitempty"`
+	ThresholdValue string `json:"thresholdValue,omitempty" xml:"thresholdValue,omitempty"`
+	SeverityType   string `json:"severityType,omitempty" xml:"severityType,omitempty"`
 }
 
 // AlertPolicies is a list of alert policies
