@@ -306,9 +306,8 @@ type BucketPerfSample struct {
 	// IngressCounts ingress objects count for bucket in requested time window
 	IngressCounts int64 `xml:"ingress_counts,omitempty"`
 
-	// TODO add EgressLatency when it becomes available from metering
-	// // EgressLatecy egress latency for bucket in requested time window
-	// EgressLatency int64 `xml:"egress_latency,omitempty"`
+	// EgressLatecy egress latency for bucket in requested time window
+	EgressLatency int64 `xml:"egress_latency,omitempty"`
 
 	// EgressBytes egress bytes for bucket in requested time window
 	EgressBytes int64 `xml:"egress_bytes,omitempty"`
