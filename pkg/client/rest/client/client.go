@@ -2,6 +2,10 @@ package client
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -9,18 +13,18 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 )
 
 // Client is a REST client that communicates with the ObjectScale management API
 type Client struct {
-	// Username is the user name used to authenticate against the API
-	Username string `json:"username"`
-
-	// Password is the password used to authenticate against the API
-	Password string `json:"password"`
+	// ObjectStoreID is used for generating TOPT for retrieving the OS
+	// TOKEN to be used when accessing the object store's management API
+	ObjectStoreID string `json:"objectStoreID"`
 
 	// Endpoint is the URL of the management API
 	Endpoint string `json:"endpoint"`
@@ -28,25 +32,83 @@ type Client struct {
 	// Gateway is the auth endpoint
 	Gateway string `json:"gateway"`
 
-	token       string
-	HTTPClient  *http.Client
-	authRetries int
+	// Namespace is the K8S namespace where client is running
+	Namespace string `json:"namespace"`
+
+	// PodName is the K8S pod name where client is running
+	PodName string `json:"podName"`
+
+	// Token is OS token returned from fed service API interactions
+	Token string `json:"token"`
+
+	objectScaleID string
+	HTTPClient    *http.Client
+	authRetries   int
 
 	// Should X-EMC-Override header be added into the request
 	OverrideHeader bool
 }
 
-func (c *Client) login() error {
+func (c *Client) getObjectScaleID() error {
 	u, err := url.Parse(c.Gateway)
 	if err != nil {
 		return err
 	}
-	u.Path = "/mgmt/login"
+	u.Path = "/fedsvc/objectScaleId"
 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
 	}
-	req.SetBasicAuth(c.Username, c.Password)
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return err
+	}
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("cannot read response, returned by GET /fedsvc/objectScaleId %w", err)
+	}
+	c.objectScaleID = string(bodyBytes)
+	if c.objectScaleID == "" {
+		return fmt.Errorf("server error: unable to get object scale id")
+	}
+	return nil
+}
+
+func (c *Client) login() error {
+	if err := c.getObjectScaleID(); err != nil {
+		return err
+	}
+	u, err := url.Parse(c.Gateway)
+	if err != nil {
+		return err
+	}
+	u.Path = "/mgmt/servicelogin"
+	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+	if err != nil {
+		return err
+	}
+
+	// urn:osc:{ObjectScaleId}:{ObjectStoreId}:service/{ServiceNameId}
+	serviceUrn := fmt.Sprintf("urn:osc:{%s}:{%s}:service/{%s}", c.objectScaleID, c.ObjectStoreID, c.PodName)
+
+	// B64-{ObjectScaleId},{ObjectStoreId},{ServiceK8SNamespace},{ServiceNameId}
+	userName := fmt.Sprintf("B64-{%s},{%s},{%s},{%s}", c.objectScaleID, c.ObjectStoreID, c.Namespace, c.PodName)
+	userName = base64.StdEncoding.EncodeToString([]byte(userName))
+
+	// HMACSHA256(key, ServiceUrn + Time_factor)
+	// time_factor = currentTimeInSeconds (rounded to nearest 30 seconds)
+	timeFactor := time.Now().UTC().Round(30 * time.Second).Unix()
+
+	secret := "U2AMmynNDIrigT9M7TNlMouVtMM3icjSwv1ImQEkNGuoGGJJg48PpyzZjzPkgmBW3iU4AbPTZqXdrJjl3R1UbuqxmOqh9Uq3xe0FktBne4P3ZZr8hgOORsz0CVd4QdhU"
+	data := serviceUrn + strconv.FormatInt(timeFactor, 10)
+
+	h := hmac.New(sha256.New, []byte(secret))
+	h.Write([]byte(data))
+	password := hex.EncodeToString(h.Sum(nil))
+
+	fmt.Println("Result: " + password)
+
+	req.SetBasicAuth(userName, password)
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return err
@@ -54,14 +116,41 @@ func (c *Client) login() error {
 	if err = handleResponse(resp); err != nil {
 		return err
 	}
-	c.token = resp.Header.Get("X-SDS-AUTH-TOKEN")
-	if c.token == "" {
+	c.Token = resp.Header.Get("X-SDS-AUTH-TOKEN")
+	if c.Token == "" {
 		return fmt.Errorf("server error: login failed")
 	} else {
 		c.authRetries = 0
 	}
 	return nil
 }
+
+// func (c *Client) login() error {
+// 	u, err := url.Parse(c.Gateway)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	u.Path = "/mgmt/login"
+// 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	req.SetBasicAuth(c.Username, c.Password)
+// 	resp, err := c.HTTPClient.Do(req)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	if err = handleResponse(resp); err != nil {
+// 		return err
+// 	}
+// 	c.token = resp.Header.Get("X-SDS-AUTH-TOKEN")
+// 	if c.token == "" {
+// 		return fmt.Errorf("server error: login failed")
+// 	} else {
+// 		c.authRetries = 0
+// 	}
+// 	return nil
+// }
 
 func handleResponse(resp *http.Response) error {
 	if resp.StatusCode > 399 {
@@ -96,7 +185,7 @@ func handleResponse(resp *http.Response) error {
 }
 
 func (c *Client) isLoggedIn() bool {
-	return c.token != ""
+	return c.Token != ""
 }
 
 // MakeRemoteCall executes an API request against the client endpoint, returning
@@ -145,7 +234,7 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	req.Header.Add("Accept", r.ContentType)
 	req.Header.Add("Content-Type", r.ContentType)
 	req.Header.Add("Accept", "application/xml")
-	req.Header.Add("X-SDS-AUTH-TOKEN", c.token)
+	req.Header.Add("X-SDS-AUTH-TOKEN", c.Token)
 	if c.OverrideHeader {
 		req.Header.Add("X-EMC-Override", "true")
 	}
@@ -162,7 +251,7 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 	case resp.StatusCode == http.StatusUnauthorized:
 		if c.authRetries < AuthRetriesMax {
 			c.authRetries += 1
-			c.token = ""
+			c.Token = ""
 			return c.MakeRemoteCall(r, into)
 		}
 		return errors.New(strings.ToLower(resp.Status))
