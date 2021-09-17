@@ -5,7 +5,6 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
-	"encoding/hex"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -63,6 +62,9 @@ func (c *Client) getObjectScaleID() error {
 	if err != nil {
 		return err
 	}
+	if err = handleResponse(resp); err != nil {
+		return err
+	}
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return fmt.Errorf("cannot read response, returned by GET /fedsvc/objectScaleId %w", err)
@@ -82,31 +84,41 @@ func (c *Client) login() error {
 	if err != nil {
 		return err
 	}
-	u.Path = "/mgmt/servicelogin"
+	u.Path = "/mgmt/serviceLogin"
 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
 	}
 
 	// urn:osc:{ObjectScaleId}:{ObjectStoreId}:service/{ServiceNameId}
-	serviceUrn := fmt.Sprintf("urn:osc:{%s}:{%s}:service/{%s}", c.objectScaleID, c.ObjectStoreID, c.PodName)
+	serviceUrn := fmt.Sprintf("urn:osc:%s:%s:service/%s", c.objectScaleID, "", c.PodName)
 
 	// B64-{ObjectScaleId},{ObjectStoreId},{ServiceK8SNamespace},{ServiceNameId}
-	userName := fmt.Sprintf("B64-{%s},{%s},{%s},{%s}", c.objectScaleID, c.ObjectStoreID, c.Namespace, c.PodName)
+	userName := fmt.Sprintf("%s,%s,%s,%s", c.objectScaleID, "", c.Namespace, c.PodName)
 	userName = base64.StdEncoding.EncodeToString([]byte(userName))
+	userName = "B64-" + userName
+
+	fmt.Println("Username: " + userName)
 
 	// HMACSHA256(key, ServiceUrn + Time_factor)
 	// time_factor = currentTimeInSeconds (rounded to nearest 30 seconds)
 	timeFactor := time.Now().UTC().Round(30 * time.Second).Unix()
 
-	secret := "U2AMmynNDIrigT9M7TNlMouVtMM3icjSwv1ImQEkNGuoGGJJg48PpyzZjzPkgmBW3iU4AbPTZqXdrJjl3R1UbuqxmOqh9Uq3xe0FktBne4P3ZZr8hgOORsz0CVd4QdhU"
+	fmt.Println(timeFactor)
+
+	//secret := "p55GJt5RmSiVU2IyCmv6qtrpJzoqsgMJ9M8G8MyPaNJGpk5w5kDH5HzsBokdKsVuhaQBaWNfn45JLrzavA5e5SdUzxnwiCFyGoQtgAsS0RoEbo2jU5JMPcOK47jhC1Yl"
+	secret := "Bq0Qy9giIopNApzNaQvxzVIhW4Nh0rdI5PvkZksXzMJZnXknk18VAvB28u1QVEAHNJrervGKqY6Fq5OJMXF88VOT0YgPhgWL18EHzaEMy9mIwPRVatxzfHouSBYHFZ5x"
 	data := serviceUrn + strconv.FormatInt(timeFactor, 10)
+
+	fmt.Println("Data to be hashed: " + data)
 
 	h := hmac.New(sha256.New, []byte(secret))
 	h.Write([]byte(data))
-	password := hex.EncodeToString(h.Sum(nil))
+	//password := hex.EncodeToString(h.Sum(nil))
+	password := base64.StdEncoding.EncodeToString(h.Sum(nil))
+	password = "HARDCODED-" + password
 
-	fmt.Println("Result: " + password)
+	fmt.Println("Hash Result: " + password)
 
 	req.SetBasicAuth(userName, password)
 	resp, err := c.HTTPClient.Do(req)
