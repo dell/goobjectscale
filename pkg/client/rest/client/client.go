@@ -15,7 +15,7 @@ import (
 
 // Client is a REST client that communicates with the ObjectScale management API
 type Client struct {
-	// Endpoint is the object control servie endpoint
+	// Endpoint is the object control service endpoint
 	Endpoint string `json:"endpoint"`
 
 	// Token is OS token returned from fed service API interactions
