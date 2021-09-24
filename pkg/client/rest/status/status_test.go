@@ -38,10 +38,8 @@ var _ = Describe("Status", func() {
 			return nil
 		})
 		clientset = rest.NewClientSet(
-			"root",
-			"ChangeMe",
 			"https://testserver",
-			"https://testgateway",
+			"OSTOKEN-eyJ4NXUiOi",
 			newRecordedHTTPClient(r),
 			false,
 		)

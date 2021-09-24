@@ -38,10 +38,8 @@ func TestMain(m *testing.M) {
 	})
 	httpClient = &http.Client{Transport: r}
 	clientset = rest.NewClientSet(
-		"root",
-		"ChangeMe",
 		"https://testserver:443",
-		"https://testgateway",
+		"OSTOKEN-eyJ4NXUiOi",
 		httpClient,
 		false,
 	)

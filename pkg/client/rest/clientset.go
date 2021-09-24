@@ -29,13 +29,10 @@ type ClientSet struct {
 }
 
 // Returns a new client set based on the provided REST client parameters
-func NewClientSet(o, p, n, e, g string, h *http.Client, overrideHdr bool) *ClientSet {
+func NewClientSet(e, t string, h *http.Client, overrideHdr bool) *ClientSet {
 	c := &client.Client{
-		ObjectStoreID:  o,
-		PodName:        p,
-		Namespace:      n,
 		Endpoint:       e,
-		Gateway:        g,
+		Token:          t,
 		HTTPClient:     h,
 		OverrideHeader: overrideHdr,
 	}

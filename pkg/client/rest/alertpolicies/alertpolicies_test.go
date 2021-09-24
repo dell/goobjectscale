@@ -40,10 +40,8 @@ var _ = Describe("AlertPolicies", func() {
 			return nil
 		})
 		clientset = rest.NewClientSet(
-			"root",
-			"ChangeMe",
 			"https://testserver",
-			"https://testgateway",
+			"OSTOKEN-eyJ4NXUiOi",
 			newRecordedHTTPClient(r),
 			false,
 		)
@@ -127,7 +125,7 @@ var _ = Describe("AlertPolicies", func() {
 	Context("#Update", func() {
 		Context("with no params", func() {
 			var (
-				err         error
+				err error
 			)
 
 			BeforeEach(func() {

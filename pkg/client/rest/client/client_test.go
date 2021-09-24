@@ -35,11 +35,9 @@ var _ = Describe("Rest client", func() {
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
 			clientset = rest.NewClientSet(
-				"root",
-				"ChangeMe",
 				"https://host",
-				"https://testgateway",
-				newTestHTTPClient(captures, false),
+				"OSTOKEN-eyJ4NXUiOi",
+				newTestHTTPClient(captures),
 				false,
 			)
 			err = clientset.Client().MakeRemoteCall(client.Request{
@@ -51,10 +49,6 @@ var _ = Describe("Rest client", func() {
 
 		It("should not error", func() {
 			Expect(err).ToNot(HaveOccurred())
-		})
-
-		It("should login", func() {
-			Expect(captures["login"]).To(Equal(1))
 		})
 
 		It("should query test route", func() {
@@ -79,11 +73,9 @@ var _ = Describe("Rest client", func() {
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
 			clientset = rest.NewClientSet(
-				"root",
-				"changme",
 				":not:a:valid:url",
-				"https://testgateway",
-				newTestHTTPClient(captures, false),
+				"OSTOKEN-eyJ4NXUiOi",
+				newTestHTTPClient(captures),
 				true,
 			)
 			err = clientset.Client().MakeRemoteCall(client.Request{
@@ -114,11 +106,9 @@ var _ = Describe("Rest client", func() {
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
 			clientset = rest.NewClientSet(
-				"root",
-				"changme",
 				"https://host",
-				"https://testgateway",
-				newTestHTTPClient(captures, false),
+				"OSTOKEN-eyJ4NXUiOi",
+				newTestHTTPClient(captures),
 				false,
 			)
 			err = clientset.Client().MakeRemoteCall(client.Request{
@@ -145,69 +135,12 @@ var _ = Describe("Rest client", func() {
 			Expect(captures["notfound"]).To(BeNil())
 		})
 	})
-
-	Context("with an auth failure", func() {
-		var (
-			err      error
-			captures map[string]interface{}
-		)
-
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(
-				"root",
-				"changme",
-				"https://host",
-				"https://testgateway",
-				newTestHTTPClient(captures, true),
-				false,
-			)
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "/test",
-				ContentType: client.ContentTypeJSON,
-			}, nil)
-		})
-
-		It("shouldn't error", func() {
-			Expect(err.Error()).To(Equal("auth failure"))
-		})
-
-		It("should attempt 3 logins", func() {
-			Expect(captures["login"]).To(Equal(1))
-		})
-
-		It("should not make the test call", func() {
-			Expect(captures["test"]).To(BeNil())
-		})
-
-		It("should not make an unfound call", func() {
-			Expect(captures["notfound"]).To(BeNil())
-		})
-	})
 })
 
-func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
+func newTestHTTPClient(captures map[string]interface{}) *http.Client {
 	return testutils.NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
-		case "https://testgateway/mgmt/login":
-			testutils.IncrCapture(captures, "login")
-			switch authFailure {
-			case true:
-				return &http.Response{
-					StatusCode: 401,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte("auth failure"))),
-					Header:     header,
-				}
-			default:
-				header.Set("X-Sds-Auth-Token", "TESTTOKEN")
-				return &http.Response{
-					StatusCode: 200,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte("OK"))),
-					Header:     header,
-				}
-			}
 		case "https://host/test":
 			testutils.IncrCapture(captures, "test")
 			return &http.Response{
