@@ -40,10 +40,12 @@ var _ = Describe("Tenants", func() {
 			return nil
 		})
 		clientset = rest.NewClientSet(
-			"root",
-			"ChangeMe",
 			"https://testserver",
 			"https://testgateway",
+			"svc-objectscale-domain-c8",
+			"objectscale-graphql-7d754f8499-ng4h6",
+			"OSC234DSF223423",
+			"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 			newRecordedHTTPClient(r),
 			false,
 		)

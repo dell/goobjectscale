@@ -2,6 +2,9 @@ package client
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -9,24 +12,32 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 )
 
 // Client is a REST client that communicates with the ObjectScale management API
 type Client struct {
-	// Username is the user name used to authenticate against the API
-	Username string `json:"username"`
-
-	// Password is the password used to authenticate against the API
-	Password string `json:"password"`
-
 	// Endpoint is the URL of the management API
 	Endpoint string `json:"endpoint"`
 
 	// Gateway is the auth endpoint
 	Gateway string `json:"gateway"`
+
+	// SharedSecret is the fedsvc shared secret
+	SharedSecret string `json:"sharedSecret"`
+
+	// PodName is the GraphQL Pod name
+	PodName string `json:"podName"`
+
+	// Namespace is the GraphQL Namespace name
+	Namespace string `json:"namespace"`
+
+	// ObjectScaleID is just that
+	ObjectScaleID string `json:"objectScaleID"`
 
 	token       string
 	HTTPClient  *http.Client
@@ -37,16 +48,32 @@ type Client struct {
 }
 
 func (c *Client) login() error {
+	// urn:osc:{ObjectScaleId}:{ObjectStoreId}:service/{ServiceNameId}
+	serviceUrn := fmt.Sprintf("urn:osc:%s:%s:service/%s", c.ObjectScaleID, "", c.PodName)
+	// B64-{ObjectScaleId},{ObjectStoreId},{ServiceK8SNamespace},{ServiceNameId}
+	userNameRaw := fmt.Sprintf("%s,%s,%s,%s", c.ObjectScaleID, "", c.Namespace, c.PodName)
+	userNameEncoded := base64.StdEncoding.EncodeToString([]byte(userNameRaw))
+	userName := "B64-" + userNameEncoded
+	// current time in milliseconds (rounded to nearest 30 seconds)
+	timeFactor := time.Now().UTC().Round(30*time.Second).UnixNano() / int64(time.Millisecond)
+
+	data := serviceUrn + strconv.FormatInt(timeFactor, 10)
+	h := hmac.New(sha256.New, []byte(c.SharedSecret))
+	if _, wrr := h.Write([]byte(data)); wrr != nil {
+		return fmt.Errorf("server error: problem writing hmac sha256 %w", wrr)
+	}
+	password := base64.StdEncoding.EncodeToString(h.Sum(nil))
+
 	u, err := url.Parse(c.Gateway)
 	if err != nil {
 		return err
 	}
-	u.Path = "/mgmt/login"
+	u.Path = "/mgmt/serviceLogin"
 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
 	}
-	req.SetBasicAuth(c.Username, c.Password)
+	req.SetBasicAuth(userName, password)
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return err
