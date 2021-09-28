@@ -35,10 +35,12 @@ var _ = Describe("Rest client", func() {
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
 			clientset = rest.NewClientSet(
-				"root",
-				"ChangeMe",
-				"https://host",
+				"https://testserver",
 				"https://testgateway",
+				"svc-objectscale-domain-c8",
+				"objectscale-graphql-7d754f8499-ng4h6",
+				"OSC234DSF223423",
+				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 				newTestHTTPClient(captures, false),
 				false,
 			)
@@ -79,10 +81,12 @@ var _ = Describe("Rest client", func() {
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
 			clientset = rest.NewClientSet(
-				"root",
-				"changme",
 				":not:a:valid:url",
 				"https://testgateway",
+				"svc-objectscale-domain-c8",
+				"objectscale-graphql-7d754f8499-ng4h6",
+				"OSC234DSF223423",
+				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 				newTestHTTPClient(captures, false),
 				true,
 			)
@@ -114,10 +118,12 @@ var _ = Describe("Rest client", func() {
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
 			clientset = rest.NewClientSet(
-				"root",
-				"changme",
-				"https://host",
+				"https://testserver",
 				"https://testgateway",
+				"svc-objectscale-domain-c8",
+				"objectscale-graphql-7d754f8499-ng4h6",
+				"OSC234DSF223423",
+				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 				newTestHTTPClient(captures, false),
 				false,
 			)
@@ -155,10 +161,12 @@ var _ = Describe("Rest client", func() {
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
 			clientset = rest.NewClientSet(
-				"root",
-				"changme",
-				"https://host",
+				"https://testserver",
 				"https://testgateway",
+				"svc-objectscale-domain-c8",
+				"objectscale-graphql-7d754f8499-ng4h6",
+				"OSC234DSF223423",
+				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 				newTestHTTPClient(captures, true),
 				false,
 			)
@@ -191,7 +199,7 @@ func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.
 	return testutils.NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
-		case "https://testgateway/mgmt/login":
+		case "https://testgateway/mgmt/serviceLogin":
 			testutils.IncrCapture(captures, "login")
 			switch authFailure {
 			case true:
@@ -208,7 +216,7 @@ func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.
 					Header:     header,
 				}
 			}
-		case "https://host/test":
+		case "https://testserver/test":
 			testutils.IncrCapture(captures, "test")
 			return &http.Response{
 				StatusCode: 200,
