@@ -48,8 +48,14 @@ type BucketQuota struct {
 	// BlockSize is the bucket size at which new object creations will be blocked
 	BlockSize int64 `json:"blockSize,omitempty" xml:"blockSize,omitempty"`
 
+	// BlockSizeCount is the bucket size, in counts, at which new object creations will be blocked
+	BlockSizeCount int64 `json:"blockSizeInCount,omitempty" xml:"blockSizeInCount,omitempty"`
+
 	// NotificationSize is the bucket size at which the users will be notified
 	NotificationSize int64 `json:"notificationSize,omitempty" xml:"notificationSize,omitempty"`
+
+	// NotificationSize is the bucket size, in counts, at which the users will be notified
+	NotificationSizeCount int64 `json:"notificationSizeInCount,omitempty" xml:"notificationSizeInCount,omitempty"`
 }
 
 // Bucket is an object storage bucket
@@ -106,18 +112,29 @@ type Bucket struct {
 	// DefaultRetention is the default retention period for objects in bucket
 	DefaultRetention int64 `json:"default_retention,omitempty" xml:"default_retention,omitempty"`
 
-	// BlockSize is the bucket size at which new object creations will be
-	// blocked
+	// BlockSize is the bucket size at which new object creations will be blocked
 	BlockSize int64 `json:"block_size,omitempty" xml:"block_size,omitempty"`
+
+	// BlockSizeCount is the bucket size, in counts, at which new object creations will be blocked
+	BlockSizeCount int64 `json:"block_size_in_count,omitempty" xml:"block_size_in_count,omitempty"`
 
 	// NotificationSize is the bucket size at which the users will be notified
 	NotificationSize int64 `json:"notification_size,omitempty" xml:"notification_size,omitempty"`
 
+	// NotificationSize is the bucket size, in counts, at which the users will be notified
+	NotificationSizeCount int64 `json:"notification_size_in_count,omitempty" xml:"notification_size_in_count,omitempty"`
+
 	// BlockSizeInput is the input of bucket size, support CreateBucket method
 	BlockSizeInput int64 `json:"blockSize,omitempty" xml:"blockSize,omitempty"`
 
+	// BlockSizeCountInput is the bucket size, in counts, at which new object creations will be blocked
+	BlockSizeCountInput int64 `json:"blockSizeInCount,omitempty" xml:"blockSizeInCount,omitempty"`
+
 	// NotificationSizeInput is the input of notification size, support CreateBucket method
 	NotificationSizeInput int64 `json:"notificationSize,omitempty" xml:"notificationSize,omitempty"`
+
+	// NotificationSizeCountInput is the bucket size, in counts, at which the users will be notified
+	NotificationSizeCountInput int64 `json:"notificationSizeInCount,omitempty" xml:"notificationSizeInCount,omitempty"`
 
 	// Tags is a list of arbitrary metadata keys and values applied to the
 	// bucket

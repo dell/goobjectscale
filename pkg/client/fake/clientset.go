@@ -487,10 +487,12 @@ func (b *Buckets) GetQuota(bucketName string, _ string) (*model.BucketQuotaInfo,
 		if bucket.Name == bucketName {
 			return &model.BucketQuotaInfo{
 				BucketQuota: model.BucketQuota{
-					BucketName:       bucket.Name,
-					Namespace:        bucket.Namespace,
-					NotificationSize: bucket.NotificationSize,
-					BlockSize:        bucket.BlockSize,
+					BucketName:            bucket.Name,
+					Namespace:             bucket.Namespace,
+					NotificationSize:      bucket.NotificationSize,
+					NotificationSizeCount: bucket.NotificationSizeCount,
+					BlockSize:             bucket.BlockSize,
+					BlockSizeCount:        bucket.BlockSizeCount,
 				},
 			}, nil
 		}
@@ -505,6 +507,8 @@ func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
 		if b.items[i].Name == bucketQuota.BucketName {
 			b.items[i].BlockSize = bucketQuota.BlockSize
 			b.items[i].NotificationSize = bucketQuota.NotificationSize
+			b.items[i].NotificationSizeCount = bucketQuota.NotificationSizeCount
+			b.items[i].BlockSizeCount = bucketQuota.BlockSizeCount
 			return nil
 		}
 	}
@@ -516,7 +520,9 @@ func (b *Buckets) DeleteQuota(bucketName string, _ string) error {
 	for i := 0; i < len(b.items); i++ {
 		if b.items[i].Name == bucketName {
 			b.items[i].BlockSize = -1
+			b.items[i].BlockSizeCount = -1
 			b.items[i].NotificationSize = -1
+			b.items[i].NotificationSizeCount = -1
 			return nil
 		}
 	}
