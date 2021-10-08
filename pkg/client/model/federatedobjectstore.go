@@ -25,9 +25,9 @@ type FederatedObjectStore struct {
 
 	ReplicationStatus string `xml:"ReplicationStatus"`
 
-	ObjectStoreRTO int `xml:"ObjectStoreRTO,omitempty"`
+	ObjectStoreRTO int64 `xml:"ObjectStoreRTO,omitempty"`
 
-	FailedData int `xml:"FailedData,omitempty"`
+	FailedData int64 `xml:"FailedData,omitempty"`
 
 	CRRControlParameters CRRControlParameters `xml:"CRRControlParameters"`
 }
