@@ -82,7 +82,7 @@ func (t *Tenants) Delete(tenantID string) error {
 // Update implements the tenants interface
 func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
 	req := client.Request{
-		Method:      http.MethodPost,
+		Method:      http.MethodPut,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s/", tenantID),
 		ContentType: client.ContentTypeXML,
 		Body:        payload,
