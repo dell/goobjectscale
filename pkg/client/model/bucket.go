@@ -190,17 +190,17 @@ type BucketList struct {
 	Items []Bucket `json:"object_bucket" xml:"object_bucket"`
 
 	// MaxBuckets is the maximum number of buckets requested in the listing
-	MaxBuckets int `json:"max_buckets,omitempty" xml:"max_buckets,omitempty"`
+	MaxBuckets int `json:"max_buckets,omitempty" xml:"MaxBuckets,omitempty"`
 
 	// NextMarker is a reference object to receive the next set of buckets
-	NextMarker string `json:"next_marker,omitempty" xml:"next_marker,omitempty"`
+	NextMarker string `json:"next_marker,omitempty" xml:"NextMarker,omitempty"`
 
 	// Filter is a string query used to limit the returned buckets in the
 	// listing
 	Filter string `json:"Filter,omitempty" xml:"Filter,omitempty"`
 
 	// NextPageLink is a hyperlink to the next page in the bucket listing
-	NextPageLink string `json:"next_page_link,omitempty" xml:"next_page_link,omitempty"`
+	NextPageLink string `json:"next_page_link,omitempty" xml:"NextPageLink,omitempty"`
 }
 
 // MinMaxGovenor enforces minimum and maximum retention for bucket objects
