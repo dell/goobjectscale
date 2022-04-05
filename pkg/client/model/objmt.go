@@ -57,8 +57,17 @@ type AccountBillingInfo struct {
 	// TotalMPUMetric total MPU parts logical and physical size, count per user
 	TotalMPUMetric []StorageClassBasedCountSize `xml:"total_mpu_metric>storage_class_counts,omitempty"`
 
+	// TotalMPRMetric total MPR parts logical and physical size, count per user
+	TotalMPRMetric []StorageClassBasedCountSize `xml:"total_mpr_metric>storage_class_counts,omitempty"`
+
 	// TotalReplicaObjectMetric total replicated objects logical and physical size, count per user
 	TotalReplicaObjectMetric []StorageClassBasedCountSize `xml:"total_replica_object_metric>storage_class_counts,omitempty"`
+
+	// TotalUserMetadataMetric total object metadata logical and physical size, count per user
+	TotalUserMetadataMetric []StorageClassBasedCountSize `xml:"total_user_metadata_metric>storage_class_counts,omitempty"`
+
+	// TotalReplicaMetadataMetric total replicated object metadata logical and physical size, count per user
+	totalReplicaMetadataMetric []StorageClassBasedCountSize `xml:"total_replica_metadata_metric>storage_class_counts,omitempty"`
 
 	// BucketBillingInfo metrics for the buckets managed by this account
 	BucketBillingInfo []BucketBillingInfo `xml:"bucket_billing_info,omitempty"`
@@ -123,11 +132,29 @@ type AccountBillingSample struct {
 	// MpuDeleteDelta list of MPU parts deletion delta per storage classes
 	MpuDeleteDelta []StorageClassBasedCountSize `xml:"mpu_delete_delta>storage_class_counts"`
 
+	// MprCreateDelta list of MPR parts creation delta per storage classes
+	MprCreateDelta []StorageClassBasedCountSize `xml:"mpr_create_delta>storage_class_counts"`
+
+	// MprDeleteDelta list of MPR parts deletion delta per storage classes
+	MprDeleteDelta []StorageClassBasedCountSize `xml:"mpr_delete_delta>storage_class_counts"`
+
 	// ReplicaCreationDelta list of replicated objects creation delta per storage classes
 	ReplicaCreationDelta []StorageClassBasedCountSize `xml:"replica_creation_delta>storage_class_counts"`
 
 	// ReplicaDeletionDelta list of replicated objects deletion delta per storage classes
 	ReplicaDeletionDelta []StorageClassBasedCountSize `xml:"replica_deletion_delta>storage_class_counts"`
+
+	// UserMetadataCreationDelta list of object metadata creation delta per storage classes
+	UserMetadataCreationDelta []StorageClassBasedCountSize `xml:"user_metadata_create_delta>storage_class_counts"`
+
+	// UserMetadataDeletionDelta list of object metadata deletion delta per storage classes
+	UserMetadataDeletionDelta []StorageClassBasedCountSize `xml:"user_metadata_delete_delta>storage_class_counts"`
+
+	// ReplicaMetadataCreationDelta list of object metadata creation delta per storage classes
+	ReplicaMetadataCreationDelta []StorageClassBasedCountSize `xml:"replica_metadata_create_delta>storage_class_counts"`
+
+	// ReplicaMetadataDeletionDelta list of object metadata deletion delta per storage classes
+	ReplicaMetadataDeletionDelta []StorageClassBasedCountSize `xml:"replica_metadata_delete_delta>storage_class_counts"`
 
 	// HardQuotaInCount hard quota in count
 	HardQuotaInCount int64 `xml:"hard_quota_in_count,omitempty"`
@@ -231,11 +258,20 @@ type BucketBillingInfo struct {
 	// TotalUserObjectMetric total object logical and physical size, count per bucket
 	TotalUserObjectMetric []StorageClassBasedCountSize `xml:"total_user_object_metric>storage_class_counts"`
 
+	// TotalUserMetadataMetric total user metadata logical and physical size, count per bucket
+	TotalUserMetadataMetric []StorageClassBasedCountSize `xml:"total_user_metadata_metric>storage_class_counts"`
+
 	// TotalMPUMetric total MPU parts logical and physical size, count per bucket
 	TotalMPUMetric []StorageClassBasedCountSize `xml:"total_mpu_metric>storage_class_counts"`
 
+	// TotalMPRMetric total MPR parts logical and physical size, count per bucket
+	TotalMPRMetric []StorageClassBasedCountSize `xml:"total_mpr_metric>storage_class_counts"`
+
 	// TotalReplicaObjectMetric total replicated objects logical and physical size, count per bucket
 	TotalReplicaObjectMetric []StorageClassBasedCountSize `xml:"total_replica_object_metric>storage_class_counts"`
+
+	// TotalReplicaMetadataMetric total replicated object metadata logical and physical size, count per bucket
+	TotalReplicaMetadataMetric []StorageClassBasedCountSize `xml:"total_replica_metadata_metric>storage_class_counts"`
 }
 
 // BucketBillingSampleList contains time range based billing metrics for buckets
@@ -309,11 +345,29 @@ type BucketBillingSample struct {
 	// MpuDeleteDelta list of MPU parts deletion delta per storage classes
 	MpuDeleteDelta []StorageClassBasedCountSize `xml:"mpu_delete_delta>storage_class_counts"`
 
+	// MprCreateDelta list of MPU parts creation delta per storage classes
+	MprCreateDelta []StorageClassBasedCountSize `xml:"mpr_create_delta>storage_class_counts"`
+
+	// MprDeleteDelta list of MPU parts deletion delta per storage classes
+	MprDeleteDelta []StorageClassBasedCountSize `xml:"mpr_delete_delta>storage_class_counts"`
+
 	// ReplicaCreationDelta list of replicated objects creation delta per storage classes
 	ReplicaCreationDelta []StorageClassBasedCountSize `xml:"replica_creation_delta>storage_class_counts"`
 
 	// ReplicaDeletionDelta list of replicated objects deletion delta per storage classes
 	ReplicaDeletionDelta []StorageClassBasedCountSize `xml:"replica_deletion_delta>storage_class_counts"`
+
+	// UserMetadataCreationDelta list of object metadata creation delta per storage classes
+	UserMetadataCreationDelta []StorageClassBasedCountSize `xml:"user_metadata_create_delta>storage_class_counts"`
+
+	// UserMetadataDeletionDelta list of object metadata deletion delta per storage classes
+	UserMetadataDeletionDelta []StorageClassBasedCountSize `xml:"user_metadata_delete_delta>storage_class_counts"`
+
+	// ReplicaMetadataCreationDelta list of object metadata creation delta per storage classes
+	ReplicaMetadataCreationDelta []StorageClassBasedCountSize `xml:"replica_metadata_create_delta>storage_class_counts"`
+
+	// ReplicaMetadataDeletionDelta list of object metadata deletion delta per storage classes
+	ReplicaMetadataDeletionDelta []StorageClassBasedCountSize `xml:"replica_metadata_delete_delta>storage_class_counts"`
 }
 
 // BucketBillingTag contains ingress and egress metrics for bucket
@@ -515,6 +569,15 @@ type StoreBillingInfo struct {
 	// TotalMPUMetric total MPU parts logical and physical size, count in object store
 	TotalMPUMetric []StorageClassBasedCountSize `xml:"total_mpu_metric>storage_class_counts,omitempty"`
 
+	// TotalMPRMetric total MPR parts logical and physical size, count per user
+	TotalMPRMetric []StorageClassBasedCountSize `xml:"total_mpr_metric>storage_class_counts,omitempty"`
+
+	// TotalUserMetadataMetric total object metadata logical and physical size, count per user
+	TotalUserMetadataMetric []StorageClassBasedCountSize `xml:"total_user_metadata_metric>storage_class_counts,omitempty"`
+
+	// TotalReplicaMetadataMetric total replicated object metadata logical and physical size, count per user
+	totalReplicaMetadataMetric []StorageClassBasedCountSize `xml:"total_replica_metadata_metric>storage_class_counts,omitempty"`
+
 	// TotalReplicaObjectMetric total replicated objects logical and physical size, count in object store
 	TotalReplicaObjectMetric []StorageClassBasedCountSize `xml:"total_replica_object_metric>storage_class_counts,omitempty"`
 
@@ -575,11 +638,29 @@ type StoreBillingSample struct {
 	// MpuDeleteDelta list of MPU parts deletion delta per storage classes
 	MpuDeleteDelta []StorageClassBasedCountSize `xml:"mpu_delete_delta>storage_class_counts"`
 
+	// MprCreateDelta list of MPU parts creation delta per storage classes
+	MprCreateDelta []StorageClassBasedCountSize `xml:"mpr_create_delta>storage_class_counts"`
+
+	// MprDeleteDelta list of MPU parts deletion delta per storage classes
+	MprDeleteDelta []StorageClassBasedCountSize `xml:"mpr_delete_delta>storage_class_counts"`
+
 	// ReplicaCreationDelta list of replicated objects creation delta per storage classes
 	ReplicaCreationDelta []StorageClassBasedCountSize `xml:"replica_creation_delta>storage_class_counts"`
 
 	// ReplicaDeletionDelta list of replicated objects deletion delta per storage classes
 	ReplicaDeletionDelta []StorageClassBasedCountSize `xml:"replica_deletion_delta>storage_class_counts"`
+
+	// UserMetadataCreationDelta list of object metadata creation delta per storage classes
+	UserMetadataCreationDelta []StorageClassBasedCountSize `xml:"user_metadata_create_delta>storage_class_counts"`
+
+	// UserMetadataDeletionDelta list of object metadata deletion delta per storage classes
+	UserMetadataDeletionDelta []StorageClassBasedCountSize `xml:"user_metadata_delete_delta>storage_class_counts"`
+
+	// ReplicaMetadataCreationDelta list of object metadata creation delta per storage classes
+	ReplicaMetadataCreationDelta []StorageClassBasedCountSize `xml:"replica_metadata_create_delta>storage_class_counts"`
+
+	// ReplicaMetadataDeletionDelta list of object metadata deletion delta per storage classes
+	ReplicaMetadataDeletionDelta []StorageClassBasedCountSize `xml:"replica_metadata_delete_delta>storage_class_counts"`
 }
 
 // TopNBucket top bucket metric
