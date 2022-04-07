@@ -33,6 +33,24 @@ type AccountBillingInfo struct {
 	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2007-04-05T14:30:55Z))
 	ConsistentTime string `xml:"consistent_time,omitempty"`
 
+	// TotalLocalData total local logical capacity usage(local: objects + MPU + user-written metadata)
+	TotalLocalData int64 `xml:"total_local_data,omitempty"`
+
+	// TotalReplicaData total replica logical capacity usage (replicated: objects + MPU + user written metadata)
+	TotalReplicaData int64 `xml:"total_replica_data,omitempty"`
+
+	// HardQuotaInCount hard quota in count
+	HardQuotaInCount int64 `xml:"hard_quota_in_count,omitempty"`
+
+	// HardQuotaInGB hard quota in logical size
+	HardQuotaInGB int64 `xml:"hard_quota_in_GB,omitempty"`
+
+	// SoftQuotaInCount soft quota in count
+	SoftQuotaInCount int64 `xml:"soft_quota_in_count,omitempty"`
+
+	// SoftQuotaInGB soft quota in logical size
+	SoftQuotaInGB int64 `xml:"soft_quota_in_GB,omitempty"`
+
 	// TotalUserObjectMetric total object logical and physical size, count per user
 	TotalUserObjectMetric []StorageClassBasedCountSize `xml:"total_user_object_metric>storage_class_counts,omitempty"`
 
@@ -41,6 +59,9 @@ type AccountBillingInfo struct {
 
 	// TotalReplicaObjectMetric total replicated objects logical and physical size, count per user
 	TotalReplicaObjectMetric []StorageClassBasedCountSize `xml:"total_replica_object_metric>storage_class_counts,omitempty"`
+
+	// BucketBillingInfo metrics for the buckets managed by this account
+	BucketBillingInfo []BucketBillingInfo `xml:"bucket_billing_info,omitempty"`
 }
 
 // AccountBillingSampleList contains time range based billing metrics for users
@@ -107,6 +128,21 @@ type AccountBillingSample struct {
 
 	// ReplicaDeletionDelta list of replicated objects deletion delta per storage classes
 	ReplicaDeletionDelta []StorageClassBasedCountSize `xml:"replica_deletion_delta>storage_class_counts"`
+
+	// HardQuotaInCount hard quota in count
+	HardQuotaInCount int64 `xml:"hard_quota_in_count,omitempty"`
+
+	// HardQuotaInGB hard quota in logical size
+	HardQuotaInGB int64 `xml:"hard_quota_in_GB,omitempty"`
+
+	// SoftQuotaInCount soft quota in count
+	SoftQuotaInCount int64 `xml:"soft_quota_in_count,omitempty"`
+
+	// SoftQuotaInGB soft quota in logical size
+	SoftQuotaInGB int64 `xml:"soft_quota_in_GB,omitempty"`
+
+	// BucketBillingSample metrics for the buckets managed by this account
+	BucketBillingSample []BucketBillingSample `xml:"bucket_billing_sample,omitempty"`
 }
 
 // StorageClassBasedCountSize contains logical and physical size and count of objects per storage class
@@ -171,8 +207,26 @@ type BucketBillingInfo struct {
 	// ConsistentTime metrics collection UTC timestamp in ISO 8601 format (2007-04-05T14:30:55Z)
 	ConsistentTime string `xml:"consistent_time,omitempty"`
 
+	// HardQuotaInCount hard quota in count
+	HardQuotaInCount int64 `xml:"hard_quota_in_count,omitempty"`
+
+	// HardQuotaInGB hard quota in logical size
+	HardQuotaInGB int64 `xml:"hard_quota_in_GB,omitempty"`
+
+	// SoftQuotaInCount soft quota in count
+	SoftQuotaInCount int64 `xml:"soft_quota_in_count,omitempty"`
+
+	// SoftQuotaInGB soft quota in logical size
+	SoftQuotaInGB int64 `xml:"soft_quota_in_GB,omitempty"`
+
 	// ObjectDistribution metrics collection of objects grouped by size
 	ObjectDistribution string `xml:"object_distribution,omitempty"`
+
+	// TotalLocalData total local logical capacity usage(local: objects + MPU + user-written metadata)
+	TotalLocalData int64 `xml:"total_local_data,omitempty"`
+
+	// TotalReplicaData total replica logical capacity usage (replicated: objects + MPU + user written metadata)
+	TotalReplicaData int64 `xml:"total_replica_data,omitempty"`
 
 	// TotalUserObjectMetric total object logical and physical size, count per bucket
 	TotalUserObjectMetric []StorageClassBasedCountSize `xml:"total_user_object_metric>storage_class_counts"`
@@ -218,6 +272,21 @@ type BucketBillingSample struct {
 
 	// SampleTimeRange time window in UTC format
 	SampleTimeRange int64 `xml:"sample_time_range,omitempty"`
+
+	// CrrThroughput Calculated by replicated object logical size/time range in seconds
+	CrrThroughput int64 `xml:"crr_throughput,omitempty"`
+
+	// HardQuotaInCount hard quota in count
+	HardQuotaInCount int64 `xml:"hard_quota_in_count,omitempty"`
+
+	// HardQuotaInGB hard quota in logical size
+	HardQuotaInGB int64 `xml:"hard_quota_in_GB,omitempty"`
+
+	// SoftQuotaInCount soft quota in count
+	SoftQuotaInCount int64 `xml:"soft_quota_in_count,omitempty"`
+
+	// SoftQuotaInGB soft quota in logical size
+	SoftQuotaInGB int64 `xml:"soft_quota_in_GB,omitempty"`
 
 	// ConsistentTime metrics collection UTC timestamp in ISO 8601 format (2007-04-05T14:30:55Z)
 	ConsistentTime string `xml:"consistent_time,omitempty"`
@@ -433,6 +502,12 @@ type StoreBillingInfo struct {
 
 	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2020-01-27T14:30:55Z))
 	ConsistentTime string `xml:"consistent_time,omitempty"`
+
+	// TotalLocalData total local logical capacity usage(local: objects + MPU + user-written metadata)
+	TotalLocalData int64 `xml:"total_local_data,omitempty"`
+
+	// TotalReplicaData total replica logical capacity usage (replicated: objects + MPU + user written metadata)
+	TotalReplicaData int64 `xml:"total_replica_data,omitempty"`
 
 	// TotalUserObjectMetric total object logical and physical size, count in object store
 	TotalUserObjectMetric []StorageClassBasedCountSize `xml:"total_user_object_metric>storage_class_counts,omitempty"`
