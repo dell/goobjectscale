@@ -129,18 +129,6 @@ type AccountBillingSample struct {
 	// ReplicaDeletionDelta list of replicated objects deletion delta per storage classes
 	ReplicaDeletionDelta []StorageClassBasedCountSize `xml:"replica_deletion_delta>storage_class_counts"`
 
-	// UserMetadataCreationDelta list of object metadata creation delta per storage classes
-	UserMetadataCreationDelta []StorageClassBasedCountSize `xml:"user_metadata_create_delta>storage_class_counts"`
-
-	// UserMetadataDeletionDelta list of object metadata deletion delta per storage classes
-	UserMetadataDeletionDelta []StorageClassBasedCountSize `xml:"user_metadata_delete_delta>storage_class_counts"`
-
-	// ReplicaMetadataCreationDelta list of object metadata creation delta per storage classes
-	ReplicaMetadataCreationDelta []StorageClassBasedCountSize `xml:"replica_metadata_create_delta>storage_class_counts"`
-
-	// ReplicaMetadataDeletionDelta list of object metadata deletion delta per storage classes
-	ReplicaMetadataDeletionDelta []StorageClassBasedCountSize `xml:"replica_metadata_delete_delta>storage_class_counts"`
-
 	// HardQuotaInCount hard quota in count
 	HardQuotaInCount int64 `xml:"hard_quota_in_count,omitempty"`
 
@@ -326,18 +314,6 @@ type BucketBillingSample struct {
 
 	// ReplicaDeletionDelta list of replicated objects deletion delta per storage classes
 	ReplicaDeletionDelta []StorageClassBasedCountSize `xml:"replica_deletion_delta>storage_class_counts"`
-
-	// UserMetadataCreationDelta list of object metadata creation delta per storage classes
-	UserMetadataCreationDelta []StorageClassBasedCountSize `xml:"user_metadata_create_delta>storage_class_counts"`
-
-	// UserMetadataDeletionDelta list of object metadata deletion delta per storage classes
-	UserMetadataDeletionDelta []StorageClassBasedCountSize `xml:"user_metadata_delete_delta>storage_class_counts"`
-
-	// ReplicaMetadataCreationDelta list of object metadata creation delta per storage classes
-	ReplicaMetadataCreationDelta []StorageClassBasedCountSize `xml:"replica_metadata_create_delta>storage_class_counts"`
-
-	// ReplicaMetadataDeletionDelta list of object metadata deletion delta per storage classes
-	ReplicaMetadataDeletionDelta []StorageClassBasedCountSize `xml:"replica_metadata_delete_delta>storage_class_counts"`
 }
 
 // BucketBillingTag contains ingress and egress metrics for bucket
@@ -604,18 +580,6 @@ type StoreBillingSample struct {
 
 	// ReplicaDeletionDelta list of replicated objects deletion delta per storage classes
 	ReplicaDeletionDelta []StorageClassBasedCountSize `xml:"replica_deletion_delta>storage_class_counts"`
-
-	// UserMetadataCreationDelta list of object metadata creation delta per storage classes
-	UserMetadataCreationDelta []StorageClassBasedCountSize `xml:"user_metadata_create_delta>storage_class_counts"`
-
-	// UserMetadataDeletionDelta list of object metadata deletion delta per storage classes
-	UserMetadataDeletionDelta []StorageClassBasedCountSize `xml:"user_metadata_delete_delta>storage_class_counts"`
-
-	// ReplicaMetadataCreationDelta list of object metadata creation delta per storage classes
-	ReplicaMetadataCreationDelta []StorageClassBasedCountSize `xml:"replica_metadata_create_delta>storage_class_counts"`
-
-	// ReplicaMetadataDeletionDelta list of object metadata deletion delta per storage classes
-	ReplicaMetadataDeletionDelta []StorageClassBasedCountSize `xml:"replica_metadata_delete_delta>storage_class_counts"`
 }
 
 // TopNBucket top bucket metric
