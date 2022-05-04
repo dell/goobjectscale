@@ -632,7 +632,7 @@ func (c *CRR) UnthrottleReplication(destObjectScale string, destObjectStore stri
 
 // ThrottleReplication implements the CRR API
 func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, param map[string]string) error {
-	throttle, _ := strconv.Atoi(param["throttleMBPerSecond"])
+	throttle, _ := strconv.Atoi(param["throttlePerSecond"])
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 	c.Config.ThrottleBandwidth = throttle
