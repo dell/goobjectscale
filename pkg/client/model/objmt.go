@@ -576,7 +576,7 @@ type StoreBillingInfo struct {
 	TotalUserMetadataMetric []StorageClassBasedCountSize `xml:"total_user_metadata_metric>storage_class_counts,omitempty"`
 
 	// TotalReplicaMetadataMetric total replicated object metadata logical and physical size, count per user
-	totalReplicaMetadataMetric []StorageClassBasedCountSize `xml:"total_replica_metadata_metric>storage_class_counts,omitempty"`
+	TotalReplicaMetadataMetric []StorageClassBasedCountSize `xml:"total_replica_metadata_metric>storage_class_counts,omitempty"`
 
 	// TotalReplicaObjectMetric total replicated objects logical and physical size, count in object store
 	TotalReplicaObjectMetric []StorageClassBasedCountSize `xml:"total_replica_object_metric>storage_class_counts,omitempty"`
