@@ -67,7 +67,7 @@ type AccountBillingInfo struct {
 	TotalUserMetadataMetric []StorageClassBasedCountSize `xml:"total_user_metadata_metric>storage_class_counts,omitempty"`
 
 	// TotalReplicaMetadataMetric total replicated object metadata logical and physical size, count per user
-	totalReplicaMetadataMetric []StorageClassBasedCountSize `xml:"total_replica_metadata_metric>storage_class_counts,omitempty"`
+	TotalReplicaMetadataMetric []StorageClassBasedCountSize `xml:"total_replica_metadata_metric>storage_class_counts,omitempty"`
 
 	// BucketBillingInfo metrics for the buckets managed by this account
 	BucketBillingInfo []BucketBillingInfo `xml:"bucket_billing_info,omitempty"`
