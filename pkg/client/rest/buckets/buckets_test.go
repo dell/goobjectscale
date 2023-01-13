@@ -6,10 +6,9 @@ import (
 	"testing"
 
 	"github.com/dnaeon/go-vcr/cassette"
+	"github.com/dnaeon/go-vcr/recorder"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-
-	"github.com/dnaeon/go-vcr/recorder"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"

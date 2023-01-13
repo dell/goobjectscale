@@ -9,9 +9,10 @@ import (
 
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
+	"github.com/stretchr/testify/require"
+
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
-	"github.com/stretchr/testify/require"
 )
 
 var (
