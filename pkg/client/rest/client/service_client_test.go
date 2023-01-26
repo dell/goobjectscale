@@ -14,7 +14,7 @@ import (
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/testutils"
 )
 
-func TestRest(t *testing.T) {
+func TestServiceRest(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Rest client Spec")
 }
@@ -34,12 +34,14 @@ var _ = Describe("Rest client", func() {
 
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewClient(
+			clientset = rest.NewClientSet(client.NewServiceClient(
 				"https://testserver",
 				"https://testgateway",
-				"testuser",
-				"testpassword",
-				newTestHTTPClient(captures, false),
+				"svc-objectscale-domain-c8",
+				"objectscale-graphql-7d754f8499-ng4h6",
+				"OSC234DSF223423",
+				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+				newTestServiceHTTPClient(captures, false),
 				false,
 			))
 			err = clientset.Client().MakeRemoteCall(client.Request{
@@ -78,12 +80,14 @@ var _ = Describe("Rest client", func() {
 
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewClient(
+			clientset = rest.NewClientSet(client.NewServiceClient(
 				":not:a:valid:url",
 				"https://testgateway",
-				"testuser",
-				"testpassword",
-				newTestHTTPClient(captures, false),
+				"svc-objectscale-domain-c8",
+				"objectscale-graphql-7d754f8499-ng4h6",
+				"OSC234DSF223423",
+				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+				newTestServiceHTTPClient(captures, false),
 				true,
 			))
 			err = clientset.Client().MakeRemoteCall(client.Request{
@@ -113,12 +117,14 @@ var _ = Describe("Rest client", func() {
 
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewClient(
+			clientset = rest.NewClientSet(client.NewServiceClient(
 				"https://testserver",
 				"https://testgateway",
-				"testuser",
-				"testpassword",
-				newTestHTTPClient(captures, false),
+				"svc-objectscale-domain-c8",
+				"objectscale-graphql-7d754f8499-ng4h6",
+				"OSC234DSF223423",
+				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+				newTestServiceHTTPClient(captures, false),
 				false,
 			))
 			err = clientset.Client().MakeRemoteCall(client.Request{
@@ -154,12 +160,14 @@ var _ = Describe("Rest client", func() {
 
 		BeforeEach(func() {
 			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewClient(
+			clientset = rest.NewClientSet(client.NewServiceClient(
 				"https://testserver",
 				"https://testgateway",
-				"testuser",
-				"testpassword",
-				newTestHTTPClient(captures, true),
+				"svc-objectscale-domain-c8",
+				"objectscale-graphql-7d754f8499-ng4h6",
+				"OSC234DSF223423",
+				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+				newTestServiceHTTPClient(captures, true),
 				false,
 			))
 			err = clientset.Client().MakeRemoteCall(client.Request{
@@ -187,11 +195,11 @@ var _ = Describe("Rest client", func() {
 	})
 })
 
-func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
+func newTestServiceHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
 	return testutils.NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
-		case "https://testgateway/mgmt/login":
+		case "https://testgateway/mgmt/serviceLogin":
 			testutils.IncrCapture(captures, "login")
 			switch authFailure {
 			case true:

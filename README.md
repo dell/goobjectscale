@@ -5,7 +5,7 @@ This project provides a development SDK for the ObjectScale object store managem
 ## Example
 
 ```go
-restClient := rest.NewClientSet("username", "password", "https://ecs-hostname:4443", &http.Client{})
+restClient := rest.NewClientSet(client.NewClient("https://ecs-hostname:4443", "https://ecs-hostname:443", "user", "password", &http.Client{}, true))
 listParams := map[string]string{}
 bucketList := restClient.Buckets().List(listParams)
 ```
