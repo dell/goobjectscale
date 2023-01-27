@@ -1,0 +1,1 @@
+# objectscale-management-go-sdk
