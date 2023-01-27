@@ -4,9 +4,8 @@ import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
-	"testing"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
@@ -14,12 +13,7 @@ import (
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/testutils"
 )
 
-func TestServiceRest(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Rest client Spec")
-}
-
-var _ = Describe("Rest client", func() {
+var _ = Describe("Service client", func() {
 
 	var (
 		clientset *rest.ClientSet

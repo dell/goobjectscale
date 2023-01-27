@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
@@ -14,9 +14,9 @@ import (
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/testutils"
 )
 
-func TestRest(t *testing.T) {
+func TestClient(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Rest client Spec")
+	RunSpecs(t, "Client Spec")
 }
 
 var _ = Describe("Rest client", func() {

@@ -7,7 +7,7 @@ import (
 
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
@@ -20,43 +20,42 @@ func TestStatus(t *testing.T) {
 	RunSpecs(t, "Status Spec")
 }
 
+var (
+	r         *recorder.Recorder
+	clientset *rest.ClientSet
+	err       error
+)
+
+var _ = BeforeSuite(func() {
+	r, err = recorder.New("fixtures")
+	if err != nil {
+		log.Fatal(err)
+	}
+	r.AddFilter(func(i *cassette.Interaction) error {
+		delete(i.Request.Headers, "Authorization")
+		delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
+		return nil
+	})
+	clientset = rest.NewClientSet(client.NewServiceClient(
+		"https://testserver",
+		"https://testgateway",
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newRecordedHTTPClient(r),
+		false,
+	))
+})
+
+var _ = AfterSuite(func() {
+	err = r.Stop()
+	if err != nil {
+		log.Fatal(err)
+	}
+})
+
 var _ = Describe("Status", func() {
-
-	var (
-		r         *recorder.Recorder
-		clientset *rest.ClientSet
-		err       error
-	)
-
-	BeforeSuite(func() {
-		r, err = recorder.New("fixtures")
-		if err != nil {
-			log.Fatal(err)
-		}
-		r.AddFilter(func(i *cassette.Interaction) error {
-			delete(i.Request.Headers, "Authorization")
-			delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
-			return nil
-		})
-		clientset = rest.NewClientSet(client.NewServiceClient(
-			"https://testserver",
-			"https://testgateway",
-			"svc-objectscale-domain-c8",
-			"objectscale-graphql-7d754f8499-ng4h6",
-			"OSC234DSF223423",
-			"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-			newRecordedHTTPClient(r),
-			false,
-		))
-	})
-
-	AfterSuite(func() {
-		err = r.Stop()
-		if err != nil {
-			log.Fatal(err)
-		}
-	})
-
 	Context("#Get", func() {
 
 		Context("with no params", func() {
