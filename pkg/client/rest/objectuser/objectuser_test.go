@@ -13,6 +13,7 @@ import (
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
 
 var (
@@ -38,7 +39,7 @@ func TestMain(m *testing.M) {
 		},
 	})
 	httpClient = &http.Client{Transport: r}
-	clientset = rest.NewClientSet(
+	clientset = rest.NewClientSet(client.NewServiceClient(
 		"https://testserver",
 		"https://testgateway",
 		"svc-objectscale-domain-c8",
@@ -47,7 +48,7 @@ func TestMain(m *testing.M) {
 		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 		httpClient,
 		false,
-	)
+	))
 	defer func() {
 		if err := r.Stop(); err != nil {
 			log.Fatal(err)
