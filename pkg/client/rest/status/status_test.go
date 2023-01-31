@@ -6,29 +6,21 @@ import (
 	"testing"
 
 	"github.com/dnaeon/go-vcr/cassette"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/dnaeon/go-vcr/recorder"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
 
 func TestStatus(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Status Spec")
-}
-
-var _ = Describe("Status", func() {
-
-	var (
-		r         *recorder.Recorder
-		clientset *rest.ClientSet
-		err       error
-	)
-
-	BeforeSuite(func() {
+	t.Run("should return build info", func(t *testing.T) {
+		var (
+			r   *recorder.Recorder
+			err error
+		)
 		r, err = recorder.New("fixtures")
 		if err != nil {
 			log.Fatal(err)
@@ -38,7 +30,7 @@ var _ = Describe("Status", func() {
 			delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
 			return nil
 		})
-		clientset = rest.NewClientSet(client.NewServiceClient(
+		clientset := rest.NewClientSet(client.NewServiceClient(
 			"https://testserver",
 			"https://testgateway",
 			"svc-objectscale-domain-c8",
@@ -48,38 +40,14 @@ var _ = Describe("Status", func() {
 			newRecordedHTTPClient(r),
 			false,
 		))
+		rebuildInfo, err := clientset.Status().GetRebuildStatus("testdevice1",
+			"testdevice1-ss-0", "testdomain", "1", nil)
+		require.NoError(t, err)
+		assert.Equal(t, rebuildInfo.Level, 1)
+		assert.Equal(t, rebuildInfo.RemainingBytes, 1024)
+		assert.Equal(t, rebuildInfo.TotalBytes, 2048)
 	})
-
-	AfterSuite(func() {
-		err = r.Stop()
-		if err != nil {
-			log.Fatal(err)
-		}
-	})
-
-	Context("#Get", func() {
-
-		Context("with no params", func() {
-			var (
-				rebuildInfo *model.RebuildInfo
-				err         error
-			)
-			BeforeEach(func() {
-				rebuildInfo, err = clientset.Status().GetRebuildStatus("testdevice1",
-					"testdevice1-ss-0", "testdomain", "1", nil)
-			})
-
-			It("should return the rebulidInfo", func() {
-				Expect(err).ToNot(HaveOccurred())
-				Expect(rebuildInfo.Level).To(Equal(1))
-				Expect(rebuildInfo.RemainingBytes).To(Equal(1024))
-				Expect(rebuildInfo.TotalBytes).To(Equal(2048))
-			})
-
-		})
-	})
-
-})
+}
 
 func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
 	return &http.Client{Transport: r}
