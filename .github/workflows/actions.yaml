@@ -1,7 +1,7 @@
 name: Workflow
 on:
   push:
-    branches: [ main, usr/mtrajfacki-dell/KRV-11147 ]
+    branches: [ main ]
   pull_request:
     branches: [ main ] 
 jobs:
