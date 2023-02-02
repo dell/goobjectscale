@@ -6,193 +6,145 @@ import (
 	"net/http"
 	"testing"
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/testutils"
 )
 
-func TestRest(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Rest client Spec")
+// IncrCapture increments the integer value of a capture field in the map
+func IncrCapture(captures map[string]interface{}, name string) {
+	currentVal, ok := captures[name].(int)
+	if !ok || captures[name] == nil {
+		captures[name] = 0
+	}
+	captures[name] = currentVal + 1
 }
 
-var _ = Describe("Rest client", func() {
+// RoundTripFunc is a transport mock that makes a fake HTTP response locally
+type RoundTripFunc func(req *http.Request) *http.Response
 
-	var (
-		clientset *rest.ClientSet
-	)
+// RoundTrip mocks an http request and returns an http response
+func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req), nil
+}
 
-	Context("with a valid user", func() {
+//NewTestClient returns *http.Client with Transport replaced to avoid making real calls
+func NewTestClient(fn RoundTripFunc) *http.Client {
+	return &http.Client{
+		Transport: RoundTripFunc(fn),
+	}
+}
 
-		var (
-			err      error
-			captures map[string]interface{}
-		)
-
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewClient(
-				"https://testserver",
-				"https://testgateway",
-				"testuser",
-				"testpassword",
-				newTestHTTPClient(captures, false),
-				false,
-			))
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "/test",
-				ContentType: client.ContentTypeJSON,
-			}, nil)
+func TestRest(t *testing.T) {
+	for scenario, fn := range map[string]func(t *testing.T){
+		"validUser":          testValidUser,
+		"InvalidEndpoint":    testInvalidEndpoint,
+		"InvalidContentType": testInvalidContentType,
+		"FailedAuth":         testFailedAuth,
+	} {
+		t.Run(scenario, func(t *testing.T) {
+			fn(t)
 		})
+	}
+}
 
-		It("should not error", func() {
-			Expect(err).ToNot(HaveOccurred())
-		})
+func testValidUser(t *testing.T) {
+	captures := map[string]interface{}{}
+	clientset := rest.NewClientSet(client.NewClient(
+		"https://testserver",
+		"https://testgateway",
+		"testuser",
+		"testpassword",
+		newTestHTTPClient(captures, false),
+		false,
+	))
+	err := clientset.Client().MakeRemoteCall(client.Request{
+		Method:      http.MethodGet,
+		Path:        "/test",
+		ContentType: client.ContentTypeJSON,
+	}, nil)
 
-		It("should login", func() {
-			Expect(captures["login"]).To(Equal(1))
-		})
+	require.NoError(t, err)
+	assert.Equal(t, captures["login"], 1)
+	assert.Equal(t, captures["test"], 1)
+	assert.Nil(t, captures["notfound"])
+}
 
-		It("should query test route", func() {
-			Expect(captures["test"]).To(Equal(1))
-		})
+func testInvalidEndpoint(t *testing.T) {
+	captures := map[string]interface{}{}
+	clientset := rest.NewClientSet(client.NewClient(
+		":not:a:valid:url",
+		"https://testgateway",
+		"testuser",
+		"testpassword",
+		newTestHTTPClient(captures, false),
+		true,
+	))
+	err := clientset.Client().MakeRemoteCall(client.Request{
+		Method:      http.MethodGet,
+		Path:        "",
+		ContentType: client.ContentTypeJSON,
+	}, nil)
+	e := "parse \":not:a:valid:url\": missing protocol scheme"
+	require.Error(t, err)
+	assert.Equal(t, err.Error(), e)
+	assert.Nil(t, captures["login"])
+	assert.Nil(t, captures["test"])
+	assert.Nil(t, captures["notfound"])
+}
 
-		It("should not query an unknown route", func() {
-			Expect(captures["notfound"]).To(BeNil())
-		})
+func testInvalidContentType(t *testing.T) {
+	captures := map[string]interface{}{}
+	clientset := rest.NewClientSet(client.NewClient(
+		"https://testserver",
+		"https://testgateway",
+		"testuser",
+		"testpassword",
+		newTestHTTPClient(captures, false),
+		false,
+	))
+	err := clientset.Client().MakeRemoteCall(client.Request{
+		Method:      http.MethodGet,
+		Path:        "",
+		ContentType: "NotAContentType",
+	}, nil)
 
-		It("should return an OK response", func() {
-			Expect(err).ToNot(HaveOccurred())
-		})
-	})
+	assert.Equal(t, err.Error(), "invalid content-type")
+	assert.Nil(t, captures["login"])
+	assert.Nil(t, captures["test"])
+	assert.Nil(t, captures["notfound"])
+}
 
-	Context("with an invalid endpoint", func() {
-		var (
-			err      error
-			captures map[string]interface{}
-		)
+func testFailedAuth(t *testing.T) {
+	captures := map[string]interface{}{}
+	clientset := rest.NewClientSet(client.NewClient(
+		"https://testserver",
+		"https://testgateway",
+		"testuser",
+		"testpassword",
+		newTestHTTPClient(captures, true),
+		false,
+	))
+	err := clientset.Client().MakeRemoteCall(client.Request{
+		Method:      http.MethodGet,
+		Path:        "/test",
+		ContentType: client.ContentTypeJSON,
+	}, nil)
 
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewClient(
-				":not:a:valid:url",
-				"https://testgateway",
-				"testuser",
-				"testpassword",
-				newTestHTTPClient(captures, false),
-				true,
-			))
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "",
-				ContentType: client.ContentTypeJSON,
-			}, nil)
-		})
-
-		It("should return an error", func() {
-			e := "parse \":not:a:valid:url\": missing protocol scheme"
-			Expect(err.Error()).To(Equal(e))
-		})
-
-		It("should not make any remote calls", func() {
-			Expect(captures["login"]).To(BeNil())
-			Expect(captures["test"]).To(BeNil())
-			Expect(captures["notfound"]).To(BeNil())
-		})
-	})
-
-	Context("with an invalid content type", func() {
-		var (
-			err      error
-			captures map[string]interface{}
-		)
-
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewClient(
-				"https://testserver",
-				"https://testgateway",
-				"testuser",
-				"testpassword",
-				newTestHTTPClient(captures, false),
-				false,
-			))
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "",
-				ContentType: "NotAContentType",
-			}, nil)
-		})
-
-		It("should return an error", func() {
-			e := "invalid content-type"
-			Expect(err.Error()).To(Equal(e))
-		})
-
-		It("should not make a login call", func() {
-			Expect(captures["login"]).To(BeNil())
-		})
-
-		It("should not make the test call", func() {
-			Expect(captures["test"]).To(BeNil())
-		})
-
-		It("should not make an unfound call", func() {
-			Expect(captures["notfound"]).To(BeNil())
-		})
-	})
-
-	Context("with an auth failure", func() {
-		var (
-			err      error
-			captures map[string]interface{}
-		)
-
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewClient(
-				"https://testserver",
-				"https://testgateway",
-				"testuser",
-				"testpassword",
-				newTestHTTPClient(captures, true),
-				false,
-			))
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "/test",
-				ContentType: client.ContentTypeJSON,
-			}, nil)
-		})
-
-		It("shouldn't error", func() {
-			Expect(err.Error()).To(Equal("auth failure"))
-		})
-
-		It("should attempt 3 logins", func() {
-			Expect(captures["login"]).To(Equal(1))
-		})
-
-		It("should not make the test call", func() {
-			Expect(captures["test"]).To(BeNil())
-		})
-
-		It("should not make an unfound call", func() {
-			Expect(captures["notfound"]).To(BeNil())
-		})
-	})
-})
+	assert.Equal(t, err.Error(), "auth failure")
+	assert.Equal(t, captures["login"], 1)
+	assert.Nil(t, captures["test"])
+	assert.Nil(t, captures["notfound"])
+}
 
 func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
-	return testutils.NewTestClient(func(req *http.Request) *http.Response {
+	return NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
 		case "https://testgateway/mgmt/login":
-			testutils.IncrCapture(captures, "login")
+			IncrCapture(captures, "login")
 			switch authFailure {
 			case true:
 				return &http.Response{
@@ -209,14 +161,14 @@ func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.
 				}
 			}
 		case "https://testserver/test":
-			testutils.IncrCapture(captures, "test")
+			IncrCapture(captures, "test")
 			return &http.Response{
 				StatusCode: 200,
 				Body:       ioutil.NopCloser(bytes.NewReader([]byte("OK"))),
 				Header:     header,
 			}
 		default:
-			testutils.IncrCapture(captures, "notfound")
+			IncrCapture(captures, "notfound")
 			return &http.Response{
 				StatusCode: 404,
 				Header:     make(http.Header),

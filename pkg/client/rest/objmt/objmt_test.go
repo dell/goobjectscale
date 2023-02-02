@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"testing"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
@@ -17,13 +16,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var (
-	rec        *recorder.Recorder
-	httpClient *http.Client
-	clientset  *rest.ClientSet
-)
+func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
+	return &http.Client{Transport: r}
+}
 
-func TestMain(m *testing.M) {
+func TestObjmt(t *testing.T) {
+	var rec *recorder.Recorder
 	var err error
 	rec, err = recorder.New("objmt_fixtures")
 	if err != nil {
@@ -50,81 +48,89 @@ func TestMain(m *testing.M) {
 		r.Body = ioutil.NopCloser(&b)
 		return cassette.DefaultMatcher(r, i) && (b.String() == "" || b.String() == i.Body)
 	})
-	httpClient = &http.Client{Transport: rec}
-	clientset = rest.NewClientSet(client.NewServiceClient(
+	clientset := rest.NewClientSet(client.NewServiceClient(
 		"https://testserver",
 		"https://testgateway",
 		"svc-objectscale-domain-c8",
 		"objectscale-graphql-7d754f8499-ng4h6",
 		"OSC234DSF223423",
 		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-		httpClient,
+		newRecordedHTTPClient(rec),
 		false,
 	))
-	defer func() {
-		if err := rec.Stop(); err != nil {
-			log.Fatal(err)
-		}
-	}()
-	m.Run()
-	os.Exit(0)
+	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
+		"accountInfo":        testAccountInfoList,
+		"accountSample":      testAccountSampleList,
+		"bucketInfo":         testBucketInfoList,
+		"bucketSample":       testBucketSampleList,
+		"bucketPerf":         testBucketPerfList,
+		"replicationInfo":    testReplicationInfoList,
+		"replicationSample":  testReplicationSampleList,
+		"storeBillingInfo":   testStoreBillingInfoList,
+		"storeBillingSample": testStoreBillingSampleList,
+		"storePerf":          testStorePerfList,
+	} {
+		t.Run(scenario, func(t *testing.T) {
+			fn(t, clientset)
+		})
+	}
 }
 
-func TestAccountInfo_List(t *testing.T) {
+func testAccountInfoList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetAccountBillingInfo([]string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestAccountSample_List(t *testing.T) {
+func testAccountSampleList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetAccountBillingSample([]string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestBucketInfo_List(t *testing.T) {
+func testBucketInfoList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetBucketBillingInfo("a12345", []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestBucketSample_List(t *testing.T) {
+func testBucketSampleList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetBucketBillingSample("a12345", []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestBucketPerf_List(t *testing.T) {
+func testBucketPerfList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetBucketBillingPerf("a12345", []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestReplicationInfo_List(t *testing.T) {
+func testReplicationInfoList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetReplicationInfo("a12345", [][]string{{"a", "b"}, {"c", "d"}}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestReplicationSample_List(t *testing.T) {
+func testReplicationSampleList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetReplicationSample("a12345", [][]string{{"a", "b"}, {"c", "d"}}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestStoreBillingInfo_List(t *testing.T) {
+func testStoreBillingInfoList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetStoreBillingInfo(nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestStoreBillingSample_List(t *testing.T) {
+func testStoreBillingSampleList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetStoreBillingSample(nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)
 }
 
-func TestStorePerf_List(t *testing.T) {
+func testStorePerfList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectMt().GetStoreReplicationData([]string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
 	require.NotNil(t, data)

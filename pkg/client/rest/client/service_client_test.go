@@ -6,201 +6,127 @@ import (
 	"net/http"
 	"testing"
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/testutils"
 )
 
 func TestServiceRest(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "Rest client Spec")
+	for scenario, fn := range map[string]func(t *testing.T){
+		"validUser":          testServiceValidUser,
+		"InvalidEndpoint":    testServiceInvalidEndpoint,
+		"InvalidContentType": testServiceInvalidContentType,
+		"FailedAuth":         testServiceFailedAuth,
+	} {
+		t.Run(scenario, func(t *testing.T) {
+			fn(t)
+		})
+	}
 }
 
-var _ = Describe("Rest client", func() {
+func testServiceValidUser(t *testing.T) {
+	captures := map[string]interface{}{}
+	clientset := rest.NewClientSet(client.NewServiceClient(
+		"https://testserver",
+		"https://testgateway",
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newTestServiceHTTPClient(captures, false),
+		false,
+	))
+	err := clientset.Client().MakeRemoteCall(client.Request{
+		Method:      http.MethodGet,
+		Path:        "/test",
+		ContentType: client.ContentTypeJSON,
+	}, nil)
 
-	var (
-		clientset *rest.ClientSet
-	)
+	require.NoError(t, err)
+	assert.Equal(t, captures["login"], 1)
+	assert.Equal(t, captures["test"], 1)
+	assert.Nil(t, captures["notfound"])
+}
 
-	Context("with a valid user", func() {
+func testServiceInvalidEndpoint(t *testing.T) {
+	captures := map[string]interface{}{}
+	clientset := rest.NewClientSet(client.NewServiceClient(
+		":not:a:valid:url",
+		"https://testgateway",
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newTestServiceHTTPClient(captures, false),
+		true,
+	))
+	err := clientset.Client().MakeRemoteCall(client.Request{
+		Method:      http.MethodGet,
+		Path:        "",
+		ContentType: client.ContentTypeJSON,
+	}, nil)
+	e := "parse \":not:a:valid:url\": missing protocol scheme"
+	require.Error(t, err)
+	assert.Equal(t, err.Error(), e)
+	assert.Nil(t, captures["login"])
+	assert.Nil(t, captures["test"])
+	assert.Nil(t, captures["notfound"])
+}
 
-		var (
-			err      error
-			captures map[string]interface{}
-		)
+func testServiceInvalidContentType(t *testing.T) {
+	captures := map[string]interface{}{}
+	clientset := rest.NewClientSet(client.NewServiceClient(
+		"https://testserver",
+		"https://testgateway",
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newTestServiceHTTPClient(captures, false),
+		false,
+	))
+	err := clientset.Client().MakeRemoteCall(client.Request{
+		Method:      http.MethodGet,
+		Path:        "",
+		ContentType: "NotAContentType",
+	}, nil)
+	assert.Equal(t, err.Error(), "invalid content-type")
+	assert.Nil(t, captures["login"])
+	assert.Nil(t, captures["test"])
+	assert.Nil(t, captures["notfound"])
+}
 
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewServiceClient(
-				"https://testserver",
-				"https://testgateway",
-				"svc-objectscale-domain-c8",
-				"objectscale-graphql-7d754f8499-ng4h6",
-				"OSC234DSF223423",
-				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-				newTestServiceHTTPClient(captures, false),
-				false,
-			))
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "/test",
-				ContentType: client.ContentTypeJSON,
-			}, nil)
-		})
-
-		It("should not error", func() {
-			Expect(err).ToNot(HaveOccurred())
-		})
-
-		It("should login", func() {
-			Expect(captures["login"]).To(Equal(1))
-		})
-
-		It("should query test route", func() {
-			Expect(captures["test"]).To(Equal(1))
-		})
-
-		It("should not query an unknown route", func() {
-			Expect(captures["notfound"]).To(BeNil())
-		})
-
-		It("should return an OK response", func() {
-			Expect(err).ToNot(HaveOccurred())
-		})
-	})
-
-	Context("with an invalid endpoint", func() {
-		var (
-			err      error
-			captures map[string]interface{}
-		)
-
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewServiceClient(
-				":not:a:valid:url",
-				"https://testgateway",
-				"svc-objectscale-domain-c8",
-				"objectscale-graphql-7d754f8499-ng4h6",
-				"OSC234DSF223423",
-				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-				newTestServiceHTTPClient(captures, false),
-				true,
-			))
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "",
-				ContentType: client.ContentTypeJSON,
-			}, nil)
-		})
-
-		It("should return an error", func() {
-			e := "parse \":not:a:valid:url\": missing protocol scheme"
-			Expect(err.Error()).To(Equal(e))
-		})
-
-		It("should not make any remote calls", func() {
-			Expect(captures["login"]).To(BeNil())
-			Expect(captures["test"]).To(BeNil())
-			Expect(captures["notfound"]).To(BeNil())
-		})
-	})
-
-	Context("with an invalid content type", func() {
-		var (
-			err      error
-			captures map[string]interface{}
-		)
-
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewServiceClient(
-				"https://testserver",
-				"https://testgateway",
-				"svc-objectscale-domain-c8",
-				"objectscale-graphql-7d754f8499-ng4h6",
-				"OSC234DSF223423",
-				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-				newTestServiceHTTPClient(captures, false),
-				false,
-			))
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "",
-				ContentType: "NotAContentType",
-			}, nil)
-		})
-
-		It("should return an error", func() {
-			e := "invalid content-type"
-			Expect(err.Error()).To(Equal(e))
-		})
-
-		It("should not make a login call", func() {
-			Expect(captures["login"]).To(BeNil())
-		})
-
-		It("should not make the test call", func() {
-			Expect(captures["test"]).To(BeNil())
-		})
-
-		It("should not make an unfound call", func() {
-			Expect(captures["notfound"]).To(BeNil())
-		})
-	})
-
-	Context("with an auth failure", func() {
-		var (
-			err      error
-			captures map[string]interface{}
-		)
-
-		BeforeEach(func() {
-			captures = map[string]interface{}{}
-			clientset = rest.NewClientSet(client.NewServiceClient(
-				"https://testserver",
-				"https://testgateway",
-				"svc-objectscale-domain-c8",
-				"objectscale-graphql-7d754f8499-ng4h6",
-				"OSC234DSF223423",
-				"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-				newTestServiceHTTPClient(captures, true),
-				false,
-			))
-			err = clientset.Client().MakeRemoteCall(client.Request{
-				Method:      http.MethodGet,
-				Path:        "/test",
-				ContentType: client.ContentTypeJSON,
-			}, nil)
-		})
-
-		It("shouldn't error", func() {
-			Expect(err.Error()).To(Equal("auth failure"))
-		})
-
-		It("should attempt 3 logins", func() {
-			Expect(captures["login"]).To(Equal(1))
-		})
-
-		It("should not make the test call", func() {
-			Expect(captures["test"]).To(BeNil())
-		})
-
-		It("should not make an unfound call", func() {
-			Expect(captures["notfound"]).To(BeNil())
-		})
-	})
-})
+func testServiceFailedAuth(t *testing.T) {
+	captures := map[string]interface{}{}
+	clientset := rest.NewClientSet(client.NewServiceClient(
+		"https://testserver",
+		"https://testgateway",
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newTestServiceHTTPClient(captures, true),
+		false,
+	))
+	err := clientset.Client().MakeRemoteCall(client.Request{
+		Method:      http.MethodGet,
+		Path:        "/test",
+		ContentType: client.ContentTypeJSON,
+	}, nil)
+	assert.Equal(t, err.Error(), "auth failure")
+	assert.Equal(t, captures["login"], 1)
+	assert.Nil(t, captures["test"])
+	assert.Nil(t, captures["notfound"])
+}
 
 func newTestServiceHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
-	return testutils.NewTestClient(func(req *http.Request) *http.Response {
+	return NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
 		case "https://testgateway/mgmt/serviceLogin":
-			testutils.IncrCapture(captures, "login")
+			IncrCapture(captures, "login")
 			switch authFailure {
 			case true:
 				return &http.Response{
@@ -217,14 +143,14 @@ func newTestServiceHTTPClient(captures map[string]interface{}, authFailure bool)
 				}
 			}
 		case "https://testserver/test":
-			testutils.IncrCapture(captures, "test")
+			IncrCapture(captures, "test")
 			return &http.Response{
 				StatusCode: 200,
 				Body:       ioutil.NopCloser(bytes.NewReader([]byte("OK"))),
 				Header:     header,
 			}
 		default:
-			testutils.IncrCapture(captures, "notfound")
+			IncrCapture(captures, "notfound")
 			return &http.Response{
 				StatusCode: 404,
 				Header:     make(http.Header),
