@@ -11,7 +11,6 @@ import (
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/testutils"
 )
 
 func TestServiceRest(t *testing.T) {
@@ -123,11 +122,11 @@ func testServiceFailedAuth(t *testing.T) {
 }
 
 func newTestServiceHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
-	return testutils.NewTestClient(func(req *http.Request) *http.Response {
+	return NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
 		case "https://testgateway/mgmt/serviceLogin":
-			testutils.IncrCapture(captures, "login")
+			IncrCapture(captures, "login")
 			switch authFailure {
 			case true:
 				return &http.Response{
@@ -144,14 +143,14 @@ func newTestServiceHTTPClient(captures map[string]interface{}, authFailure bool)
 				}
 			}
 		case "https://testserver/test":
-			testutils.IncrCapture(captures, "test")
+			IncrCapture(captures, "test")
 			return &http.Response{
 				StatusCode: 200,
 				Body:       ioutil.NopCloser(bytes.NewReader([]byte("OK"))),
 				Header:     header,
 			}
 		default:
-			testutils.IncrCapture(captures, "notfound")
+			IncrCapture(captures, "notfound")
 			return &http.Response{
 				StatusCode: 404,
 				Header:     make(http.Header),

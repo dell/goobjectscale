@@ -11,8 +11,31 @@ import (
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/testutils"
 )
+
+// IncrCapture increments the integer value of a capture field in the map
+func IncrCapture(captures map[string]interface{}, name string) {
+	currentVal, ok := captures[name].(int)
+	if !ok || captures[name] == nil {
+		captures[name] = 0
+	}
+	captures[name] = currentVal + 1
+}
+
+// RoundTripFunc is a transport mock that makes a fake HTTP response locally
+type RoundTripFunc func(req *http.Request) *http.Response
+
+// RoundTrip mocks an http request and returns an http response
+func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req), nil
+}
+
+//NewTestClient returns *http.Client with Transport replaced to avoid making real calls
+func NewTestClient(fn RoundTripFunc) *http.Client {
+	return &http.Client{
+		Transport: RoundTripFunc(fn),
+	}
+}
 
 func TestRest(t *testing.T) {
 	for scenario, fn := range map[string]func(t *testing.T){
@@ -117,11 +140,11 @@ func testFailedAuth(t *testing.T) {
 }
 
 func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
-	return testutils.NewTestClient(func(req *http.Request) *http.Response {
+	return NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
 		case "https://testgateway/mgmt/login":
-			testutils.IncrCapture(captures, "login")
+			IncrCapture(captures, "login")
 			switch authFailure {
 			case true:
 				return &http.Response{
@@ -138,14 +161,14 @@ func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.
 				}
 			}
 		case "https://testserver/test":
-			testutils.IncrCapture(captures, "test")
+			IncrCapture(captures, "test")
 			return &http.Response{
 				StatusCode: 200,
 				Body:       ioutil.NopCloser(bytes.NewReader([]byte("OK"))),
 				Header:     header,
 			}
 		default:
-			testutils.IncrCapture(captures, "notfound")
+			IncrCapture(captures, "notfound")
 			return &http.Response{
 				StatusCode: 404,
 				Header:     make(http.Header),
