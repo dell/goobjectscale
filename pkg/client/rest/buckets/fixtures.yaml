@@ -1,5 +1,5 @@
 ---
-version: 1
+version: 2
 interactions:
 - request:
     body: ""
@@ -20,7 +20,7 @@ interactions:
         - OSTOKEN-eyJ4NXUiOiJkdW1teVVybCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJyb290Iiwib3Nfcm9sIjpbIlNZU1RFTV9BRE1JTiIsIlNZU1RFTV9NT05JVE9SIiwiU0VDVVJJVFlfQURNSU4iXSwiaXNzIjoiZmVkc3ZjIiwiZXhwIjoxNjIzNDQwNTgwLCJpYXQiOjE2MjM0MzY5ODAsImp0aSI6ImMyNjljNTUzLTJmM2MtNDc3OC1iZDI4LTIyM2RiNWJiZWZkNiJ9.CNFKStCNRy-iYzd7-3gawOx5hwDmNIh5B2O8T2-J3K-W4t3v3ORHWv0tIf3eluk4Md6oCuUBKrAJXq0fZlxw8zSVNxccRNjJaRt6qiDLaMiXhL1rEwDIT4du6g56Yaxh8lQsgHYHxEhESmXzTmWNmEsJnb3___JjTR0qELJjEs298xwtME7LUKoH0xMygs1vH_su7X5bHfuPTyapP8hkx84TBSnco41tslNGii9KnQzdt3bIlsCOrPACiCJsjbQpsQGEOR9B4qwo47VKNry9JOl1Q47Sww4kIV2v-ZakZVWinHpgTGaYjR-jOWAqcFPCcPXB_KbVmTEkuJpmdnrXDQ
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: ""
     form: {}
@@ -63,7 +63,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:52 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: ""
     form: {}
@@ -106,7 +106,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:53 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: ""
     form: {}
@@ -132,7 +132,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:53 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: ""
     form: {}
@@ -158,7 +158,7 @@ interactions:
       - OSTOKEN-eyJ4NXUiOiJkdW1teVVybCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJyb290Iiwib3Nfcm9sIjpbIlNZU1RFTV9BRE1JTiIsIlNZU1RFTV9NT05JVE9SIiwiU0VDVVJJVFlfQURNSU4iXSwiaWF0IjoxNjI0NTU3OTg1LCJleHAiOjE2MjQ1NjE1ODUsImlzcyI6ImZlZHN2YyIsImp0aSI6ImYzNzMwZTU5LTY3YTQtNGFhNS04Mjg1LTc1MGY1MTBhZjYxZSJ9.No6nH4Q8BYNZnwuxyYkIcknrbVGAeAP8Xh8wFkaXHKp1dLf_4ffOpMgRCYqIu2Q6slB4Iqw1KQo1V5_9QG1bWuAvAJWrNgZAH0iRGezaQjASjh6KTT9wDV4jmgLYJxsyD8QcKMeI41R6iloci0z6k6mWVvPuVLv0Oi73vU9tP6Qx-_ohVnj5Kj7JcXk4mpjZIi_bZfTlhJpow65yOpDDu-issGdfIHPNezZ2AN3WHVHAB_AHLjQ_BzxjTymqLkno5X7fEROb6XC5fcR6FUpUnOxoGdfdKQ2CYK_yJ6oJhEc8h7tcFgs2rbxtvDVxfJPOl-TpHBUIIUAhiIJ0Zgh0NA
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: ""
     form: {}
@@ -184,7 +184,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:53 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: <object_bucket_create><name>testbucket1</name><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><namespace>130820808912778549</namespace><notification_size>0</notification_size><TagSet></TagSet><MaxKeys>0</MaxKeys><Enabled>false</Enabled><Type></Type><Name></Name><Datatype></Datatype><enforce_retention>false</enforce_retention><minimum_fixed_retention>0</minimum_fixed_retention><minimum_variable_retention>0</minimum_variable_retention><maximum_fixed_retention>0</maximum_fixed_retention><maximum_variable_retention>0</maximum_variable_retention><HREF></HREF><Rel></Rel><inactive>false</inactive><global>false</global><remote>false</remote><internal>false</internal></object_bucket_create>
     form: {}
@@ -209,7 +209,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:54 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: "null"
     form: {}
@@ -234,7 +234,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:55 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: <object_bucket_create><name>testbucket1</name><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><namespace>130820808912778549</namespace><notification_size>0</notification_size><TagSet></TagSet><MaxKeys>0</MaxKeys><Enabled>false</Enabled><Type></Type><Name></Name><Datatype></Datatype><enforce_retention>false</enforce_retention><minimum_fixed_retention>0</minimum_fixed_retention><minimum_variable_retention>0</minimum_variable_retention><maximum_fixed_retention>0</maximum_fixed_retention><maximum_variable_retention>0</maximum_variable_retention><HREF></HREF><Rel></Rel><inactive>false</inactive><global>false</global><remote>false</remote><internal>false</internal></object_bucket_create>
     form: {}
@@ -259,7 +259,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:56 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: "null"
     form: {}
@@ -284,7 +284,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:58 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: <object_bucket_create><name>testbucket1</name><vpool>urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global</vpool><namespace>130820808912778549</namespace><notification_size>0</notification_size><TagSet></TagSet><MaxKeys>0</MaxKeys><Enabled>false</Enabled><Type></Type><Name></Name><Datatype></Datatype><enforce_retention>false</enforce_retention><minimum_fixed_retention>0</minimum_fixed_retention><minimum_variable_retention>0</minimum_variable_retention><maximum_fixed_retention>0</maximum_fixed_retention><maximum_variable_retention>0</maximum_variable_retention><HREF></HREF><Rel></Rel><inactive>false</inactive><global>false</global><remote>false</remote><internal>false</internal></object_bucket_create>
     form: {}
@@ -309,7 +309,7 @@ interactions:
         - Mon, 10 Jun 2019 21:04:59 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:
 - request:
     body: "null"
     form: {}
@@ -334,4 +334,4 @@ interactions:
         - Mon, 10 Jun 2019 21:05:04 GMT
     status: 200 OK
     code: 200
-    duration: ""
+    duration:

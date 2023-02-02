@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/dnaeon/go-vcr/cassette"
-	"github.com/dnaeon/go-vcr/recorder"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"gopkg.in/dnaeon/go-vcr.v3/cassette"
+	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
@@ -24,11 +24,11 @@ func TestStatus(t *testing.T) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		r.AddFilter(func(i *cassette.Interaction) error {
+		r.AddHook(func(i *cassette.Interaction) error {
 			delete(i.Request.Headers, "Authorization")
 			delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
 			return nil
-		})
+		}, recorder.BeforeSaveHook)
 		clientset := rest.NewClientSet(client.NewServiceClient(
 			"https://testserver",
 			"https://testgateway",

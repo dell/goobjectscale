@@ -11,9 +11,9 @@ import (
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 
-	"github.com/dnaeon/go-vcr/cassette"
-	"github.com/dnaeon/go-vcr/recorder"
 	"github.com/stretchr/testify/require"
+	"gopkg.in/dnaeon/go-vcr.v3/cassette"
+	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 )
 
 func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
@@ -27,12 +27,12 @@ func TestObjmt(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	rec.AddFilter(func(i *cassette.Interaction) error {
+	rec.AddHook(func(i *cassette.Interaction) error {
 		delete(i.Request.Headers, "Authorization")
 		delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
 		return nil
-	})
-	rec.SetTransport(&http.Transport{
+	}, recorder.BeforeSaveHook)
+	rec.SetRealTransport(&http.Transport{
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: true,
 		},
