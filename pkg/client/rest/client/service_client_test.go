@@ -13,36 +13,12 @@ import (
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
 
-// IncrCapture increments the integer value of a capture field in the map
-func IncrCapture(captures map[string]interface{}, name string) {
-	currentVal, ok := captures[name].(int)
-	if !ok || captures[name] == nil {
-		captures[name] = 0
-	}
-	captures[name] = currentVal + 1
-}
-
-// RoundTripFunc is a transport mock that makes a fake HTTP response locally
-type RoundTripFunc func(req *http.Request) *http.Response
-
-// RoundTrip mocks an http request and returns an http response
-func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
-	return f(req), nil
-}
-
-//NewTestClient returns *http.Client with Transport replaced to avoid making real calls
-func NewTestClient(fn RoundTripFunc) *http.Client {
-	return &http.Client{
-		Transport: RoundTripFunc(fn),
-	}
-}
-
-func TestRest(t *testing.T) {
+func TestServiceRest(t *testing.T) {
 	for scenario, fn := range map[string]func(t *testing.T){
-		"validUser":          testValidUser,
-		"InvalidEndpoint":    testInvalidEndpoint,
-		"InvalidContentType": testInvalidContentType,
-		"FailedAuth":         testFailedAuth,
+		"validUser":          testServiceValidUser,
+		"InvalidEndpoint":    testServiceInvalidEndpoint,
+		"InvalidContentType": testServiceInvalidContentType,
+		"FailedAuth":         testServiceFailedAuth,
 	} {
 		t.Run(scenario, func(t *testing.T) {
 			fn(t)
@@ -50,14 +26,16 @@ func TestRest(t *testing.T) {
 	}
 }
 
-func testValidUser(t *testing.T) {
+func testServiceValidUser(t *testing.T) {
 	captures := map[string]interface{}{}
-	clientset := rest.NewClientSet(client.NewClient(
+	clientset := rest.NewClientSet(client.NewServiceClient(
 		"https://testserver",
 		"https://testgateway",
-		"testuser",
-		"testpassword",
-		newTestHTTPClient(captures, false),
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newTestServiceHTTPClient(captures, false),
 		false,
 	))
 	err := clientset.Client().MakeRemoteCall(client.Request{
@@ -72,14 +50,16 @@ func testValidUser(t *testing.T) {
 	assert.Nil(t, captures["notfound"])
 }
 
-func testInvalidEndpoint(t *testing.T) {
+func testServiceInvalidEndpoint(t *testing.T) {
 	captures := map[string]interface{}{}
-	clientset := rest.NewClientSet(client.NewClient(
+	clientset := rest.NewClientSet(client.NewServiceClient(
 		":not:a:valid:url",
 		"https://testgateway",
-		"testuser",
-		"testpassword",
-		newTestHTTPClient(captures, false),
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newTestServiceHTTPClient(captures, false),
 		true,
 	))
 	err := clientset.Client().MakeRemoteCall(client.Request{
@@ -95,14 +75,16 @@ func testInvalidEndpoint(t *testing.T) {
 	assert.Nil(t, captures["notfound"])
 }
 
-func testInvalidContentType(t *testing.T) {
+func testServiceInvalidContentType(t *testing.T) {
 	captures := map[string]interface{}{}
-	clientset := rest.NewClientSet(client.NewClient(
+	clientset := rest.NewClientSet(client.NewServiceClient(
 		"https://testserver",
 		"https://testgateway",
-		"testuser",
-		"testpassword",
-		newTestHTTPClient(captures, false),
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newTestServiceHTTPClient(captures, false),
 		false,
 	))
 	err := clientset.Client().MakeRemoteCall(client.Request{
@@ -110,21 +92,22 @@ func testInvalidContentType(t *testing.T) {
 		Path:        "",
 		ContentType: "NotAContentType",
 	}, nil)
-
 	assert.Equal(t, err.Error(), "invalid content-type")
 	assert.Nil(t, captures["login"])
 	assert.Nil(t, captures["test"])
 	assert.Nil(t, captures["notfound"])
 }
 
-func testFailedAuth(t *testing.T) {
+func testServiceFailedAuth(t *testing.T) {
 	captures := map[string]interface{}{}
-	clientset := rest.NewClientSet(client.NewClient(
+	clientset := rest.NewClientSet(client.NewServiceClient(
 		"https://testserver",
 		"https://testgateway",
-		"testuser",
-		"testpassword",
-		newTestHTTPClient(captures, true),
+		"svc-objectscale-domain-c8",
+		"objectscale-graphql-7d754f8499-ng4h6",
+		"OSC234DSF223423",
+		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		newTestServiceHTTPClient(captures, true),
 		false,
 	))
 	err := clientset.Client().MakeRemoteCall(client.Request{
@@ -132,18 +115,17 @@ func testFailedAuth(t *testing.T) {
 		Path:        "/test",
 		ContentType: client.ContentTypeJSON,
 	}, nil)
-
 	assert.Equal(t, err.Error(), "auth failure")
 	assert.Equal(t, captures["login"], 1)
 	assert.Nil(t, captures["test"])
 	assert.Nil(t, captures["notfound"])
 }
 
-func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
+func newTestServiceHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
 	return NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
 		switch req.URL.String() {
-		case "https://testgateway/mgmt/login":
+		case "https://testgateway/mgmt/serviceLogin":
 			IncrCapture(captures, "login")
 			switch authFailure {
 			case true:

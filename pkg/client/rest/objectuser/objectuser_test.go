@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
-	"os"
 	"testing"
 
 	"github.com/dnaeon/go-vcr/cassette"
@@ -13,15 +12,15 @@ import (
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
 
-var (
-	r          *recorder.Recorder
-	httpClient *http.Client
-	clientset  *rest.ClientSet
-)
+func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
+	return &http.Client{Transport: r}
+}
 
-func TestMain(m *testing.M) {
+func TestObjectUser(t *testing.T) {
+	var r *recorder.Recorder
 	var err error
 	r, err = recorder.New("fixtures")
 	if err != nil {
@@ -37,27 +36,30 @@ func TestMain(m *testing.M) {
 			InsecureSkipVerify: true,
 		},
 	})
-	httpClient = &http.Client{Transport: r}
-	clientset = rest.NewClientSet(
+	clientset := rest.NewClientSet(client.NewServiceClient(
 		"https://testserver",
 		"https://testgateway",
 		"svc-objectscale-domain-c8",
 		"objectscale-graphql-7d754f8499-ng4h6",
 		"OSC234DSF223423",
 		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-		httpClient,
+		newRecordedHTTPClient(r),
 		false,
-	)
-	defer func() {
-		if err := r.Stop(); err != nil {
-			log.Fatal(err)
-		}
-	}()
-	m.Run()
-	os.Exit(0)
+	))
+	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
+		"list":         testList,
+		"getInfo":      testGetInfo,
+		"getSecret":    testGetSecret,
+		"createSecret": testCreateSecret,
+		"deleteSecret": testDeleteSecret,
+	} {
+		t.Run(scenario, func(t *testing.T) {
+			fn(t, clientset)
+		})
+	}
 }
 
-func TestObjectUser_List(t *testing.T) {
+func testList(t *testing.T, clientset *rest.ClientSet) {
 	data, err := clientset.ObjectUser().List(nil)
 	require.NoError(t, err)
 	require.Len(t, data.BlobUser, 1)
@@ -85,7 +87,7 @@ var objectUserGetInfoTest = []struct {
 	},
 }
 
-func TestObjectUser_GetInfo(t *testing.T) {
+func testGetInfo(t *testing.T, clientset *rest.ClientSet) {
 	for _, tt := range objectUserGetInfoTest {
 		t.Run(tt.in, func(t *testing.T) {
 			data, err := clientset.ObjectUser().GetInfo(tt.in, nil)
@@ -122,7 +124,7 @@ var objectUserGetSecretTest = []struct {
 	},
 }
 
-func TestObjectUser_GetSecret(t *testing.T) {
+func testGetSecret(t *testing.T, clientset *rest.ClientSet) {
 	for _, tt := range objectUserGetSecretTest {
 		t.Run(tt.in, func(t *testing.T) {
 			data, err := clientset.ObjectUser().GetSecret(tt.in, nil)
@@ -160,7 +162,7 @@ var objectUserCreateSecretTest = []struct {
 	},
 }
 
-func TestObjectUser_CreateSecret(t *testing.T) {
+func testCreateSecret(t *testing.T, clientset *rest.ClientSet) {
 	for _, tt := range objectUserCreateSecretTest {
 		t.Run(tt.in1, func(t *testing.T) {
 			data, err := clientset.ObjectUser().CreateSecret(tt.in1, tt.in2, nil)
@@ -194,7 +196,7 @@ var objectUserDeleteSecretTest = []struct {
 	},
 }
 
-func TestObjectUser_DeleteSecret(t *testing.T) {
+func testDeleteSecret(t *testing.T, clientset *rest.ClientSet) {
 	for _, tt := range objectUserDeleteSecretTest {
 		t.Run(tt.in1, func(t *testing.T) {
 			err := clientset.ObjectUser().DeleteSecret(tt.in1, tt.in2, nil)
