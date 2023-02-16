@@ -100,4 +100,6 @@ func testGet(t *testing.T, clientset *rest.ClientSet) {
 	crr, err := clientset.CRR().Get("test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, crr.DestObjectStore, "test-objectstore")
+	_, err = clientset.CRR().Get("bad-objectscale", "bad-objectstore", map[string]string{})
+	require.Error(t, err)
 }

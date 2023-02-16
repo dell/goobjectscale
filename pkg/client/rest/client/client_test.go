@@ -18,25 +18,19 @@ package client_test
 
 import (
 	"bytes"
-	"io/ioutil"
+	"errors"
+	"fmt"
+
+	"io"
 	"net/http"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
-
-// IncrCapture increments the integer value of a capture field in the map
-func IncrCapture(captures map[string]interface{}, name string) {
-	currentVal, ok := captures[name].(int)
-	if !ok || captures[name] == nil {
-		captures[name] = 0
-	}
-	captures[name] = currentVal + 1
-}
 
 // RoundTripFunc is a transport mock that makes a fake HTTP response locally
 type RoundTripFunc func(req *http.Request) *http.Response
@@ -55,47 +49,29 @@ func NewTestClient(fn RoundTripFunc) *http.Client {
 
 func TestRest(t *testing.T) {
 	for scenario, fn := range map[string]func(t *testing.T){
-		"validUser":          testValidUser,
+		"NoErrorsNoObject":   testNoErrorsNoObject,
+		"BadRequest":         testBadRequest,
+		"EmptyBody":          testEmptyBody,
+		"WithBody":           testWithBody,
 		"InvalidEndpoint":    testInvalidEndpoint,
 		"InvalidContentType": testInvalidContentType,
-		"FailedAuth":         testFailedAuth,
+		"FailedAuth":         testFailedLogin,
+		"HandleResponse":     testHandleResponse,
+		"NoGateway":          testNoGateway,
+		"OverriderHeader":    testOverrideHeader,
 	} {
 		t.Run(scenario, func(t *testing.T) {
 			fn(t)
 		})
 	}
 }
-
-func testValidUser(t *testing.T) {
-	captures := map[string]interface{}{}
-	clientset := rest.NewClientSet(client.NewClient(
-		"https://testserver",
-		"https://testgateway",
-		"testuser",
-		"testpassword",
-		newTestHTTPClient(captures, false),
-		false,
-	))
-	err := clientset.Client().MakeRemoteCall(client.Request{
-		Method:      http.MethodGet,
-		Path:        "/test",
-		ContentType: client.ContentTypeJSON,
-	}, nil)
-
-	require.NoError(t, err)
-	assert.Equal(t, captures["login"], 1)
-	assert.Equal(t, captures["test"], 1)
-	assert.Nil(t, captures["notfound"])
-}
-
 func testInvalidEndpoint(t *testing.T) {
-	captures := map[string]interface{}{}
 	clientset := rest.NewClientSet(client.NewClient(
 		":not:a:valid:url",
 		"https://testgateway",
 		"testuser",
 		"testpassword",
-		newTestHTTPClient(captures, false),
+		newTestHTTPClient(),
 		true,
 	))
 	err := clientset.Client().MakeRemoteCall(client.Request{
@@ -105,20 +81,15 @@ func testInvalidEndpoint(t *testing.T) {
 	}, nil)
 	e := "parse \":not:a:valid:url\": missing protocol scheme"
 	require.Error(t, err)
-	assert.Equal(t, err.Error(), e)
-	assert.Nil(t, captures["login"])
-	assert.Nil(t, captures["test"])
-	assert.Nil(t, captures["notfound"])
+	require.Equal(t, err.Error(), e)
 }
-
 func testInvalidContentType(t *testing.T) {
-	captures := map[string]interface{}{}
 	clientset := rest.NewClientSet(client.NewClient(
 		"https://testserver",
 		"https://testgateway",
 		"testuser",
 		"testpassword",
-		newTestHTTPClient(captures, false),
+		newTestHTTPClient(),
 		false,
 	))
 	err := clientset.Client().MakeRemoteCall(client.Request{
@@ -127,68 +98,283 @@ func testInvalidContentType(t *testing.T) {
 		ContentType: "NotAContentType",
 	}, nil)
 
-	assert.Equal(t, err.Error(), "invalid content-type")
-	assert.Nil(t, captures["login"])
-	assert.Nil(t, captures["test"])
-	assert.Nil(t, captures["notfound"])
+	require.Equal(t, err.Error(), "invalid content-type")
 }
 
-func testFailedAuth(t *testing.T) {
-	captures := map[string]interface{}{}
+func testFailedLogin(t *testing.T) {
+	clientset := rest.NewClientSet(client.NewClient(
+		"https://testserver",
+		"https://testgateway",
+		"testuser1",
+		"testpassword1",
+		newTestHTTPClient(),
+		false,
+	))
+
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        "/failedLogin",
+		ContentType: client.ContentTypeJSON,
+	}
+	err := clientset.Client().MakeRemoteCall(req, nil)
+	require.Error(t, err)
+}
+
+func testBadRequest(t *testing.T) {
 	clientset := rest.NewClientSet(client.NewClient(
 		"https://testserver",
 		"https://testgateway",
 		"testuser",
 		"testpassword",
-		newTestHTTPClient(captures, true),
+		newTestHTTPClient(),
 		false,
 	))
-	err := clientset.Client().MakeRemoteCall(client.Request{
+	//Content-type JSON
+	req := client.Request{
 		Method:      http.MethodGet,
-		Path:        "/test",
+		Path:        "/badRequest",
 		ContentType: client.ContentTypeJSON,
-	}, nil)
-
-	assert.Equal(t, err.Error(), "auth failure")
-	assert.Equal(t, captures["login"], 1)
-	assert.Nil(t, captures["test"])
-	assert.Nil(t, captures["notfound"])
+	}
+	err := clientset.Client().MakeRemoteCall(req, nil)
+	require.Error(t, err)
+	//Content-type XML
+	req = client.Request{
+		Method:      http.MethodGet,
+		Path:        "/badRequest",
+		ContentType: client.ContentTypeXML,
+	}
+	nerr := clientset.Client().MakeRemoteCall(req, nil)
+	require.Error(t, nerr)
 }
 
-func newTestHTTPClient(captures map[string]interface{}, authFailure bool) *http.Client {
+func testEmptyBody(t *testing.T) {
+	clientset := rest.NewClientSet(client.NewClient(
+		"https://testserver",
+		"https://testgateway",
+		"testuser",
+		"testpassword",
+		newTestHTTPClient(),
+		false,
+	))
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        "/emptyBody",
+		ContentType: client.ContentTypeJSON,
+	}
+	bucketList := &model.BucketList{}
+	err := clientset.Client().MakeRemoteCall(req, bucketList)
+	require.Nil(t, err)
+}
+
+func testWithBody(t *testing.T) {
+	clientset := rest.NewClientSet(client.NewClient(
+		"https://testserver",
+		"https://testgateway",
+		"testuser",
+		"testpassword",
+		newTestHTTPClient(),
+		false,
+	))
+	//JSON
+	//Success
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        "/ok/json",
+		ContentType: client.ContentTypeJSON,
+	}
+	ecsError := &model.Error{}
+	err := clientset.Client().MakeRemoteCall(req, ecsError)
+	require.Nil(t, err)
+	//Error
+	req = client.Request{
+		Method:      http.MethodGet,
+		Path:        "/ok/xml",
+		ContentType: client.ContentTypeJSON,
+	}
+	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	require.Equal(t, err.Error(), "invalid character '<' looking for beginning of value")
+	//XML
+	//Success
+	req = client.Request{
+		Method:      http.MethodGet,
+		Path:        "/ok/xml",
+		ContentType: client.ContentTypeXML,
+	}
+	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	require.Nil(t, err)
+	//Error
+	req = client.Request{
+		Method:      http.MethodGet,
+		Path:        "/ok/json",
+		ContentType: client.ContentTypeXML,
+	}
+	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	require.Equal(t, err.Error(), "EOF")
+}
+
+func testNoErrorsNoObject(t *testing.T) {
+	clientset := rest.NewClientSet(client.NewClient(
+		"https://testserver",
+		"https://testgateway",
+		"testuser",
+		"testpassword",
+		newTestHTTPClient(),
+		false,
+	))
+
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        "/ok/json",
+		ContentType: client.ContentTypeJSON,
+	}
+
+	//Content-type JSON
+	err := clientset.Client().MakeRemoteCall(req, nil)
+	require.Nil(t, err)
+
+	//Content-type XML
+	err = clientset.Client().MakeRemoteCall(req, nil)
+	require.Nil(t, err)
+}
+
+func testNoGateway(t *testing.T) {
+	clientset := rest.NewClientSet(&client.Client{
+		Endpoint:       "https://testserver",
+		Username:       "testuser",
+		Password:       "testpassword",
+		HTTPClient:     newTestHTTPClient(),
+		OverrideHeader: false,
+	})
+	ecsError := &model.Error{}
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        "/badRequest",
+		ContentType: client.ContentTypeJSON,
+	}
+	err := clientset.Client().MakeRemoteCall(req, ecsError)
+	require.Error(t, err)
+
+}
+
+func testOverrideHeader(t *testing.T) {
+	clientset := rest.NewClientSet(client.NewClient(
+		"https://testserver",
+		"https://testgateway",
+		"testuser",
+		"testpassword",
+		newTestHTTPClient(),
+		true,
+	))
+
+	req := client.Request{
+		Method:      http.MethodGet,
+		Path:        "/ok/json",
+		ContentType: client.ContentTypeJSON,
+	}
+
+	//Content-type JSON
+	err := clientset.Client().MakeRemoteCall(req, nil)
+	require.Nil(t, err)
+}
+
+func newTestHTTPClient() *http.Client {
 	return NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
-		switch req.URL.String() {
-		case "https://testgateway/mgmt/login":
-			IncrCapture(captures, "login")
-			switch authFailure {
-			case true:
-				return &http.Response{
-					StatusCode: 401,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte("auth failure"))),
-					Header:     header,
-				}
-			default:
-				header.Set("X-Sds-Auth-Token", "TESTTOKEN")
-				return &http.Response{
-					StatusCode: 200,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte("OK"))),
-					Header:     header,
-				}
-			}
-		case "https://testserver/test":
-			IncrCapture(captures, "test")
+		if req.URL.String() == "https://testserver/ok/json" {
 			return &http.Response{
 				StatusCode: 200,
-				Body:       ioutil.NopCloser(bytes.NewReader([]byte("OK"))),
+				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"OK"}`))),
 				Header:     header,
 			}
-		default:
-			IncrCapture(captures, "notfound")
+		}
+		if req.URL.String() == "https://testserver/ok/xml" {
 			return &http.Response{
-				StatusCode: 404,
-				Header:     make(http.Header),
+				StatusCode: 200,
+				Body:       io.NopCloser(bytes.NewReader([]byte(`<?xml version="1.0" encoding="UTF-8" ?><error><Description>"OK"</Description></error>`))),
+				Header:     header,
 			}
 		}
+		if req.URL.String() == "https://testserver/failedLogin" {
+			return &http.Response{
+				StatusCode: 401,
+				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"Unauthorized"}`))),
+				Header:     header,
+			}
+		}
+		if req.URL.String() == "https://testserver/badRequest" {
+			return &http.Response{
+				StatusCode: 403,
+				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"Forbidden"}`))),
+				Header:     header,
+			}
+		}
+		if req.URL.String() == "https://testserver/emptyBody" {
+			return &http.Response{
+				StatusCode: 200,
+				Header:     header,
+			}
+		}
+		if req.URL.String() == "https://testgateway/mgmt/login" {
+			reqAuth := fmt.Sprint(req.Header["Authorization"])
+			defaultAuthCreds := "[Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk]"
+			header.Set("X-Sds-Auth-Token", "")
+			if reqAuth == defaultAuthCreds {
+				header.Set("X-Sds-Auth-Token", "TESTTOKEN")
+			}
+			return &http.Response{
+				StatusCode: 200,
+				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"OK"}`))),
+				Header:     header,
+			}
+		}
+		return nil
 	})
+}
+
+// Required to force io.ReadAll error
+type errReader int
+
+func (errReader) Read(p []byte) (n int, err error) {
+	return 0, errors.New("server error: bad body")
+}
+
+func testHandleResponse(t *testing.T) {
+	response := &http.Response{
+		StatusCode: 403,
+		Body:       io.NopCloser(bytes.NewReader([]byte(`<?xml version="1.0" encoding="UTF-8" ?><error><description>"OK"</description></error>`))),
+	}
+	emptyStatusResponse := &http.Response{
+		StatusCode: 403,
+		Body:       nil,
+		Status:     "failed",
+	}
+	emptyCodeResponse := &http.Response{
+		StatusCode: 403,
+		Body:       nil,
+	}
+	notFoundResponse := &http.Response{
+		StatusCode: 403,
+		Body:       io.NopCloser(bytes.NewReader([]byte(`<?xml version="1.0" encoding="UTF-8" ?><error><code>1004</code></error>`))),
+	}
+
+	badBodyResponse := &http.Response{
+		StatusCode: 403,
+		Body:       io.NopCloser(errReader(0)),
+	}
+
+	err := client.HandleResponse(response)
+	require.Error(t, err)
+
+	err = client.HandleResponse(emptyStatusResponse)
+	require.Equal(t, err.Error(), "server error: failed")
+
+	err = client.HandleResponse(emptyCodeResponse)
+	require.Equal(t, err.Error(), "server error: status code 403")
+
+	err = client.HandleResponse(notFoundResponse)
+	require.Equal(t, err.Error(), "server error: not found")
+
+	err = client.HandleResponse(badBodyResponse)
+	require.Equal(t, err.Error(), "server error: bad body")
+
 }

@@ -78,12 +78,16 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	alertPolicies, err := clientset.AlertPolicies().List(map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(alertPolicies.Items), 3)
+	_, err = clientset.AlertPolicies().List(map[string]string{"a": "b"})
+	require.Error(t, err)
 }
 
 func testGet(t *testing.T, clientset *rest.ClientSet) {
 	alertPolicy, err := clientset.AlertPolicies().Get("testPolicy")
 	require.NoError(t, err)
 	assert.Equal(t, alertPolicy.PolicyName, "testPolicy")
+	_, err = clientset.AlertPolicies().Get("nonexistentPolicy")
+	require.Error(t, err)
 }
 
 func testCreate(t *testing.T, clientset *rest.ClientSet) {
@@ -102,9 +106,14 @@ func testUpdate(t *testing.T, clientset *rest.ClientSet) {
 	}
 	_, err := clientset.AlertPolicies().Update(payload, "testPolicy")
 	require.NoError(t, err)
+	// Updating nonexistent policy
+	_, err = clientset.AlertPolicies().Update(payload, "nonexistentPolicy")
+	require.Error(t, err)
 }
 
 func testDelete(t *testing.T, clientset *rest.ClientSet) {
 	err := clientset.AlertPolicies().Delete("testPolicy")
 	require.NoError(t, err)
+	err = clientset.AlertPolicies().Delete("")
+	require.Error(t, err)
 }

@@ -20,7 +20,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -75,7 +75,7 @@ func HandleResponse(resp *http.Response) error {
 				return fmt.Errorf("server error: status code %d", resp.StatusCode)
 			}
 		default:
-			body, err := ioutil.ReadAll(resp.Body)
+			body, err := io.ReadAll(resp.Body)
 			if err != nil {
 				fmt.Printf("server errror: %s", strings.ToLower(resp.Status))
 				return err

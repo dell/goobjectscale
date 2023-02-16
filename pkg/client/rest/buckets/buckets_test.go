@@ -61,10 +61,16 @@ func TestBuckets(t *testing.T) {
 		false,
 	))
 	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
-		"list":   testList,
-		"get":    testGet,
-		"create": testCreate,
-		"delete": testDelete,
+		"list":         testList,
+		"get":          testGet,
+		"create":       testCreate,
+		"delete":       testDelete,
+		"getQuota":     testGetQuota,
+		"getPolicy":    testGetPolicy,
+		"updatePolicy": testUpdatePolicy,
+		"deletePolicy": testDeletePolicy,
+		"UpdateQuota":  testUpdateQuota,
+		"deleteQuota":  testDeleteQuota,
 	} {
 		t.Run(scenario, func(t *testing.T) {
 			fn(t, clientset)
@@ -76,12 +82,16 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	buckets, err := clientset.Buckets().List(map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(buckets.Items), 18)
+	_, err = clientset.Buckets().List(map[string]string{"a": "b"})
+	require.Error(t, err)
 }
 
 func testGet(t *testing.T, clientset *rest.ClientSet) {
 	bucket, err := clientset.Buckets().Get("Files", map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, bucket.Name, "Files")
+	_, err = clientset.Buckets().Get("Flies", map[string]string{})
+	require.Error(t, err)
 }
 
 func testCreate(t *testing.T, clientset *rest.ClientSet) {
@@ -114,5 +124,47 @@ func testDelete(t *testing.T, clientset *rest.ClientSet) {
 	}
 	err := clientset.Buckets().Delete("testbucket1", "130820808912778549")
 	require.NoError(t, err)
+	err = clientset.Buckets().Delete("unknownbucket", "130820808912778549")
+	require.Error(t, err)
+}
 
+func testGetQuota(t *testing.T, clientset *rest.ClientSet) {
+	quota, err := clientset.Buckets().GetQuota("testbucket1", "130820808912778549")
+	require.NoError(t, err)
+	assert.Equal(t, int(quota.BlockSize), -1)
+	_, err = clientset.Buckets().GetQuota("testbucket", "130820808912778549")
+	require.Error(t, err)
+}
+
+func testGetPolicy(t *testing.T, clientset *rest.ClientSet) {
+	_, err := clientset.Buckets().GetPolicy("testbucket1", map[string]string{})
+	require.NoError(t, err)
+	_, err = clientset.Buckets().GetPolicy("unknownbucket", map[string]string{})
+	require.Error(t, err)
+}
+
+func testUpdatePolicy(t *testing.T, clientset *rest.ClientSet) {
+	err := clientset.Buckets().UpdatePolicy("testbucket1", "testpolicy", map[string]string{})
+	require.Nil(t, err)
+}
+
+func testDeletePolicy(t *testing.T, clientset *rest.ClientSet) {
+	err := clientset.Buckets().DeletePolicy("testbucket1", map[string]string{})
+	require.Nil(t, err)
+}
+
+func testUpdateQuota(t *testing.T, clientset *rest.ClientSet) {
+	bucketQuotaUpdate := model.BucketQuotaUpdate{}
+	bucketQuota := model.BucketQuota{
+		BucketName: "testbucket1",
+	}
+	bucketQuotaUpdate.BucketQuota = bucketQuota
+	err := clientset.Buckets().UpdateQuota(bucketQuotaUpdate)
+	require.Nil(t, err)
+
+}
+
+func testDeleteQuota(t *testing.T, clientset *rest.ClientSet) {
+	err := clientset.Buckets().DeleteQuota("testbucket1", "130820808912778549")
+	require.Nil(t, err)
 }
