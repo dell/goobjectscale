@@ -48,7 +48,7 @@ type Client struct {
 	authRetries int
 
 	// Should X-EMC-Override header be added into the request
-	OverrideHeader bool ``
+	OverrideHeader bool
 }
 
 var _ RemoteCaller = (*Client)(nil)
@@ -186,7 +186,6 @@ func (c *Client) MakeRemoteCall(r Request, into interface{}) error {
 		}
 		switch r.ContentType {
 		case ContentTypeXML:
-
 			if err = xml.Unmarshal(body, into); err != nil {
 				return err
 			}
