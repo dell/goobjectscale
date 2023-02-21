@@ -81,6 +81,8 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	require.Len(t, data.BlobUser, 1)
 	require.Equal(t, data.BlobUser[0].UserID, "zmvodjnrbmjxagvwcxf5cg==")
 	require.Equal(t, data.BlobUser[0].Namespace, "small-operator-acceptance")
+	_, err = clientset.ObjectUser().List(map[string]string{"a": "b"})
+	require.Error(t, err)
 }
 
 var objectUserGetInfoTest = []struct {

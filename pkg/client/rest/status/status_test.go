@@ -60,7 +60,10 @@ func TestStatus(t *testing.T) {
 		require.NoError(t, err)
 		assert.Equal(t, rebuildInfo.Level, 1)
 		assert.Equal(t, rebuildInfo.RemainingBytes, 1024)
-		assert.Equal(t, rebuildInfo.TotalBytes, 2048)
+		require.Equal(t, rebuildInfo.TotalBytes, 2048)
+		_, err = clientset.Status().GetRebuildStatus("testdevice1",
+			"testdevice1-ss-1", "testdomain", "1", nil)
+		require.Error(t, err)
 	})
 }
 

@@ -351,3 +351,155 @@ interactions:
     status: 200 OK
     code: 200
     duration:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket1/quota?namespace=130820808912778549
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><bucket_quota_details><blockSize>-1</blockSize><bucketname>standalone-bucket</bucketname><namespace>s3</namespace><notificationSize>-1</notificationSize></bucket_quota_details> 
+    headers:
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+        - "*/*"
+      Authorization:
+        - AWS usr:gWb7MDmgkwu4I2RXcoENfugsdsI= 
+    url: https://testserver/object/bucket/testbucket1/policy
+    method: GET
+  response:
+    body: '{"Version": "","Id": "","Statement": {"ID": "","Effect": "","Principal": "usr","NotPrincipal": "","Action": "","NotAction": "","Resource": "","NotResource": "","Condition": ""}}'
+    headers:
+      Content-Type:
+        - application/octet-stream
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration:
+- request:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><bucket_quota_param><blockSize>10</blockSize></bucket_quota_param>
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket1/quota
+    method: PUT
+  response:
+    body: 
+    headers:
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket1/quota?namespace=130820808912778549
+    method: DELETE
+  response:
+    body: 
+    headers:
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration:
+- request:
+    body: 
+    form: {}
+    headers:
+      Accept:
+        - application/json
+      Content-Type:
+        - application/json
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket1/policy
+    method: PUT
+  response:
+    body: 
+    headers:
+      Content-Type:
+        - application/json
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration:
+- request:
+    body: 
+    form: {}
+    headers:
+      Accept:
+        - application/json
+      Content-Type:
+        - application/json
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket1/policy
+    method: DELETE
+  response:
+    body: 
+    headers:
+      Content-Type:
+        - application/json
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 200
+    duration:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+        - application/xml
+      Content-Type:
+        - application/xml
+      X-Sds-Auth-Token:
+        - BAAcaUFwZ2hFRGc4WWozdHp2ZGRKcHQ2RjJEdE4wPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOjAwOWYwNDZlLThkMDYtNDc4Ni1iN2NmLWY2MzM3NmZkNzg5ZQIADTI4MjE3MjU2ODIxMjUDAC51cm46VG9rZW46MjY0OGI3ODMtYWU2MS00MDQxLTg2MTQtODEwNjcyZjFlNmY0AgAC0A8=
+    url: https://testserver/object/bucket/testbucket/quota?namespace=130820808912778549
+    method: GET
+  response:
+    body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><bucket_quota_details><blockSize>-1</blockSize><bucketname>standalone-bucket</bucketname><namespace>s3</namespace><notificationSize>-1</notificationSize></bucket_quota_details> 
+    headers:
+      Content-Type:
+        - application/xml
+      Date:
+        - Mon, 10 Jun 2019 21:04:52 GMT
+    status: 200 OK
+    code: 404
+    duration:

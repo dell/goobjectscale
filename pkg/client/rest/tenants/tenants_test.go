@@ -80,11 +80,15 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	tenants, err := clientset.Tenants().List(map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(tenants.Items), 1)
+	_, err = clientset.Tenants().List(map[string]string{"a": "b"})
+	require.Error(t, err)
 }
 func testGet(t *testing.T, clientset *rest.ClientSet) {
 	tenant, err := clientset.Tenants().Get("10d9817c-3696-4625-854e-82b21d8c0795", map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, tenant.ID, "10d9817c-3696-4625-854e-82b21d8c0795")
+	_, err = clientset.Tenants().Get("0", map[string]string{})
+	require.Error(t, err)
 
 }
 func testCreate(t *testing.T, clientset *rest.ClientSet) {
@@ -107,10 +111,14 @@ func testUpdate(t *testing.T, clientset *rest.ClientSet) {
 	}
 	err := clientset.Tenants().Update(payload, "test-account")
 	require.NoError(t, err)
+	err = clientset.Tenants().Update(payload, "noaccount")
+	require.Error(t, err)
 }
 func testDelete(t *testing.T, clientset *rest.ClientSet) {
 	err := clientset.Tenants().Delete("test-account")
 	require.NoError(t, err)
+	err = clientset.Tenants().Delete("noaccount")
+	require.Error(t, err)
 }
 func testGetQuota(t *testing.T, clientset *rest.ClientSet) {
 	quota, err := clientset.Tenants().GetQuota("test-account", nil)
