@@ -1,10 +1,13 @@
 name: Workflow
 on:
   push:
+    branches: [ main ]
+    paths-ignore:
+    - '**/Makefile'
   pull_request:
     branches: [ main ] 
     paths-ignore:
-    - 'Makefile'
+    - '**/Makefile'
 jobs:
   code-check:
     name: Check formatting, linting, vetting
