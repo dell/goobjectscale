@@ -4,6 +4,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ] 
+    paths-ignore:
+    - 'Makefile'
 jobs:
   code-check:
     name: Check formatting, linting, vetting
