@@ -29,7 +29,7 @@ type FederatedObjectStores struct {
 	Client client.RemoteCaller
 }
 
-var _ api.FederatedObjectStoresInterface = &FederatedObjectStores{}
+var _ api.FederatedObjectStoresInterface = &FederatedObjectStores{} // interface guard
 
 // List implements the federatedobjectstores interface
 func (t *FederatedObjectStores) List(params map[string]string) (*model.FederatedObjectStoreList, error) {

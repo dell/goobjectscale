@@ -30,7 +30,7 @@ type AlertPolicies struct {
 	Client client.RemoteCaller
 }
 
-var _ api.AlertPoliciesInterface = &AlertPolicies{}
+var _ api.AlertPoliciesInterface = &AlertPolicies{} // interface guard
 
 // Get implements the AlertPolicy interface
 func (ap *AlertPolicies) Get(policyName string) (*model.AlertPolicy, error) {

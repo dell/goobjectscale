@@ -317,7 +317,7 @@ type Tenants struct {
 	items []model.Tenant
 }
 
-var _ api.TenantsInterface = &Tenants{}
+var _ api.TenantsInterface = &Tenants{} // interface guard
 
 func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
 	newtenant := &model.Tenant{

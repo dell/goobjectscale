@@ -49,17 +49,19 @@ func TestTenants(t *testing.T) {
 		delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
 		return nil
 	}, recorder.BeforeSaveHook)
-	clientset := rest.NewClientSet(client.NewServiceClient(
-		"https://testserver",
-		"https://testgateway",
-		"svc-objectscale-domain-c8",
-		"objectscale-graphql-7d754f8499-ng4h6",
-		"OSC234DSF223423",
-		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-		newRecordedHTTPClient(r),
-		false,
-	))
-
+	c := client.Simple{
+		Endpoint: "https://testserver",
+		Authenticator: &client.AuthService{
+			Gateway:       "https://testgateway",
+			SharedSecret:  "OSC234DSF223423",
+			PodName:       "objectscale-graphql-7d754f8499-ng4h6",
+			Namespace:     "svc-objectscale-domain-c8",
+			ObjectScaleID: "IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		},
+		HTTPClient:     newRecordedHTTPClient(r),
+		OverrideHeader: false,
+	}
+	clientset := rest.NewClientSet(&c)
 	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
 		"list":        testList,
 		"get":         testGet,
@@ -86,7 +88,7 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 func testGet(t *testing.T, clientset *rest.ClientSet) {
 	tenant, err := clientset.Tenants().Get("10d9817c-3696-4625-854e-82b21d8c0795", map[string]string{})
 	require.NoError(t, err)
-	assert.Equal(t, tenant.ID, "10d9817c-3696-4625-854e-82b21d8c0795")
+	assert.Equal(t, "10d9817c-3696-4625-854e-82b21d8c0795", tenant.ID)
 	_, err = clientset.Tenants().Get("0", map[string]string{})
 	require.Error(t, err)
 
@@ -102,7 +104,7 @@ func testCreate(t *testing.T, clientset *rest.ClientSet) {
 	}
 	tenant, err := clientset.Tenants().Create(payload)
 	require.NoError(t, err)
-	assert.Equal(t, tenant.ID, "test-account")
+	assert.Equal(t, "test-account", tenant.ID)
 }
 func testUpdate(t *testing.T, clientset *rest.ClientSet) {
 	payload := model.TenantUpdate{
@@ -123,7 +125,7 @@ func testDelete(t *testing.T, clientset *rest.ClientSet) {
 func testGetQuota(t *testing.T, clientset *rest.ClientSet) {
 	quota, err := clientset.Tenants().GetQuota("test-account", nil)
 	require.NoError(t, err)
-	assert.Equal(t, quota.BlockSize, "5")
+	assert.Equal(t, "5", quota.BlockSize)
 }
 func testSetQuota(t *testing.T, clientset *rest.ClientSet) {
 	payload := model.TenantQuotaSet{

@@ -50,16 +50,19 @@ func TestBuckets(t *testing.T) {
 		delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
 		return nil
 	}, recorder.BeforeSaveHook)
-	clientset := rest.NewClientSet(client.NewServiceClient(
-		"https://testserver",
-		"https://testgateway",
-		"svc-objectscale-domain-c8",
-		"objectscale-graphql-7d754f8499-ng4h6",
-		"OSC234DSF223423",
-		"IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
-		newRecordedHTTPClient(r),
-		false,
-	))
+	c := client.Simple{
+		Endpoint: "https://testserver",
+		Authenticator: &client.AuthService{
+			Gateway:       "https://testgateway",
+			SharedSecret:  "OSC234DSF223423",
+			PodName:       "objectscale-graphql-7d754f8499-ng4h6",
+			Namespace:     "svc-objectscale-domain-c8",
+			ObjectScaleID: "IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
+		},
+		HTTPClient:     newRecordedHTTPClient(r),
+		OverrideHeader: false,
+	}
+	clientset := rest.NewClientSet(&c)
 	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
 		"list":         testList,
 		"get":          testGet,

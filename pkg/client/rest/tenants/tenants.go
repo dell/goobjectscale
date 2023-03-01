@@ -30,7 +30,7 @@ type Tenants struct {
 	Client client.RemoteCaller
 }
 
-var _ api.TenantsInterface = &Tenants{}
+var _ api.TenantsInterface = &Tenants{} // interface guard
 
 // List implements the tenants interface
 func (t *Tenants) List(params map[string]string) (*model.TenantList, error) {

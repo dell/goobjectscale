@@ -387,7 +387,7 @@ interactions:
     body: '{"Version": "","Id": "","Statement": {"ID": "","Effect": "","Principal": "usr","NotPrincipal": "","Action": "","NotAction": "","Resource": "","NotResource": "","Condition": ""}}'
     headers:
       Content-Type:
-        - application/octet-stream
+        - application/json
       Date:
         - Mon, 10 Jun 2019 21:04:52 GMT
     status: 200 OK
