@@ -1,4 +1,4 @@
-# Dell ObjectScale Management Go SDK
+# Dell EMC ObjectScale Management Go SDK
 
 This project provides a development SDK for the ObjectScale object store management API for Go based applications
 
