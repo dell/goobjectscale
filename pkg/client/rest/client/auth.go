@@ -72,9 +72,6 @@ type AuthService struct {
 // does not mean the next request is guaranteed to succeed as authentication can
 // become expired.
 func (auth *AuthService) IsAuthenticated() bool {
-	if auth == nil {
-		return false
-	}
 	return auth.token != ""
 }
 
@@ -143,9 +140,6 @@ type AuthUser struct {
 // does not mean the next request is guaranteed to succeed as authentication can
 // become expired.
 func (auth *AuthUser) IsAuthenticated() bool {
-	if auth == nil {
-		return false
-	}
 	return auth.token != ""
 }
 
