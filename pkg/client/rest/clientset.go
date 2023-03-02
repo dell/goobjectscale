@@ -42,7 +42,7 @@ type ClientSet struct {
 	federatedObjectStores api.FederatedObjectStoresInterface
 }
 
-// Returns a new client set based on the provided REST client parameters
+// NewClientSet returns a new client set based on the provided REST client parameters
 func NewClientSet(c client.RemoteCaller) *ClientSet {
 	return &ClientSet{
 		client:                c,
@@ -87,7 +87,7 @@ func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objmt
 }
 
-// ObjectMt implements the client API for objMT metrics
+// CRR implements the client API for Cross Region Replication
 func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
 }
@@ -97,7 +97,7 @@ func (c *ClientSet) Status() api.StatusInterfaces {
 	return c.status
 }
 
-// ObjectMt implements the client API for objMT metrics
+// FederatedObjectStores implements the client API
 func (c *ClientSet) FederatedObjectStores() api.FederatedObjectStoresInterface {
 	return c.federatedObjectStores
 }

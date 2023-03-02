@@ -34,6 +34,7 @@ type RemoteCaller interface {
 	MakeRemoteCall(r Request, into interface{}) error
 }
 
+// HandleResponse handles custom behavior based on server response
 func HandleResponse(resp *http.Response) error {
 	if resp.StatusCode > 399 {
 		switch resp.Body {

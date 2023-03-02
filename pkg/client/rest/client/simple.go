@@ -122,10 +122,14 @@ func (c *Simple) MakeRemoteCall(r Request, into interface{}) error {
 			req.Header.Add("X-EMC-Override", "true")
 		}
 		resp, err := c.HTTPClient.Do(req)
+
+		if resp != nil {
+			defer resp.Body.Close()
+		}
 		if err != nil {
 			return err
 		}
-		defer resp.Body.Close()
+
 		//
 		switch {
 		case resp.StatusCode == http.StatusUnauthorized:

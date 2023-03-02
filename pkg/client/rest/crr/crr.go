@@ -62,7 +62,7 @@ func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, 
 	return c.Client.MakeRemoteCall(req, nil)
 }
 
-// ResumeReplication implements the CRR interface
+// UnthrottleReplication implements the CRR interface
 func (c *CRR) UnthrottleReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,

@@ -77,9 +77,9 @@ func (auth *AuthService) IsAuthenticated() bool {
 
 // Login obtains fresh authentication token(s) from the server.
 func (auth *AuthService) Login(ht *http.Client) error {
-	// urn:osc:{ObjectScaleId}:{ObjectStoreId}:service/{ServiceNameId}
+	// urn:osc:{ObjectScaleID}:{ObjectStoreID}:service/{ServiceNameID}
 	serviceUrn := fmt.Sprintf("urn:osc:%s:%s:service/%s", auth.ObjectScaleID, "", auth.PodName)
-	// B64-{ObjectScaleId},{ObjectStoreId},{ServiceK8SNamespace},{ServiceNameId}
+	// B64-{ObjectScaleID},{ObjectStoreID},{ServiceK8SNamespace},{ServiceNameID}
 	userNameRaw := fmt.Sprintf("%s,%s,%s,%s", auth.ObjectScaleID, "", auth.Namespace, auth.PodName)
 	userNameEncoded := base64.StdEncoding.EncodeToString([]byte(userNameRaw))
 	userName := "B64-" + userNameEncoded
