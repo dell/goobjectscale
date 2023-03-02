@@ -77,6 +77,7 @@ func TestSimple(t *testing.T) {
 		"OverriderHeader":    testOverrideHeader,
 		"FailedAuth":         testFailedAuth,
 		"TestHttp":           testHTTP,
+		"TestLogin":          testLogin,
 	}
 
 	t.Run("service-auth", func(t *testing.T) {
@@ -361,11 +362,29 @@ func testHTTP(t *testing.T, auth client.Authenticator) {
 		Method:      http.MethodGet,
 		Path:        "",
 		ContentType: "NotAContentType",
+		Params:      map[string]string{"param1": "param"},
 	}
 	_, err := req.HTTP(c.Endpoint)
 	require.Error(t, err)
-}
+	req = client.Request{
+		Method:      http.MethodGet,
+		Path:        "/test",
+		ContentType: client.ContentTypeJSON,
+		Params:      map[string]string{"param1": "param"},
+	}
+	_, err = req.HTTP(c.Endpoint)
+	require.NoError(t, err)
 
+	req = client.Request{
+		Method:      "not a method",
+		Path:        "/test",
+		ContentType: client.ContentTypeJSON,
+		Params:      map[string]string{"param1": "param"},
+	}
+	_, err = req.HTTP(c.Endpoint)
+	require.Error(t, err)
+	require.Equal(t, "create request: net/http: invalid method \"not a method\"", err.Error())
+}
 
 func NewTestHTTPClient() *http.Client {
 	return NewTestClient(func(req *http.Request) *http.Response {
