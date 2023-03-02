@@ -43,8 +43,8 @@ type AccountBillingInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"account_billing_objmt_info" json:"account_billing_objmt_info"`
 
-	// AccountId IAM user account ID used for request
-	AccountId string `xml:"account_id,omitempty"`
+	// AccountID IAM user account ID used for request
+	AccountID string `xml:"account_id,omitempty"`
 
 	// ConsistentTime metrics collection UTC timestamp (ISO 8601 format (2007-04-05T14:30:55Z))
 	ConsistentTime string `xml:"consistent_time,omitempty"`
@@ -118,8 +118,8 @@ type AccountBillingSample struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"account_billing_objmt_sample" json:"account_billing_objmt_sample"`
 
-	// AccountId IAM user account ID used for request
-	AccountId string `xml:"account_id,omitempty"`
+	// AccountID IAM user account ID used for request
+	AccountID string `xml:"account_id,omitempty"`
 
 	// StartTime is a start of time window for data selection (ISO 8601 format (2020-01-27T14:30:55Z))
 	StartTime string `xml:"start_time,omitempty"`

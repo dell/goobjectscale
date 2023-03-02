@@ -27,15 +27,16 @@ type FederatedObjectStoreList struct {
 	Items []FederatedObjectStore `xml:"ReplicationStoreInfo"`
 }
 
+// FederatedObjectStore
 type FederatedObjectStore struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"ReplicationStoreInfo"`
 
 	CRRConfigured bool `xml:"CRRConfigured"`
 
-	ObjectScaleId string `xml:"ObjectScaleId"`
+	ObjectScaleID string `xml:"ObjectScaleId"`
 
-	ObjectStoreId string `xml:"ObjectStoreId"`
+	ObjectStoreID string `xml:"ObjectStoreId"`
 
 	ObjectStoreName string `xml:"ObjectStoreName"`
 
@@ -48,6 +49,7 @@ type FederatedObjectStore struct {
 	CRRControlParameters CRRControlParameters `xml:"CRRControlParameters"`
 }
 
+// CRRControlParameters represents parameters for Cross Region Replication
 type CRRControlParameters struct {
 	XMLName xml.Name `xml:"CRRControlParameters"`
 

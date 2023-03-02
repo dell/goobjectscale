@@ -166,13 +166,14 @@ func (c *ClientSet) Buckets() api.BucketsInterface {
 	return c.buckets
 }
 
+// BucketPolicy is a policy applied to a bucket
 type BucketPolicy struct {
 	BucketName string
 	Policy     string
 	Namespace  string
 }
 
-// Tenants implements the client API.
+// FederatedObjectStores implements the client API.
 func (c *ClientSet) FederatedObjectStores() api.FederatedObjectStoresInterface {
 	return c.federatedobjectstores
 }
@@ -294,7 +295,7 @@ func clearSecretKey2(key *model.ObjectUserSecret) {
 	key.KeyExpiryTimestamp2 = ""
 }
 
-// GetSecret returns information about object user secrets.
+// GetInfo returns information about object user.
 func (o *ObjectUsers) GetInfo(uid string, _ map[string]string) (*model.ObjectUserInfo, error) {
 	if _, ok := o.InfoList[uid]; !ok {
 		return nil, fmt.Errorf("info for %s is not found", uid)
@@ -319,6 +320,7 @@ type Tenants struct {
 
 var _ api.TenantsInterface = &Tenants{} // interface guard
 
+// Create creates a tenant in an object store.
 func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
 	newtenant := &model.Tenant{
 		ID:                payload.AccountID,
@@ -330,6 +332,7 @@ func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
 	return newtenant, nil
 }
 
+// Delete deletes a tenant in an object store.
 func (t *Tenants) Delete(tenantID string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == tenantID {
@@ -340,6 +343,7 @@ func (t *Tenants) Delete(tenantID string) error {
 	return errors.New("tenant not found")
 }
 
+// Update pdates Tenant details default_bucket_size and alias
 func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == tenantID {
@@ -453,9 +457,8 @@ func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error
 	if found {
 		delete(b.policy, fmt.Sprintf("%s/%s", bucketName, param["namespace"]))
 		return nil
-	} else {
-		return errors.New("bucket not found")
 	}
+	return errors.New("bucket not found")
 }
 
 // UpdatePolicy implements the buckets API
@@ -470,9 +473,8 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[strin
 	if found {
 		b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
 		return nil
-	} else {
-		return errors.New("bucket not found")
 	}
+	return errors.New("bucket not found")
 }
 
 // Create implements the buckets API
@@ -747,6 +749,7 @@ type Status struct {
 	RebuildInfo *model.RebuildInfo
 }
 
+// GetRebuildStatus returns rebuild status of an ObjectScale object store
 func (s *Status) GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
 	s.RebuildInfo.TotalBytes = 2048
 	s.RebuildInfo.RemainingBytes = 1024

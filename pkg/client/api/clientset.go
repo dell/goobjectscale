@@ -96,7 +96,7 @@ type ObjectUserInterface interface {
 	DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, params map[string]string) error
 }
 
-// AlertPolicyInterface represents a alert policy resource client interface.
+// AlertPoliciesInterface represents a alert policy resource client interface.
 type AlertPoliciesInterface interface {
 	// List returns a list of alert policies within the ObjectScale object store.
 	List(params map[string]string) (*model.AlertPolicies, error)
@@ -141,7 +141,7 @@ type TenantsInterface interface {
 	SetQuota(name string, payload model.TenantQuotaSet) error
 }
 
-// ObjectUserInterface represents an interface for objMT service metrics.
+// ObjmtInterface represents an interface for objMT service metrics.
 type ObjmtInterface interface {
 	// GetAccountBillingInfo returns billing info metrics for defined accounts
 	GetAccountBillingInfo(ids []string, params map[string]string) (*model.AccountBillingInfoList, error)

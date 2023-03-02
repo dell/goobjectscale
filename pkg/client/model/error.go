@@ -18,6 +18,7 @@ package model
 
 import "encoding/xml"
 
+// Error implements custom error
 type Error struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"error"`

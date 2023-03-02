@@ -18,6 +18,7 @@ package model
 
 import "encoding/xml"
 
+// CRR is Cross Region Replication
 type CRR struct {
 	XMLName xml.Name `xml:"ReplicationAdminConfiguration"`
 

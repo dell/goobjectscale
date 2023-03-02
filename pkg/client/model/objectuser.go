@@ -16,6 +16,7 @@
 
 package model
 
+// BlobUser is an object user
 type BlobUser struct {
 	UserID    string `json:"userid"`
 	Namespace string `json:"namespace"`
@@ -59,7 +60,7 @@ type ObjectUserSecretKeyDeleteReq struct {
 	Namespace string `json:"namespace"`
 }
 
-// ObjectUserSecretKeyRes to unmarshal ObjectUserSecretKey create resp
+// ObjectUserSecretKeyCreateRes to unmarshal ObjectUserSecretKey create resp
 type ObjectUserSecretKeyCreateRes struct {
 	SecretKey          string `json:"secret_key"`
 	KeyTimeStamp       string `json:"key_timestamp"`
