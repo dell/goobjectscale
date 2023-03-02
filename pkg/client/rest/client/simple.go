@@ -128,28 +128,43 @@ func (c *Simple) MakeRemoteCall(r Request, into interface{}) error {
 		//
 		switch {
 		case resp.StatusCode == http.StatusUnauthorized:
-			resp.Body.Close()
+			if bodyErr := resp.Body.Close(); bodyErr != nil {
+				return bodyErr
+			}
 			return ErrAuthorization
 		case resp.StatusCode > 399:
 			var ecsError model.Error
 			if err = Unmarshal(resp, &ecsError); err != nil {
-				resp.Body.Close()
+				if bodyErr := resp.Body.Close(); bodyErr != nil {
+					return bodyErr
+				}
 				return err
 			}
-			resp.Body.Close()
+			if bodyErr := resp.Body.Close(); bodyErr != nil {
+				return bodyErr
+			}
+			if bodyErr := resp.Body.Close(); bodyErr != nil {
+				return bodyErr
+			}
 			return fmt.Errorf("%s: %s", ecsError.Description, ecsError.Details)
 		case into == nil:
 			// No errors found, and no response object defined, so just return
 			// without error
-			resp.Body.Close()
+			if bodyErr := resp.Body.Close(); bodyErr != nil {
+				return bodyErr
+			}
 			return nil
 		default:
 			if err = Unmarshal(resp, into); err != nil {
-				resp.Body.Close()
+				if bodyErr := resp.Body.Close(); bodyErr != nil {
+					return bodyErr
+				}
 				return err
 			}
 		}
-		resp.Body.Close()
+		if bodyErr := resp.Body.Close(); bodyErr != nil {
+			return bodyErr
+		}
 		return nil
 	}
 	//
