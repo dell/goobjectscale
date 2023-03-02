@@ -27,7 +27,7 @@ type FederatedObjectStoreList struct {
 	Items []FederatedObjectStore `xml:"ReplicationStoreInfo"`
 }
 
-// FederatedObjectStore
+// FederatedObjectStore is an ObjectStore which is Federated
 type FederatedObjectStore struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"ReplicationStoreInfo"`

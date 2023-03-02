@@ -18,7 +18,7 @@ package model
 
 import "encoding/xml"
 
-// AlerPolicy implements the AlertPolicy API
+// AlertPolicy implements the AlertPolicy API
 type AlertPolicy struct {
 	XMLName              xml.Name             `xml:"alert_policy"`
 	PolicyName           string               `json:"policyName" xml:"policyName"`
