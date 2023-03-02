@@ -122,33 +122,34 @@ func (c *Simple) MakeRemoteCall(r Request, into interface{}) error {
 			req.Header.Add("X-EMC-Override", "true")
 		}
 		resp, err := c.HTTPClient.Do(req)
-
-		if resp != nil {
-			defer resp.Body.Close()
-		}
 		if err != nil {
 			return err
 		}
-
 		//
 		switch {
 		case resp.StatusCode == http.StatusUnauthorized:
+			resp.Body.Close()
 			return ErrAuthorization
 		case resp.StatusCode > 399:
 			var ecsError model.Error
 			if err = Unmarshal(resp, &ecsError); err != nil {
+				resp.Body.Close()
 				return err
 			}
+			resp.Body.Close()
 			return fmt.Errorf("%s: %s", ecsError.Description, ecsError.Details)
 		case into == nil:
 			// No errors found, and no response object defined, so just return
 			// without error
+			resp.Body.Close()
 			return nil
 		default:
 			if err = Unmarshal(resp, into); err != nil {
+				resp.Body.Close()
 				return err
 			}
 		}
+		resp.Body.Close()
 		return nil
 	}
 	//
