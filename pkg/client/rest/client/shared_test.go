@@ -25,6 +25,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
 
@@ -64,8 +65,16 @@ func TestHandleResponse(t *testing.T) {
 		Body:       io.NopCloser(errReader(0)),
 	}
 
+	notFoundError := &model.Error{
+		Code: 1004,
+	}
+	okError := &model.Error{
+		Code:        0,
+		Description: "OK",
+	}
+
 	err := client.HandleResponse(response)
-	require.Error(t, err)
+	require.ErrorIs(t, err, okError)
 
 	err = client.HandleResponse(emptyStatusResponse)
 	require.Equal(t, "server error: failed", err.Error())
@@ -74,7 +83,7 @@ func TestHandleResponse(t *testing.T) {
 	require.Equal(t, "server error: status code 403", err.Error())
 
 	err = client.HandleResponse(notFoundResponse)
-	require.Equal(t, "server error: not found", err.Error())
+	require.ErrorIs(t, err, notFoundError)
 
 	err = client.HandleResponse(badBodyResponse)
 	require.Equal(t, "server error: bad body", err.Error())

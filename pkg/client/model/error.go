@@ -16,7 +16,11 @@
 
 package model
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"fmt"
+	"strings"
+)
 
 // Error implements custom error
 type Error struct {
@@ -36,3 +40,45 @@ type Error struct {
 	// be retried
 	Retryable bool `xml:"retryable" json:"retryable"`
 }
+
+var _ error = Error{}
+
+// Error is a method that allows us to use the Error model as go error
+func (err Error) Error() string {
+	if err.Description == "" {
+		err.Description = "Unknown"
+	}
+
+	if err.Details != "" {
+		return fmt.Sprintf("%s: %s", err.Description, err.Details)
+	}
+	return err.Description
+}
+
+// StatusCode is there so we can reference the Code field in Is method
+func (err Error) StatusCode() int64 {
+	return err.Code
+}
+
+func (err Error) Is(target error) bool {
+	// create intermidiate interface
+	type statusCoder interface {
+		StatusCode() int64
+	}
+
+	// validate if target implements statusCoder interface,
+	// and compare the status codes
+	switch target := target.(type) {
+	case statusCoder:
+		return err.StatusCode() == target.StatusCode()
+
+	default:
+		// if someone is already relying on error message comparission, then don't break it
+		return strings.EqualFold(err.Error(), target.Error())
+	}
+}
+
+const (
+	CodeNotFound  int64 = 1004
+	CodeDuplicate int64 = 1005
+)
