@@ -49,7 +49,7 @@ jobs:
       - name: Run the forbidden words scan
         uses: dell/common-github-actions/code-sanitizer@main
         with:
-          args: /github/workspace/ #TODO: verify when actual code is in the repo
+          args: /github/workspace/pkg #TODO: verify when actual code is in the repo
 
   tests:
     name: Run Go unit tests and check package coverage
