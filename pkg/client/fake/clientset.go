@@ -17,7 +17,6 @@
 package fake
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -166,14 +165,7 @@ func (c *ClientSet) Buckets() api.BucketsInterface {
 	return c.buckets
 }
 
-// BucketPolicy is a policy applied to a bucket
-type BucketPolicy struct {
-	BucketName string
-	Policy     string
-	Namespace  string
-}
-
-// FederatedObjectStores implements the client API.
+// Tenants implements the client API.
 func (c *ClientSet) FederatedObjectStores() api.FederatedObjectStoresInterface {
 	return c.federatedobjectstores
 }
@@ -191,6 +183,12 @@ func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 // ObjectMt implements the client API for objMT metrics
 func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objectMt
+}
+
+type BucketPolicy struct {
+	BucketName string
+	Policy     string
+	Namespace  string
 }
 
 // UserSecret make easiest passing secret about users.
@@ -211,6 +209,8 @@ type ObjectUsers struct {
 	Secrets  map[string]*model.ObjectUserSecret
 	InfoList map[string]*model.ObjectUserInfo
 }
+
+var _ api.ObjectUserInterface = (*ObjectUsers)(nil) // interface guard
 
 // NewObjectUsers returns initialized ObjectUsers.
 func NewObjectUsers(blobUsers []model.BlobUser, userSecrets []UserSecret, userInfoList []UserInfo) *ObjectUsers {
@@ -239,7 +239,11 @@ func (o *ObjectUsers) List(_ map[string]string) (*model.ObjectUserList, error) {
 // GetSecret returns information about object user secrets.
 func (o *ObjectUsers) GetSecret(uid string, _ map[string]string) (*model.ObjectUserSecret, error) {
 	if _, ok := o.Secrets[uid]; !ok {
-		return nil, fmt.Errorf("secret for %s is not found", uid)
+		return nil, &model.Error{
+			Description: "secret not found",
+			Details:     fmt.Sprintf("secret for %s is not found", uid),
+			Code:        model.CodeDuplicate,
+		}
 	}
 	return o.Secrets[uid], nil
 }
@@ -257,7 +261,11 @@ func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCrea
 
 	switch {
 	case o.Secrets[uid].SecretKey1 != "" && o.Secrets[uid].SecretKey2 != "":
-		return nil, fmt.Errorf("user %s already has 2 valid keys", uid)
+		return nil, &model.Error{
+			Description: "max keys reached",
+			Details:     fmt.Sprintf("user %s already has 2 valid keys", uid),
+			Code:        model.CodeDuplicate,
+		}
 	case o.Secrets[uid].SecretKey1 != "":
 		o.Secrets[uid].SecretKey2 = req.SecretKey
 		return &model.ObjectUserSecretKeyCreateRes{
@@ -274,7 +282,11 @@ func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCrea
 // DeleteSecret will delete a specific secret
 func (o *ObjectUsers) DeleteSecret(uid string, req model.ObjectUserSecretKeyDeleteReq, _ map[string]string) error {
 	if _, ok := o.Secrets[uid]; !ok {
-		return fmt.Errorf("user %s not found", uid)
+		return &model.Error{
+			Description: "user not found",
+			Details:     fmt.Sprintf("user %s not found", uid),
+			Code:        model.CodeNotFound,
+		}
 	}
 	switch req.SecretKey {
 	case o.Secrets[uid].SecretKey1:
@@ -285,7 +297,11 @@ func (o *ObjectUsers) DeleteSecret(uid string, req model.ObjectUserSecretKeyDele
 		clearSecretKey2(o.Secrets[uid])
 		return nil
 	default:
-		return fmt.Errorf("user %s secret key not found", uid)
+		return &model.Error{
+			Description: "not found",
+			Details:     fmt.Sprintf("user %s secret key not found", uid),
+			Code:        model.CodeNotFound,
+		}
 	}
 }
 
@@ -298,7 +314,11 @@ func clearSecretKey2(key *model.ObjectUserSecret) {
 // GetInfo returns information about object user.
 func (o *ObjectUsers) GetInfo(uid string, _ map[string]string) (*model.ObjectUserInfo, error) {
 	if _, ok := o.InfoList[uid]; !ok {
-		return nil, fmt.Errorf("info for %s is not found", uid)
+		return nil, &model.Error{
+			Description: "info not found",
+			Details:     fmt.Sprintf("info for %s is not found", uid),
+			Code:        model.CodeDuplicate,
+		}
 	}
 	return o.InfoList[uid], nil
 }
@@ -307,6 +327,8 @@ func (o *ObjectUsers) GetInfo(uid string, _ map[string]string) (*model.ObjectUse
 type FederatedObjectStores struct {
 	items []model.FederatedObjectStore
 }
+
+var _ api.FederatedObjectStoresInterface = (*FederatedObjectStores)(nil) // interface guard
 
 // List implements the tenants API
 func (f *FederatedObjectStores) List(_ map[string]string) (*model.FederatedObjectStoreList, error) {
@@ -318,7 +340,7 @@ type Tenants struct {
 	items []model.Tenant
 }
 
-var _ api.TenantsInterface = &Tenants{} // interface guard
+var _ api.TenantsInterface = (*Tenants)(nil) // interface guard
 
 // Create creates a tenant in an object store.
 func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
@@ -340,7 +362,10 @@ func (t *Tenants) Delete(tenantID string) error {
 			return nil
 		}
 	}
-	return errors.New("tenant not found")
+	return &model.Error{
+		Description: "tenant not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // Update updates Tenant details default_bucket_size and alias
@@ -352,7 +377,10 @@ func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
 			return nil
 		}
 	}
-	return errors.New("tenant not found")
+	return &model.Error{
+		Description: "tenant not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // Get implements the tenants API
@@ -362,7 +390,10 @@ func (t *Tenants) Get(id string, _ map[string]string) (*model.Tenant, error) {
 			return &tenant, nil
 		}
 	}
-	return nil, errors.New("not found")
+	return nil, &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // List implements the tenants API
@@ -384,7 +415,10 @@ func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, 
 			}, nil
 		}
 	}
-	return nil, errors.New("not found")
+	return nil, &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // SetQuota updates the quota settings for the given tenant
@@ -399,7 +433,10 @@ func (t *Tenants) SetQuota(id string, tenantQuota model.TenantQuotaSet) error {
 		}
 	}
 
-	return errors.New("not found")
+	return &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // DeleteQuota deletes the quota settings for the given tenant
@@ -413,7 +450,10 @@ func (t *Tenants) DeleteQuota(id string) error {
 			return nil
 		}
 	}
-	return errors.New("not found")
+	return &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // Buckets implements the buckets API
@@ -421,6 +461,8 @@ type Buckets struct {
 	items  []model.Bucket
 	policy map[string]string
 }
+
+var _ api.BucketsInterface = (*Buckets)(nil) // interface guard
 
 // List implements the buckets API
 func (b *Buckets) List(_ map[string]string) (*model.BucketList, error) {
@@ -434,7 +476,10 @@ func (b *Buckets) Get(name string, _ map[string]string) (*model.Bucket, error) {
 			return &bucket, nil
 		}
 	}
-	return nil, errors.New("not found")
+	return nil, &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // GetPolicy implements the buckets API
@@ -457,8 +502,12 @@ func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error
 	if found {
 		delete(b.policy, fmt.Sprintf("%s/%s", bucketName, param["namespace"]))
 		return nil
+	} else {
+		return &model.Error{
+			Description: "bucket not found",
+			Code:        model.CodeNotFound,
+		}
 	}
-	return errors.New("bucket not found")
 }
 
 // UpdatePolicy implements the buckets API
@@ -473,15 +522,22 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[strin
 	if found {
 		b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
 		return nil
+	} else {
+		return &model.Error{
+			Description: "bucket not found",
+			Code:        model.CodeNotFound,
+		}
 	}
-	return errors.New("bucket not found")
 }
 
 // Create implements the buckets API
 func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 	for _, existingBucket := range b.items {
 		if existingBucket.Namespace == createParam.Namespace && existingBucket.Name == createParam.Name {
-			return nil, errors.New("duplicate found")
+			return nil, &model.Error{
+				Description: "duplicate found",
+				Code:        model.CodeNotFound,
+			}
 		}
 	}
 	b.items = append(b.items, createParam)
@@ -496,7 +552,10 @@ func (b *Buckets) Delete(name string, namespace string) error {
 			return nil
 		}
 	}
-	return errors.New("not found")
+	return &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // GetQuota gets the quota for the given bucket and namespace.
@@ -516,7 +575,10 @@ func (b *Buckets) GetQuota(bucketName string, _ string) (*model.BucketQuotaInfo,
 		}
 	}
 
-	return nil, errors.New("not found")
+	return nil, &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // UpdateQuota updates the quota for the specified bucket.
@@ -530,7 +592,10 @@ func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
 			return nil
 		}
 	}
-	return errors.New("not found")
+	return &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // DeleteQuota deletes the quota setting for the given bucket and namespace.
@@ -544,7 +609,10 @@ func (b *Buckets) DeleteQuota(bucketName string, _ string) error {
 			return nil
 		}
 	}
-	return errors.New("not found")
+	return &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // Objmt is a fake (mocked) implementation of the Objmt interface
@@ -560,6 +628,8 @@ type Objmt struct {
 	storeBillingSampleList      *model.StoreBillingSampleList
 	storeReplicationDataList    *model.StoreReplicationDataList
 }
+
+var _ api.ObjmtInterface = (*Objmt)(nil) // interface guard
 
 // GetStoreBillingInfo returns billing info metrics for object store
 func (mt *Objmt) GetStoreBillingInfo(_ map[string]string) (*model.StoreBillingInfoList, error) {
@@ -615,6 +685,8 @@ func (mt *Objmt) GetReplicationSample(_ string, _ [][]string, _ map[string]strin
 type CRR struct {
 	Config *model.CRR
 }
+
+var _ api.CRRInterface = (*CRR)(nil) // interface guard
 
 // PauseReplication implements the CRR API
 func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
@@ -674,6 +746,8 @@ type AlertPolicies struct {
 	items []model.AlertPolicy
 }
 
+var _ api.AlertPoliciesInterface = (*AlertPolicies)(nil) // interface guard
+
 // Get implements the AlertPolicy API
 func (ap *AlertPolicies) Get(policyName string) (*model.AlertPolicy, error) {
 	for _, AlertPolicy := range ap.items {
@@ -681,7 +755,10 @@ func (ap *AlertPolicies) Get(policyName string) (*model.AlertPolicy, error) {
 			return &AlertPolicy, nil
 		}
 	}
-	return nil, errors.New("not found")
+	return nil, &model.Error{
+		Description: "not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // List implements the buckets API
@@ -718,7 +795,10 @@ func (ap *AlertPolicies) Delete(policyName string) error {
 			return nil
 		}
 	}
-	return errors.New("alert policy not found")
+	return &model.Error{
+		Description: "alert policy not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // Update implements the AlertPolicy API
@@ -741,7 +821,10 @@ func (ap *AlertPolicies) Update(payload model.AlertPolicy, policyName string) (*
 			return &alertpolicy, nil
 		}
 	}
-	return nil, errors.New("alert policy not found")
+	return nil, &model.Error{
+		Description: "alert policy not found",
+		Code:        model.CodeNotFound,
+	}
 }
 
 // Status implements the Status API
@@ -749,7 +832,8 @@ type Status struct {
 	RebuildInfo *model.RebuildInfo
 }
 
-// GetRebuildStatus returns rebuild status of an ObjectScale object store
+var _ api.StatusInterfaces = (*Status)(nil) // interface guard
+
 func (s *Status) GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
 	s.RebuildInfo.TotalBytes = 2048
 	s.RebuildInfo.RemainingBytes = 1024
