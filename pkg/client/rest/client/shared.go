@@ -18,7 +18,6 @@ package client
 
 import (
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -55,12 +54,7 @@ func HandleResponse(resp *http.Response) error {
 			if err != nil {
 				return err
 			}
-			switch {
-			case apiError.Code == 1004:
-				return errors.New("server error: not found")
-			default:
-				return fmt.Errorf("server error: %s", strings.ToLower(apiError.Description))
-			}
+			return fmt.Errorf("server error: %w", apiError)
 		}
 	}
 	return nil
