@@ -165,7 +165,7 @@ func (c *ClientSet) Buckets() api.BucketsInterface {
 	return c.buckets
 }
 
-// Tenants implements the client API.
+// FederatedObjectStores implements the client API.
 func (c *ClientSet) FederatedObjectStores() api.FederatedObjectStoresInterface {
 	return c.federatedobjectstores
 }
@@ -180,11 +180,12 @@ func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
 }
 
-// ObjectMt implements the client API for objMT metrics
+// ObjectMt implements the client API for objMT metrics.
 func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objectMt
 }
 
+// BucketPolicy contains information about bucket policy to be used in fake client set.
 type BucketPolicy struct {
 	BucketName string
 	Policy     string
@@ -511,11 +512,10 @@ func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error
 	if found {
 		delete(b.policy, fmt.Sprintf("%s/%s", bucketName, param["namespace"]))
 		return nil
-	} else {
-		return model.Error{
-			Description: "bucket not found",
-			Code:        model.CodeNotFound,
-		}
+	}
+	return model.Error{
+		Description: "bucket not found",
+		Code:        model.CodeNotFound,
 	}
 }
 
@@ -531,11 +531,10 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[strin
 	if found {
 		b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
 		return nil
-	} else {
-		return model.Error{
-			Description: "bucket not found",
-			Code:        model.CodeNotFound,
-		}
+	}
+	return model.Error{
+		Description: "bucket not found",
+		Code:        model.CodeNotFound,
 	}
 }
 
@@ -843,6 +842,7 @@ type Status struct {
 
 var _ api.StatusInterfaces = (*Status)(nil) // interface guard
 
+// GetRebuildStatus implements the Status API
 func (s *Status) GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
 	s.RebuildInfo.TotalBytes = 2048
 	s.RebuildInfo.RemainingBytes = 1024
