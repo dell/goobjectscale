@@ -60,6 +60,7 @@ func (err Error) StatusCode() int64 {
 	return err.Code
 }
 
+// Is compare errors status
 func (err Error) Is(target error) bool {
 	// create intermidiate interface
 	type statusCoder interface {
@@ -78,6 +79,7 @@ func (err Error) Is(target error) bool {
 	}
 }
 
+// Error Codes
 const (
 	CodeNotFound  int64 = 1004
 	CodeDuplicate int64 = 1005

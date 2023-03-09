@@ -13,6 +13,8 @@
 //  limitations under the License.
 //
 
+// Package iam provides funtions for managing objectscale IAM
+//
 // Example function using IAM client to create new user in ObjectScale.
 //
 //	func ExampleCreateIAMUser(userName string) {
@@ -45,6 +47,7 @@ import (
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 )
 
+// Name of handlers and headers added to IAM
 const (
 	SDSHandlerName       = "X-Sds-Handler"
 	SDSHeaderName        = "X-Sds-Auth-Token"
