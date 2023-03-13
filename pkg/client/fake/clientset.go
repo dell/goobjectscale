@@ -19,6 +19,7 @@ package fake
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
@@ -493,24 +494,37 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 }
 
 // GetPolicy implements the buckets API
-func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string, error) {
-	if policy, ok := b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])]; ok {
+func (b *Buckets) GetPolicy(bucketName string, params map[string]string) (string, error) {
+	// this is not path, it is used to quickly distinguish which function must fail
+	_, ok := params["X-TEST/Buckets/GetPolicy/force-fail"]
+	if ok {
+		return "", model.Error{
+			Description: "An unexpected error occurred",
+			// TODO: verify if this error code is correct
+			Code: 999,
+		}
+	}
+	if policy, ok := b.policy[fmt.Sprintf("%s/%s", bucketName, params["namespace"])]; ok {
 		return policy, nil
 	}
 	return "", nil
 }
 
 // DeletePolicy implements the buckets API
-func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error {
-	found := false
-	for _, bucket := range b.items {
-		if bucket.Name == bucketName {
-			found = true
-			break
+// DeletePolicy implements the buckets API
+func (b *Buckets) DeletePolicy(bucketName string, params map[string]string) error {
+	// this is not path, it is used to quickly distinguish which function must fail
+	_, ok := params["X-TEST/Buckets/DeletePolicy/force-fail"]
+	if ok {
+		return model.Error{
+			Description: "An unexpected error occurred",
+			// TODO: verify if this error code is correct
+			Code: 999,
 		}
 	}
+	found := false
 	if found {
-		delete(b.policy, fmt.Sprintf("%s/%s", bucketName, param["namespace"]))
+		delete(b.policy, fmt.Sprintf("%s/%s", bucketName, params["namespace"]))
 		return nil
 	}
 	return model.Error{
@@ -520,16 +534,19 @@ func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error
 }
 
 // UpdatePolicy implements the buckets API
-func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[string]string) error {
-	found := false
-	for _, bucket := range b.items {
-		if bucket.Name == bucketName {
-			found = true
-			break
+func (b *Buckets) UpdatePolicy(bucketName string, policy string, params map[string]string) error {
+	// this is not path, it is used to quickly distinguish which function must fail
+	_, ok := params["X-TEST/Buckets/UpdatePolicy/force-fail"]
+	if ok {
+		return model.Error{
+			Description: "An unexpected error occurred",
+			// TODO: verify if this error code is correct
+			Code: 999,
 		}
 	}
+	found := false
 	if found {
-		b.policy[fmt.Sprintf("%s/%s", bucketName, param["namespace"])] = policy
+		b.policy[fmt.Sprintf("%s/%s", bucketName, params["namespace"])] = policy
 		return nil
 	}
 	return model.Error{
@@ -539,21 +556,38 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[strin
 }
 
 // Create implements the buckets API
-func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
+func (b *Buckets) Create(createParams model.Bucket) (*model.Bucket, error) {
+	// This piece of code verifies if the incomoing request is for forcing an unexpected error.
+	if strings.Contains(createParams.Name, "FORCEFAIL") {
+		return &createParams, model.Error{
+			Description: "Bucket was not sucessfully created",
+			// TODO: verify if this error code is correct
+			Code: 999,
+		}
+	}
+
 	for _, existingBucket := range b.items {
-		if existingBucket.Namespace == createParam.Namespace && existingBucket.Name == createParam.Name {
+		if existingBucket.Namespace == createParams.Namespace && existingBucket.Name == createParams.Name {
 			return nil, model.Error{
 				Description: "duplicate found",
 				Code:        model.CodeNotFound,
 			}
 		}
 	}
-	b.items = append(b.items, createParam)
-	return &createParam, nil
+	b.items = append(b.items, createParams)
+	return &createParams, nil
 }
 
 // Delete implements the buckets API
 func (b *Buckets) Delete(name string, namespace string) error {
+	// This piece of code verifies if the incomoing request is for forcing an unexpected error.
+	if strings.Contains(name, "FORCEFAIL") {
+		return model.Error{
+			Description: "Bucket was not sucessfully deleted",
+			// TODO: verify if this error code is correct
+			Code: 999,
+		}
+	}
 	for i, existingBucket := range b.items {
 		if existingBucket.Name == name && existingBucket.Namespace == namespace {
 			b.items = append(b.items[:i], b.items[i+1:]...)
