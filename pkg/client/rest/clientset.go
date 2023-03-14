@@ -17,9 +17,9 @@
 package rest
 
 import (
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/alertpolicies"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/buckets"
+	"github.com/dell/goobjectscale/pkg/client/api"
+	"github.com/dell/goobjectscale/pkg/client/rest/alertpolicies"
+	"github.com/dell/goobjectscale/pkg/client/rest/buckets"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/crr"
 	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/federatedobjectstores"

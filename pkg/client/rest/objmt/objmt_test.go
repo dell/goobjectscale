@@ -24,8 +24,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
+	"github.com/dell/goobjectscale/pkg/client/rest"
+	"github.com/dell/goobjectscale/pkg/client/rest/client"
 
 	"github.com/stretchr/testify/require"
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"

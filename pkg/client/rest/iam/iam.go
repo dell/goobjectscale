@@ -44,7 +44,7 @@ import (
 
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
+	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
 // Name of handlers and headers added to IAM
