@@ -244,7 +244,7 @@ func (o *ObjectUsers) GetSecret(uid string, _ map[string]string) (*model.ObjectU
 		return nil, model.Error{
 			Description: "secret not found",
 			Details:     fmt.Sprintf("secret for %s is not found", uid),
-			Code:        model.CodeDuplicate,
+			Code:        model.CodeResourceNotFound,
 		}
 	}
 	return o.Secrets[uid], nil
@@ -266,7 +266,7 @@ func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCrea
 		return nil, model.Error{
 			Description: "max keys reached",
 			Details:     fmt.Sprintf("user %s already has 2 valid keys", uid),
-			Code:        model.CodeDuplicate,
+			Code:        model.CodeExceedingLimit,
 		}
 	case o.Secrets[uid].SecretKey1 != "":
 		o.Secrets[uid].SecretKey2 = req.SecretKey
@@ -287,7 +287,7 @@ func (o *ObjectUsers) DeleteSecret(uid string, req model.ObjectUserSecretKeyDele
 		return model.Error{
 			Description: "user not found",
 			Details:     fmt.Sprintf("user %s not found", uid),
-			Code:        model.CodeNotFound,
+			Code:        model.CodeResourceNotFound,
 		}
 	}
 	switch req.SecretKey {
@@ -302,7 +302,7 @@ func (o *ObjectUsers) DeleteSecret(uid string, req model.ObjectUserSecretKeyDele
 		return model.Error{
 			Description: "not found",
 			Details:     fmt.Sprintf("user %s secret key not found", uid),
-			Code:        model.CodeNotFound,
+			Code:        model.CodeResourceNotFound,
 		}
 	}
 }
@@ -319,7 +319,7 @@ func (o *ObjectUsers) GetInfo(uid string, _ map[string]string) (*model.ObjectUse
 		return nil, model.Error{
 			Description: "info not found",
 			Details:     fmt.Sprintf("info for %s is not found", uid),
-			Code:        model.CodeDuplicate,
+			Code:        model.CodeResourceNotFound,
 		}
 	}
 	return o.InfoList[uid], nil
@@ -366,7 +366,7 @@ func (t *Tenants) Delete(tenantID string) error {
 	}
 	return model.Error{
 		Description: "tenant not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -381,7 +381,7 @@ func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
 	}
 	return model.Error{
 		Description: "tenant not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -394,7 +394,7 @@ func (t *Tenants) Get(id string, _ map[string]string) (*model.Tenant, error) {
 	}
 	return nil, model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -419,7 +419,7 @@ func (t *Tenants) GetQuota(id string, _ map[string]string) (*model.TenantQuota, 
 	}
 	return nil, model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -437,7 +437,7 @@ func (t *Tenants) SetQuota(id string, tenantQuota model.TenantQuotaSet) error {
 
 	return model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -454,7 +454,7 @@ func (t *Tenants) DeleteQuota(id string) error {
 	}
 	return model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -478,7 +478,7 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 	if ok {
 		return nil, model.Error{
 			Description: "An unexpected error occurred",
-			Code:        999,
+			Code:        model.CodeInternalException,
 		}
 	}
 
@@ -489,7 +489,7 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 	}
 	return nil, model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -500,8 +500,7 @@ func (b *Buckets) GetPolicy(bucketName string, params map[string]string) (string
 	if ok {
 		return "", model.Error{
 			Description: "An unexpected error occurred",
-			// TODO: verify if this error code is correct
-			Code: 999,
+			Code:        model.CodeInternalException,
 		}
 	}
 	if policy, ok := b.policy[fmt.Sprintf("%s/%s", bucketName, params["namespace"])]; ok {
@@ -511,15 +510,13 @@ func (b *Buckets) GetPolicy(bucketName string, params map[string]string) (string
 }
 
 // DeletePolicy implements the buckets API
-// DeletePolicy implements the buckets API
 func (b *Buckets) DeletePolicy(bucketName string, params map[string]string) error {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/DeletePolicy/force-fail"]
 	if ok {
 		return model.Error{
 			Description: "An unexpected error occurred",
-			// TODO: verify if this error code is correct
-			Code: 999,
+			Code:        model.CodeInternalException,
 		}
 	}
 	found := false
@@ -529,7 +526,7 @@ func (b *Buckets) DeletePolicy(bucketName string, params map[string]string) erro
 	}
 	return model.Error{
 		Description: "bucket not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -540,8 +537,7 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, params map[stri
 	if ok {
 		return model.Error{
 			Description: "An unexpected error occurred",
-			// TODO: verify if this error code is correct
-			Code: 999,
+			Code:        model.CodeInternalException,
 		}
 	}
 	found := false
@@ -551,18 +547,17 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, params map[stri
 	}
 	return model.Error{
 		Description: "bucket not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
 // Create implements the buckets API
 func (b *Buckets) Create(createParams model.Bucket) (*model.Bucket, error) {
-	// This piece of code verifies if the incomoing request is for forcing an unexpected error.
+	// This piece of code verifies if the incoming request is for forcing an unexpected error.
 	if strings.Contains(createParams.Name, "FORCEFAIL") {
 		return &createParams, model.Error{
 			Description: "Bucket was not sucessfully created",
-			// TODO: verify if this error code is correct
-			Code: 999,
+			Code:        model.CodeInternalException,
 		}
 	}
 
@@ -570,7 +565,7 @@ func (b *Buckets) Create(createParams model.Bucket) (*model.Bucket, error) {
 		if existingBucket.Namespace == createParams.Namespace && existingBucket.Name == createParams.Name {
 			return nil, model.Error{
 				Description: "duplicate found",
-				Code:        model.CodeNotFound,
+				Code:        model.CodeBucketAlreadyExists,
 			}
 		}
 	}
@@ -580,12 +575,11 @@ func (b *Buckets) Create(createParams model.Bucket) (*model.Bucket, error) {
 
 // Delete implements the buckets API
 func (b *Buckets) Delete(name string, namespace string) error {
-	// This piece of code verifies if the incomoing request is for forcing an unexpected error.
+	// This piece of code verifies if the incoming request is for forcing an unexpected error.
 	if strings.Contains(name, "FORCEFAIL") {
 		return model.Error{
 			Description: "Bucket was not sucessfully deleted",
-			// TODO: verify if this error code is correct
-			Code: 999,
+			Code:        model.CodeInternalException,
 		}
 	}
 	for i, existingBucket := range b.items {
@@ -596,7 +590,7 @@ func (b *Buckets) Delete(name string, namespace string) error {
 	}
 	return model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -619,7 +613,7 @@ func (b *Buckets) GetQuota(bucketName string, _ string) (*model.BucketQuotaInfo,
 
 	return nil, model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -636,7 +630,7 @@ func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
 	}
 	return model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -653,7 +647,7 @@ func (b *Buckets) DeleteQuota(bucketName string, _ string) error {
 	}
 	return model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -799,7 +793,7 @@ func (ap *AlertPolicies) Get(policyName string) (*model.AlertPolicy, error) {
 	}
 	return nil, model.Error{
 		Description: "not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -839,7 +833,7 @@ func (ap *AlertPolicies) Delete(policyName string) error {
 	}
 	return model.Error{
 		Description: "alert policy not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
@@ -865,7 +859,7 @@ func (ap *AlertPolicies) Update(payload model.AlertPolicy, policyName string) (*
 	}
 	return nil, model.Error{
 		Description: "alert policy not found",
-		Code:        model.CodeNotFound,
+		Code:        model.CodeResourceNotFound,
 	}
 }
 
