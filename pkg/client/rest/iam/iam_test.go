@@ -24,13 +24,13 @@ import (
 	"testing"
 
 	awsIAM "github.com/aws/aws-sdk-go/service/iam"
-	objscaleIAM "github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/iam"
+	objscaleIAM "github.com/dell/goobjectscale/pkg/client/rest/iam"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
+	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
 var (

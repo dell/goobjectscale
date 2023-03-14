@@ -1,4 +1,4 @@
-module github.com/emcecs/objectscale-management-go-sdk
+module github.com/dell/goobjectscale
 
 go 1.18
 

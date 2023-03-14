@@ -20,7 +20,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
+	"github.com/dell/goobjectscale/pkg/client/model"
 	"github.com/stretchr/testify/assert"
 )
 

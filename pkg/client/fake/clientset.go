@@ -22,8 +22,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/api"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
+	"github.com/dell/goobjectscale/pkg/client/api"
+	"github.com/dell/goobjectscale/pkg/client/model"
 )
 
 // ClientSet is a set of clients for each API section

@@ -21,7 +21,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
+	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
 func testLogin(t *testing.T, auth client.Authenticator) {

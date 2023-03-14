@@ -26,9 +26,9 @@ import (
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/model"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest"
-	"github.com/emcecs/objectscale-management-go-sdk/pkg/client/rest/client"
+	"github.com/dell/goobjectscale/pkg/client/model"
+	"github.com/dell/goobjectscale/pkg/client/rest"
+	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
 func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
