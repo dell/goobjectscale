@@ -109,7 +109,7 @@ func testCreate(t *testing.T, clientset *rest.ClientSet) {
 	assert.Equal(t, bucket.Name, "testbucket1")
 
 	//Delete bucket after
-	delErr := clientset.Buckets().Delete("testbucket1", "130820808912778549")
+	delErr := clientset.Buckets().Delete("testbucket1", "130820808912778549", true)
 	if delErr != nil {
 		panic(delErr)
 	}
@@ -125,9 +125,9 @@ func testDelete(t *testing.T, clientset *rest.ClientSet) {
 	if createErr != nil {
 		panic(createErr)
 	}
-	err := clientset.Buckets().Delete("testbucket1", "130820808912778549")
+	err := clientset.Buckets().Delete("testbucket1", "130820808912778549", true)
 	require.NoError(t, err)
-	err = clientset.Buckets().Delete("unknownbucket", "130820808912778549")
+	err = clientset.Buckets().Delete("unknownbucket", "130820808912778549", true)
 	require.Error(t, err)
 }
 
