@@ -1,0 +1,19 @@
+# CODEOWNERS
+#
+# Documentation for this file can be found at:
+# https://help.github.com/en/articles/about-code-owners
+
+# These are the default owners for the code and will
+# be requested for review when someone opens a pull request.
+# Order is alphabetical for easier maintenance.
+#
+# Adam Ginna (adamginna-dell)
+# Bogdan Novikov (bogdanNovikovDell)
+# Bartosz Ciesielczyk (cbartoszDell)
+# Leonard Ulman (Leonard-Dell)
+# Małgorzata Dutka (mdutka-dell)
+# Marcin Trajfacki (mtrajfacki-dell)
+# Mateusz Urbanek (shanduur-dell)
+
+# for all files
+* @adamginna-dell @bogdanNovikovDell @cbartoszDell @Leonard-Dell @mdutka-dell @mtrajfacki-dell @shanduur-dell
