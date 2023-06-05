@@ -1,13 +1,14 @@
-# goobjectscale
-
-![GitHub license](https://img.shields.io/github/license/dell/goobjectscale)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/dell/goobjectscale)
-![GitHub branch checks state](https://img.shields.io/github/checks-status/dell/goobjectscale/main)
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/dell/goobjectscale)
-[![Go Report Card](https://goreportcard.com/badge/github.com/dell/goobjectscale)](https://goreportcard.com/report/github.com/dell/goobjectscale)
-[![Go Reference](https://pkg.go.dev/badge/github.com/dell/goobjectscale.svg)](https://pkg.go.dev/github.com/dell/goobjectscale)
 
 > 🚧 **NOTE:** The *goobjectscale* is in a preview stage, and API is subject to change between minor updates. Until `v1.0.0` we do not guarantee backwards compatibility between versions.
+
+# goobjectscale
+
+[![GitHub license](https://img.shields.io/github/license/dell/goobjectscale)](https://github.com/dell/goobjectscale/blob/main/LICENSE)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/dell/goobjectscale)](https://github.com/dell/goobjectscale/releases/latest)
+[![GitHub branch checks state](https://img.shields.io/github/checks-status/dell/goobjectscale/main)](https://github.com/dell/goobjectscale/actions)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/dell/goobjectscale)](https://github.com/dell/goobjectscale/blob/main/go.mod)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dell/goobjectscale)](https://goreportcard.com/report/github.com/dell/goobjectscale)
+[![Go Reference](https://pkg.go.dev/badge/github.com/dell/goobjectscale.svg)](https://pkg.go.dev/github.com/dell/goobjectscale)
 
 ## Overview
 
