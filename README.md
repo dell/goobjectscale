@@ -21,7 +21,7 @@ import (
 
 // First, provide user credentials for your ObjectScale.
 objectscaleAuthUser := objectscaleClient.AuthUser{
-	Gateway:  "https://gateway.example.com:443",
+	Gateway:  "https://gateway.example.com:443", // Look at FAQ how to obtain it.
 	Username: "example-user",
 	Password: "example-password",
 }
@@ -35,7 +35,7 @@ transport := &http.Transport{
 
 // Finally, create REST clientset
 clientset := rest.NewClientSet(&objectscaleClient.Simple{
-	Endpoint:       "https://objectstore.example.com:4443",
+	Endpoint:       "https://objectstore.example.com:4443", // Look at FAQ how to obtain it.
 	Authenticator:  &user,
 	HTTPClient:     &http.Client{Transport: transport},
 	OverrideHeader: false,
@@ -47,7 +47,7 @@ clientset := rest.NewClientSet(&objectscaleClient.Simple{
 ```go
 // Create new parameters map, that will be provided to the Get call.
 parameters := map[string]string{
-	"namespace": "osaia3382ab190a7a3df", // "namespace" is a required parameter
+	"namespace": "osaia3382ab190a7a3df", // "namespace" is a required parameter (look at FAQ how to obtain it).
 }
 
 // NOTE: Create clientset beforehand.
@@ -65,8 +65,8 @@ import "github.com/dell/goobjectscale/pkg/client/model"
 
 // Create new bucket using clientset.
 bucket, err = clientset.Buckets().Create(&model.Bucket{
-	Name: "example-bucket",             // Name is a required field
-	Namespace: "osaia3382ab190a7a3df",  // Namespace is a required field
+	Name: "example-bucket",             // Name is a required field.
+	Namespace: "osaia3382ab190a7a3df",  // Namespace is a required field.
 })
 ```
 
@@ -77,7 +77,7 @@ import "github.com/dell/goobjectscale/pkg/client/model"
 
 // NOTE: Create clientset beforehand.
 
-// Delete bucket requires bucket name, namespace and emptyBucket parameters.
+// Delete bucket requires bucket name, namespace (look at FAQ how to obtain it) and emptyBucket parameters.
 // EmptyBucket indicates if the bucket should be deleted, if it has any objects.
 err := clientset.Buckets().Delete("example-bucket", "osaia3382ab190a7a3df", false)
 ```
@@ -96,14 +96,14 @@ x509Client := *http.DefaultClient
 
 // First, provide user credentials for your ObjectScale.
 objectscaleAuthUser := &objectscaleClient.AuthUser{
-	Gateway:  "https://gateway.example.com:443",
+	Gateway:  "https://gateway.example.com:443", // Look at FAQ how to obtain it.
 	Username: "example-user",
 	Password: "example-password",
 }
 
 // Create new session with custom endpoint.
 iamSession, err := session.NewSession(&aws.Config{
-	Endpoint:                      "https://gateway.example.com:443",
+	Endpoint:                      "https://gateway.example.com:443", // Look at FAQ how to obtain it.
 	Region:                        "us-west-1",
 	CredentialsChainVerboseErrors: aws.Bool(true),
 	HTTPClient: x509Client,
@@ -116,7 +116,7 @@ iamClient = iam.New(iamSession)
 // First we need to inject ObjectScale access token from objectscaleAuthUser structure.
 InjectTokenToIAMClient(iamClient, objectscaleAuthUser, x509Client)
 
-// Next we need to inject Account ID / Namespace (those).
+// Next we need to inject Account ID / Namespace (look at FAQ how to obtain it).
 InjectAccountIDToIAMClient(iamClient, "osaia3382ab190a7a3df")
 
 // Finally we can use the IAM client to do API calls to ObjectScale.
@@ -141,27 +141,36 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ### What is the Namespace? What is the AccountID?
 
-Those two terms used around codebase are unfortunatly referring to the same thing. The easiest way to obtain it is to look in Objectscale Portal.
+Those two terms used around codebase are unfortunately referring to the same thing. The easiest way to obtain it is to look in Objectscale Portal.
 
 1. Login into ObjectScale Portal;
-2. <!-- TODO: where to look? -->
-3. 
+2. Select Accounts tab in the panel on the left side of your screen;
+3. You should now see list of accounts. Select one of the values from column called *Account ID*.
 
 ### How to obtain ObjectScale Gateway endpoint URL?
 
 The easiest way to obtain ObjectScale Gateway endpoint URL is to look in ObjectScale Portal.
 
 1. Login into ObjectScale Portal;
-2. <!-- TODO: where to look? -->
-3. 
+2. From the menu on left side of the screen select *Administration* tab;
+3. After unfolding *Administration* tab enter *ObjectScale* page;
+4. Select *Federation* tab;
+5. In the table you will see one or more values, unroll selected one;
+6. In the table, you will now see *External Endpoint* value associated with *objectscale-gateway-internal*.
+7. The endpoint must be of the following format: `https://<IP-ADDRESS>:443` or `https://<EXTERNAL-HOSTNAME>`
 
 ### How to obtain ObjectScale Objectstore endpoint URL?
 
 The easiest way to obtain ObjectScale Objectstore endpoint URL is to look in ObjectScale Portal.
 
+
 1. Login into ObjectScale Portal;
-2. <!-- TODO: where to look? -->
-3. 
+2. From the menu on left side of the screen select *Administration* tab;
+3. After unfolding *Administration* tab enter *ObjectScale* page;
+4. Select one of the object stores visible in the table, and click its name;
+5. You should see *Summary* of that object store.
+6. In the *Management Service details* section, you will see value under *IP address* column.
+7. The endpoint must be of the following format: `https://<IP-ADDRESS>:4443` or `https://<EXTERNAL-HOSTNAME>`
 
 ## Support
 
