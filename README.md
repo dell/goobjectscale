@@ -10,12 +10,25 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/dell/goobjectscale)](https://goreportcard.com/report/github.com/dell/goobjectscale)
 [![Go Reference](https://pkg.go.dev/badge/github.com/dell/goobjectscale.svg)](https://pkg.go.dev/github.com/dell/goobjectscale)
 
-## Overview
-
+## Description
 _goobjectscale_ is a Go package that provides a client for the Dell ObjectScale Managment HTTP API and helpers for Dell ObjectScale Identity and Access Management (IAM) HTTP API (compatible with Amazon Web Servicess IAM).
 
-## Examples
+## Table of Contents
 
+* [Code of Conduct](https://github.com/dell/csm/blob/main/docs/CODE_OF_CONDUCT.md)
+* [Maintainer Guide](https://github.com/dell/csm/blob/main/docs/MAINTAINER_GUIDE.md)
+* [Committer Guide](https://github.com/dell/csm/blob/main/docs/COMMITTER_GUIDE.md)
+* [Contributing Guide](https://github.com/dell/csm/blob/main/docs/CONTRIBUTING.md)
+* [List of Adopters](https://github.com/dell/csm/blob/main/docs/ADOPTERS.md)
+* [Support](#support)
+* [Security](https://github.com/dell/csm/blob/main/docs/SECURITY.md)
+* [Examples](#examples)
+* [FAQ](#faq)
+
+## Support
+For any issues, questions or feedback, please follow our [support process](https://github.com/dell/csm/blob/main/docs/SUPPORT.md)
+
+## Examples
 The tests provide working examples for how to use the package, but here are a few code snippets to further illustrate the basic ideas.
 
 ### Initialize a new client
@@ -133,18 +146,6 @@ user, err := iamClient.CreateUser(&iam.CreateUserInput{
 })
 ```
 
-## Contributions
-
-**First:** if you're unsure or afraid of anything, just ask or submit the issue or pull request anyway. You won't be yelled at for giving your best effort. The worst that can happen is that you'll be politely asked to change something.
-
-We appreciate any sort of contributions, and don't want a wall of rules to get in the way of that.
-
-## Licensing
-
-Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
 ## FAQ
 
 ### What is the Namespace? What is the AccountID?
@@ -180,6 +181,3 @@ The easiest way to obtain ObjectScale Objectstore endpoint URL is to look in Obj
 6. In the *Management Service details* section, you will see value under *IP address* column.
 7. The endpoint must be of the following format: `https://<IP-ADDRESS>:4443` or `https://<EXTERNAL-HOSTNAME>`
 
-## Support
-
-For any issues, questions or feedback, please follow our [support process](https://github.com/dell/csm/blob/main/docs/SUPPORT.md)
