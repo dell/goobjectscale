@@ -1,5 +1,12 @@
 # goobjectscale
 
+![GitHub license](https://img.shields.io/github/license/dell/goobjectscale)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/dell/goobjectscale)
+![GitHub branch checks state](https://img.shields.io/github/checks-status/dell/goobjectscale/main)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/dell/goobjectscale)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dell/goobjectscale)](https://goreportcard.com/report/github.com/dell/goobjectscale)
+[![Go Reference](https://pkg.go.dev/badge/github.com/dell/goobjectscale.svg)](https://pkg.go.dev/github.com/dell/goobjectscale)
+
 > 🚧 **NOTE:** The *goobjectscale* is in a preview stage, and API is subject to change between minor updates. Until `v1.0.0` we do not guarantee backwards compatibility between versions.
 
 ## Overview
@@ -144,7 +151,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 Those two terms used around codebase are unfortunately referring to the same thing. The easiest way to obtain it is to look in Objectscale Portal.
 
 1. Login into ObjectScale Portal;
-2. Select Accounts tab in the panel on the left side of your screen;
+2. Select *Accounts* tab in the panel on the left side of your screen;
 3. You should now see list of accounts. Select one of the values from column called *Account ID*.
 
 ### How to obtain ObjectScale Gateway endpoint URL?
