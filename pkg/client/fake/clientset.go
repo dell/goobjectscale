@@ -1,14 +1,18 @@
-// Copyright © 2023 Dell Inc. or its subsidiaries. All Rights Reserved.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//      http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//
+//  Copyright © 2021 - 2023 Dell Inc. or its subsidiaries. All Rights Reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//       http://www.apache.org/licenses/LICENSE-2.0
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+//
 
 package fake
 
@@ -247,7 +251,14 @@ func (o *ObjectUsers) GetSecret(uid string, _ map[string]string) (*model.ObjectU
 }
 
 // CreateSecret will create a specific secret
-func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCreateReq, _ map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
+func (o *ObjectUsers) CreateSecret(uid string, req model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
+	if _, ok := params["X-TEST/ObjectUser/CreateSecret/force-fail"]; ok {
+		return nil, model.Error{
+			Description: "An unexpected error occurred",
+			Code:        model.CodeInternalException,
+		}
+	}
+
 	if _, ok := o.Secrets[uid]; !ok {
 		o.Secrets[uid] = &model.ObjectUserSecret{
 			SecretKey1: req.SecretKey,
@@ -536,10 +547,13 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, params map[stri
 			Code:        model.CodeInternalException,
 		}
 	}
+
 	_, ok = params["X-TEST/Buckets/UpdatePolicy/force-success"]
 	if ok {
+		b.policy[fmt.Sprintf("%s/%s", bucketName, params["namespace"])] = policy
 		return nil
 	}
+
 	found := false
 	if found {
 		b.policy[fmt.Sprintf("%s/%s", bucketName, params["namespace"])] = policy
