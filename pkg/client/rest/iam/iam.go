@@ -37,10 +37,12 @@
 package iam
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/iam"
+	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 
@@ -56,8 +58,13 @@ const (
 )
 
 // InjectTokenToIAMClient configure IAM client to connect with Objectscale
-func InjectTokenToIAMClient(clientIam *iam.IAM, clientObjectscale client.Authenticator, httpClient http.Client) {
-	clientIam.Handlers.Sign.RemoveByName(v4.SignRequestHandler.Name)
+func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.Authenticator, httpClient http.Client) error {
+	realIam, ok := clientIam.(*iam.IAM)
+	if !ok {
+		return errors.New("invalid iam client")
+	}
+
+	realIam.Handlers.Sign.RemoveByName(v4.SignRequestHandler.Name)
 
 	handler := request.NamedHandler{
 		Name: SDSHandlerName,
@@ -74,15 +81,22 @@ func InjectTokenToIAMClient(clientIam *iam.IAM, clientObjectscale client.Authent
 		},
 	}
 
-	swapped := clientIam.Handlers.Sign.SwapNamed(handler)
+	swapped := realIam.Handlers.Sign.SwapNamed(handler)
 	if !swapped {
-		clientIam.Handlers.Sign.PushFrontNamed(handler)
+		realIam.Handlers.Sign.PushFrontNamed(handler)
 	}
+
+	return nil
 }
 
 // InjectAccountIDToIAMClient configure IAM client to connect with Objectscale Accont
-func InjectAccountIDToIAMClient(clientIam *iam.IAM, AccountID string) {
-	clientIam.Handlers.Sign.RemoveByName(v4.SignRequestHandler.Name)
+func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, AccountID string) error {
+	realIam, ok := clientIam.(*iam.IAM)
+	if !ok {
+		return errors.New("invalid iam client")
+	}
+
+	realIam.Handlers.Sign.RemoveByName(v4.SignRequestHandler.Name)
 	handler := request.NamedHandler{
 		Name: AccountIDHandlerName,
 		Fn: func(r *request.Request) {
@@ -90,8 +104,10 @@ func InjectAccountIDToIAMClient(clientIam *iam.IAM, AccountID string) {
 		},
 	}
 
-	swapped := clientIam.Handlers.Sign.SwapNamed(handler)
+	swapped := realIam.Handlers.Sign.SwapNamed(handler)
 	if !swapped {
-		clientIam.Handlers.Sign.PushFrontNamed(handler)
+		realIam.Handlers.Sign.PushFrontNamed(handler)
 	}
+
+	return nil
 }
