@@ -20,6 +20,7 @@ import (
 	"testing"
 
 	awsIAM "github.com/aws/aws-sdk-go/service/iam"
+	"github.com/aws/aws-sdk-go/service/iam/iamiface"
 	objscaleIAM "github.com/dell/goobjectscale/pkg/client/rest/iam"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -88,10 +89,38 @@ func TestIam(t *testing.T) {
 	})
 }
 
+// This must fail because we need iam.AIM and not iamiface.IAMAPI
+func TestInvalidInjectTokenInterface(t *testing.T) {
+	type invalidIAMClient struct {
+		iamiface.IAMAPI
+	}
+
+	TestClient := newTestHTTPClient()
+
+	err := objscaleIAM.InjectTokenToIAMClient(invalidIAMClient{}, &FixtureServiceauth, *TestClient)
+	if err == nil {
+		t.Errorf("Expected error injecting token to IAM client")
+	}
+}
+
+func TestInvalidInjectAccountIDInterface(t *testing.T) {
+	type invalidIAMClient struct {
+		iamiface.IAMAPI
+	}
+
+	err := objscaleIAM.InjectAccountIDToIAMClient(invalidIAMClient{}, "xxx")
+	if err == nil {
+		t.Errorf("Expected error injecting AccountID to IAM client")
+	}
+}
+
 func testInjectTokenToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 	TestClient := newTestHTTPClient()
 
-	objscaleIAM.InjectTokenToIAMClient(iamClient, &FixtureServiceauth, *TestClient)
+	err := objscaleIAM.InjectTokenToIAMClient(iamClient, &FixtureServiceauth, *TestClient)
+	if err != nil {
+		t.Errorf("Error injecting token to IAM client: %v", err)
+	}
 	r := &request.Request{
 		HTTPRequest: &http.Request{
 			Header: http.Header{},
@@ -100,7 +129,10 @@ func testInjectTokenToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 	iamClient.Handlers.Sign.Run(r)
 	checkHeader(t, *r, objscaleIAM.SDSHeaderName, "TESTTOKEN")
 
-	objscaleIAM.InjectTokenToIAMClient(iamClient, &FixtureUserAuth, *TestClient)
+	err = objscaleIAM.InjectTokenToIAMClient(iamClient, &FixtureUserAuth, *TestClient)
+	if err != nil {
+		t.Errorf("Error injecting token to IAM client: %v", err)
+	}
 	r = &request.Request{
 		HTTPRequest: &http.Request{
 			Header: http.Header{},
@@ -111,7 +143,10 @@ func testInjectTokenToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 }
 
 func testInjectAccountIDToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
-	objscaleIAM.InjectAccountIDToIAMClient(iamClient, "xxx")
+	err := objscaleIAM.InjectAccountIDToIAMClient(iamClient, "xxx")
+	if err != nil {
+		t.Errorf("Error injecting AccountID to IAM client: %v", err)
+	}
 	r := &request.Request{
 		HTTPRequest: &http.Request{
 			Header: http.Header{},
@@ -120,7 +155,10 @@ func testInjectAccountIDToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 	iamClient.Handlers.Sign.Run(r)
 	checkHeader(t, *r, objscaleIAM.AccountIDHeaderName, "xxx")
 
-	objscaleIAM.InjectAccountIDToIAMClient(iamClient, "yyy")
+	err = objscaleIAM.InjectAccountIDToIAMClient(iamClient, "yyy")
+	if err != nil {
+		t.Errorf("Error injecting AccountID to IAM client: %v", err)
+	}
 	r = &request.Request{
 		HTTPRequest: &http.Request{
 			Header: http.Header{},
@@ -128,7 +166,6 @@ func testInjectAccountIDToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 	}
 	iamClient.Handlers.Sign.Run(r)
 	checkHeader(t, *r, objscaleIAM.AccountIDHeaderName, "yyy")
-
 }
 
 func checkHeader(t *testing.T, request request.Request, expectedHeader string, expectedHeaderValue string) {

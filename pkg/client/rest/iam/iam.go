@@ -37,6 +37,7 @@
 package iam
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -57,10 +58,10 @@ const (
 )
 
 // InjectTokenToIAMClient configure IAM client to connect with Objectscale
-func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.Authenticator, httpClient http.Client) {
+func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.Authenticator, httpClient http.Client) error {
 	realIam, ok := clientIam.(*iam.IAM)
 	if !ok {
-		return
+		return errors.New("invalid iam client")
 	}
 
 	realIam.Handlers.Sign.RemoveByName(v4.SignRequestHandler.Name)
@@ -84,13 +85,15 @@ func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.
 	if !swapped {
 		realIam.Handlers.Sign.PushFrontNamed(handler)
 	}
+
+	return nil
 }
 
 // InjectAccountIDToIAMClient configure IAM client to connect with Objectscale Accont
-func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, AccountID string) {
+func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, AccountID string) error {
 	realIam, ok := clientIam.(*iam.IAM)
 	if !ok {
-		return
+		return errors.New("invalid iam client")
 	}
 
 	realIam.Handlers.Sign.RemoveByName(v4.SignRequestHandler.Name)
@@ -105,4 +108,6 @@ func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, AccountID string) {
 	if !swapped {
 		realIam.Handlers.Sign.PushFrontNamed(handler)
 	}
+
+	return nil
 }
