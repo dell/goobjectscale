@@ -13,21 +13,6 @@
 ## Description
 _goobjectscale_ is a Go package that provides a client for the Dell ObjectScale Managment HTTP API and helpers for Dell ObjectScale Identity and Access Management (IAM) HTTP API (compatible with Amazon Web Servicess IAM).
 
-## Table of Contents
-
-* [Code of Conduct](https://github.com/dell/csm/blob/main/docs/CODE_OF_CONDUCT.md)
-* [Maintainer Guide](https://github.com/dell/csm/blob/main/docs/MAINTAINER_GUIDE.md)
-* [Committer Guide](https://github.com/dell/csm/blob/main/docs/COMMITTER_GUIDE.md)
-* [Contributing Guide](https://github.com/dell/csm/blob/main/docs/CONTRIBUTING.md)
-* [List of Adopters](https://github.com/dell/csm/blob/main/docs/ADOPTERS.md)
-* [Support](#support)
-* [Security](https://github.com/dell/csm/blob/main/docs/SECURITY.md)
-* [Examples](#examples)
-* [FAQ](#faq)
-
-## Support
-For any issues, questions or feedback, please follow our [support process](https://github.com/dell/csm/blob/main/docs/SUPPORT.md)
-
 ## Examples
 The tests provide working examples for how to use the package, but here are a few code snippets to further illustrate the basic ideas.
 
@@ -180,4 +165,3 @@ The easiest way to obtain ObjectScale Objectstore endpoint URL is to look in Obj
 5. You should see *Summary* of that object store.
 6. In the *Management Service details* section, you will see value under *IP address* column.
 7. The endpoint must be of the following format: `https://<IP-ADDRESS>:4443` or `https://<EXTERNAL-HOSTNAME>`
-
