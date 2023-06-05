@@ -536,6 +536,10 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, params map[stri
 			Code:        model.CodeInternalException,
 		}
 	}
+	_, ok = params["X-TEST/Buckets/UpdatePolicy/force-success"]
+	if ok {
+		return nil
+	}
 	found := false
 	if found {
 		b.policy[fmt.Sprintf("%s/%s", bucketName, params["namespace"])] = policy
@@ -722,7 +726,7 @@ var _ api.CRRInterface = (*CRR)(nil) // interface guard
 
 // PauseReplication implements the CRR API
 func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
-	//resume, _ := strconv.Atoi(params["pauseEndMills"])
+	// resume, _ := strconv.Atoi(params["pauseEndMills"])
 	resume, _ := strconv.ParseInt(params["pauseEndMills"], 10, 64)
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
