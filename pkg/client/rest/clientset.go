@@ -38,6 +38,8 @@ type ClientSet struct {
 	federatedObjectStores api.FederatedObjectStoresInterface
 }
 
+var _ api.ClientSet = (*ClientSet)(nil)
+
 // NewClientSet returns a new client set based on the provided REST client parameters.
 func NewClientSet(c client.RemoteCaller) *ClientSet {
 	return &ClientSet{
@@ -88,7 +90,7 @@ func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
 }
 
-// Status implements the client API
+// Status implements the client API.
 func (c *ClientSet) Status() api.StatusInterface {
 	return c.status
 }

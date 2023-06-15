@@ -3,6 +3,8 @@
 package mocks
 
 import (
+	context "context"
+
 	model "github.com/dell/goobjectscale/pkg/client/model"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -12,25 +14,28 @@ type AlertPoliciesInterface struct {
 	mock.Mock
 }
 
-// Create provides a mock function with given fields: payload
-func (_m *AlertPoliciesInterface) Create(payload model.AlertPolicy) (*model.AlertPolicy, error) {
-	ret := _m.Called(payload)
+// Create provides a mock function with given fields: ctx, payload
+func (_m *AlertPoliciesInterface) Create(ctx context.Context, payload model.AlertPolicy) (*model.AlertPolicy, error) {
+	ret := _m.Called(ctx, payload)
 
 	var r0 *model.AlertPolicy
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(model.AlertPolicy) (*model.AlertPolicy, error)); ok {
-		return rf(payload)
+
+	if rf, ok := ret.Get(0).(func(context.Context, model.AlertPolicy) (*model.AlertPolicy, error)); ok {
+		return rf(ctx, payload)
 	}
-	if rf, ok := ret.Get(0).(func(model.AlertPolicy) *model.AlertPolicy); ok {
-		r0 = rf(payload)
+
+	if rf, ok := ret.Get(0).(func(context.Context, model.AlertPolicy) *model.AlertPolicy); ok {
+		r0 = rf(ctx, payload)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.AlertPolicy)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(model.AlertPolicy) error); ok {
-		r1 = rf(payload)
+	if rf, ok := ret.Get(1).(func(context.Context, model.AlertPolicy) error); ok {
+		r1 = rf(ctx, payload)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -38,13 +43,13 @@ func (_m *AlertPoliciesInterface) Create(payload model.AlertPolicy) (*model.Aler
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: policyName
-func (_m *AlertPoliciesInterface) Delete(policyName string) error {
-	ret := _m.Called(policyName)
+// Delete provides a mock function with given fields: ctx, policyName
+func (_m *AlertPoliciesInterface) Delete(ctx context.Context, policyName string) error {
+	ret := _m.Called(ctx, policyName)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string) error); ok {
-		r0 = rf(policyName)
+	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
+		r0 = rf(ctx, policyName)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -52,25 +57,28 @@ func (_m *AlertPoliciesInterface) Delete(policyName string) error {
 	return r0
 }
 
-// Get provides a mock function with given fields: policyName
-func (_m *AlertPoliciesInterface) Get(policyName string) (*model.AlertPolicy, error) {
-	ret := _m.Called(policyName)
+// Get provides a mock function with given fields: ctx, policyName
+func (_m *AlertPoliciesInterface) Get(ctx context.Context, policyName string) (*model.AlertPolicy, error) {
+	ret := _m.Called(ctx, policyName)
 
 	var r0 *model.AlertPolicy
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string) (*model.AlertPolicy, error)); ok {
-		return rf(policyName)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string) (*model.AlertPolicy, error)); ok {
+		return rf(ctx, policyName)
 	}
-	if rf, ok := ret.Get(0).(func(string) *model.AlertPolicy); ok {
-		r0 = rf(policyName)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string) *model.AlertPolicy); ok {
+		r0 = rf(ctx, policyName)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.AlertPolicy)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string) error); ok {
-		r1 = rf(policyName)
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, policyName)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -78,25 +86,28 @@ func (_m *AlertPoliciesInterface) Get(policyName string) (*model.AlertPolicy, er
 	return r0, r1
 }
 
-// List provides a mock function with given fields: params
-func (_m *AlertPoliciesInterface) List(params map[string]string) (*model.AlertPolicies, error) {
-	ret := _m.Called(params)
+// List provides a mock function with given fields: ctx, params
+func (_m *AlertPoliciesInterface) List(ctx context.Context, params map[string]string) (*model.AlertPolicies, error) {
+	ret := _m.Called(ctx, params)
 
 	var r0 *model.AlertPolicies
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(map[string]string) (*model.AlertPolicies, error)); ok {
-		return rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.AlertPolicies, error)); ok {
+		return rf(ctx, params)
 	}
-	if rf, ok := ret.Get(0).(func(map[string]string) *model.AlertPolicies); ok {
-		r0 = rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.AlertPolicies); ok {
+		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.AlertPolicies)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(map[string]string) error); ok {
-		r1 = rf(params)
+	if rf, ok := ret.Get(1).(func(context.Context, map[string]string) error); ok {
+		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -104,25 +115,28 @@ func (_m *AlertPoliciesInterface) List(params map[string]string) (*model.AlertPo
 	return r0, r1
 }
 
-// Update provides a mock function with given fields: payload, policyName
-func (_m *AlertPoliciesInterface) Update(payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
-	ret := _m.Called(payload, policyName)
+// Update provides a mock function with given fields: ctx, payload, policyName
+func (_m *AlertPoliciesInterface) Update(ctx context.Context, payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
+	ret := _m.Called(ctx, payload, policyName)
 
 	var r0 *model.AlertPolicy
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(model.AlertPolicy, string) (*model.AlertPolicy, error)); ok {
-		return rf(payload, policyName)
+
+	if rf, ok := ret.Get(0).(func(context.Context, model.AlertPolicy, string) (*model.AlertPolicy, error)); ok {
+		return rf(ctx, payload, policyName)
 	}
-	if rf, ok := ret.Get(0).(func(model.AlertPolicy, string) *model.AlertPolicy); ok {
-		r0 = rf(payload, policyName)
+
+	if rf, ok := ret.Get(0).(func(context.Context, model.AlertPolicy, string) *model.AlertPolicy); ok {
+		r0 = rf(ctx, payload, policyName)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.AlertPolicy)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(model.AlertPolicy, string) error); ok {
-		r1 = rf(payload, policyName)
+	if rf, ok := ret.Get(1).(func(context.Context, model.AlertPolicy, string) error); ok {
+		r1 = rf(ctx, payload, policyName)
 	} else {
 		r1 = ret.Error(1)
 	}

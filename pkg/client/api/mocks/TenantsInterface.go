@@ -3,6 +3,8 @@
 package mocks
 
 import (
+	context "context"
+
 	model "github.com/dell/goobjectscale/pkg/client/model"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -12,25 +14,28 @@ type TenantsInterface struct {
 	mock.Mock
 }
 
-// Create provides a mock function with given fields: payload
-func (_m *TenantsInterface) Create(payload model.TenantCreate) (*model.Tenant, error) {
-	ret := _m.Called(payload)
+// Create provides a mock function with given fields: ctx, payload
+func (_m *TenantsInterface) Create(ctx context.Context, payload model.TenantCreate) (*model.Tenant, error) {
+	ret := _m.Called(ctx, payload)
 
 	var r0 *model.Tenant
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(model.TenantCreate) (*model.Tenant, error)); ok {
-		return rf(payload)
+
+	if rf, ok := ret.Get(0).(func(context.Context, model.TenantCreate) (*model.Tenant, error)); ok {
+		return rf(ctx, payload)
 	}
-	if rf, ok := ret.Get(0).(func(model.TenantCreate) *model.Tenant); ok {
-		r0 = rf(payload)
+
+	if rf, ok := ret.Get(0).(func(context.Context, model.TenantCreate) *model.Tenant); ok {
+		r0 = rf(ctx, payload)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.Tenant)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(model.TenantCreate) error); ok {
-		r1 = rf(payload)
+	if rf, ok := ret.Get(1).(func(context.Context, model.TenantCreate) error); ok {
+		r1 = rf(ctx, payload)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -38,13 +43,13 @@ func (_m *TenantsInterface) Create(payload model.TenantCreate) (*model.Tenant, e
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: name
-func (_m *TenantsInterface) Delete(name string) error {
-	ret := _m.Called(name)
+// Delete provides a mock function with given fields: ctx, name
+func (_m *TenantsInterface) Delete(ctx context.Context, name string) error {
+	ret := _m.Called(ctx, name)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string) error); ok {
-		r0 = rf(name)
+	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
+		r0 = rf(ctx, name)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -52,13 +57,13 @@ func (_m *TenantsInterface) Delete(name string) error {
 	return r0
 }
 
-// DeleteQuota provides a mock function with given fields: name
-func (_m *TenantsInterface) DeleteQuota(name string) error {
-	ret := _m.Called(name)
+// DeleteQuota provides a mock function with given fields: ctx, name
+func (_m *TenantsInterface) DeleteQuota(ctx context.Context, name string) error {
+	ret := _m.Called(ctx, name)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string) error); ok {
-		r0 = rf(name)
+	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
+		r0 = rf(ctx, name)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -66,25 +71,28 @@ func (_m *TenantsInterface) DeleteQuota(name string) error {
 	return r0
 }
 
-// Get provides a mock function with given fields: name, params
-func (_m *TenantsInterface) Get(name string, params map[string]string) (*model.Tenant, error) {
-	ret := _m.Called(name, params)
+// Get provides a mock function with given fields: ctx, name, params
+func (_m *TenantsInterface) Get(ctx context.Context, name string, params map[string]string) (*model.Tenant, error) {
+	ret := _m.Called(ctx, name, params)
 
 	var r0 *model.Tenant
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, map[string]string) (*model.Tenant, error)); ok {
-		return rf(name, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (*model.Tenant, error)); ok {
+		return rf(ctx, name, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, map[string]string) *model.Tenant); ok {
-		r0 = rf(name, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) *model.Tenant); ok {
+		r0 = rf(ctx, name, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.Tenant)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, map[string]string) error); ok {
-		r1 = rf(name, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, map[string]string) error); ok {
+		r1 = rf(ctx, name, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -92,25 +100,28 @@ func (_m *TenantsInterface) Get(name string, params map[string]string) (*model.T
 	return r0, r1
 }
 
-// GetQuota provides a mock function with given fields: name, params
-func (_m *TenantsInterface) GetQuota(name string, params map[string]string) (*model.TenantQuota, error) {
-	ret := _m.Called(name, params)
+// GetQuota provides a mock function with given fields: ctx, name, params
+func (_m *TenantsInterface) GetQuota(ctx context.Context, name string, params map[string]string) (*model.TenantQuota, error) {
+	ret := _m.Called(ctx, name, params)
 
 	var r0 *model.TenantQuota
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, map[string]string) (*model.TenantQuota, error)); ok {
-		return rf(name, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (*model.TenantQuota, error)); ok {
+		return rf(ctx, name, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, map[string]string) *model.TenantQuota); ok {
-		r0 = rf(name, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) *model.TenantQuota); ok {
+		r0 = rf(ctx, name, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.TenantQuota)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, map[string]string) error); ok {
-		r1 = rf(name, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, map[string]string) error); ok {
+		r1 = rf(ctx, name, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -118,25 +129,28 @@ func (_m *TenantsInterface) GetQuota(name string, params map[string]string) (*mo
 	return r0, r1
 }
 
-// List provides a mock function with given fields: params
-func (_m *TenantsInterface) List(params map[string]string) (*model.TenantList, error) {
-	ret := _m.Called(params)
+// List provides a mock function with given fields: ctx, params
+func (_m *TenantsInterface) List(ctx context.Context, params map[string]string) (*model.TenantList, error) {
+	ret := _m.Called(ctx, params)
 
 	var r0 *model.TenantList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(map[string]string) (*model.TenantList, error)); ok {
-		return rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.TenantList, error)); ok {
+		return rf(ctx, params)
 	}
-	if rf, ok := ret.Get(0).(func(map[string]string) *model.TenantList); ok {
-		r0 = rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.TenantList); ok {
+		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.TenantList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(map[string]string) error); ok {
-		r1 = rf(params)
+	if rf, ok := ret.Get(1).(func(context.Context, map[string]string) error); ok {
+		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -144,13 +158,13 @@ func (_m *TenantsInterface) List(params map[string]string) (*model.TenantList, e
 	return r0, r1
 }
 
-// SetQuota provides a mock function with given fields: name, payload
-func (_m *TenantsInterface) SetQuota(name string, payload model.TenantQuotaSet) error {
-	ret := _m.Called(name, payload)
+// SetQuota provides a mock function with given fields: ctx, name, payload
+func (_m *TenantsInterface) SetQuota(ctx context.Context, name string, payload model.TenantQuotaSet) error {
+	ret := _m.Called(ctx, name, payload)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, model.TenantQuotaSet) error); ok {
-		r0 = rf(name, payload)
+	if rf, ok := ret.Get(0).(func(context.Context, string, model.TenantQuotaSet) error); ok {
+		r0 = rf(ctx, name, payload)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -158,13 +172,13 @@ func (_m *TenantsInterface) SetQuota(name string, payload model.TenantQuotaSet) 
 	return r0
 }
 
-// Update provides a mock function with given fields: payload, name
-func (_m *TenantsInterface) Update(payload model.TenantUpdate, name string) error {
-	ret := _m.Called(payload, name)
+// Update provides a mock function with given fields: ctx, payload, name
+func (_m *TenantsInterface) Update(ctx context.Context, payload model.TenantUpdate, name string) error {
+	ret := _m.Called(ctx, payload, name)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(model.TenantUpdate, string) error); ok {
-		r0 = rf(payload, name)
+	if rf, ok := ret.Get(0).(func(context.Context, model.TenantUpdate, string) error); ok {
+		r0 = rf(ctx, payload, name)
 	} else {
 		r0 = ret.Error(0)
 	}

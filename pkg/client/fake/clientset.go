@@ -23,7 +23,7 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/model"
 )
 
-// ClientSet is a set of clients for each API section
+// ClientSet is a set of clients for each API section.
 type ClientSet struct {
 	buckets               api.BucketsInterface
 	objectUser            api.ObjectUserInterface
@@ -35,7 +35,9 @@ type ClientSet struct {
 	federatedobjectstores api.FederatedObjectStoresInterface
 }
 
-// NewClientSet returns a new client set based on the provided REST client parameters
+var _ api.ClientSet = (*ClientSet)(nil)
+
+// NewClientSet returns a new client set based on the provided REST client parameters.
 func NewClientSet(objs ...interface{}) *ClientSet {
 	var (
 		policy                      = make(map[string]string)
@@ -59,6 +61,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 		rebuildInfo                 *model.RebuildInfo
 		federatedObjectStoreList    []model.FederatedObjectStore
 	)
+
 	for _, o := range objs {
 		switch object := o.(type) {
 		case *model.Bucket:
@@ -143,43 +146,43 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 	}
 }
 
-// Status implements the client API
+// Status implements the client API.
 func (c *ClientSet) Status() api.StatusInterface {
 	return c.status
 }
 
-// CRR implements the client API
-func (c *ClientSet) CRR(ctx context.Context) api.CRRInterface {
+// CRR implements the client API.
+func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
 }
 
-// AlertPolicies implements the client API
-func (c *ClientSet) AlertPolicies(ctx context.Context) api.AlertPoliciesInterface {
+// AlertPolicies implements the client API.
+func (c *ClientSet) AlertPolicies() api.AlertPoliciesInterface {
 	return c.alertPolicies
 }
 
-// Buckets implements the client API
-func (c *ClientSet) Buckets(ctx context.Context) api.BucketsInterface {
+// Buckets implements the client API.
+func (c *ClientSet) Buckets() api.BucketsInterface {
 	return c.buckets
 }
 
 // FederatedObjectStores implements the client API.
-func (c *ClientSet) FederatedObjectStores(ctx context.Context) api.FederatedObjectStoresInterface {
+func (c *ClientSet) FederatedObjectStores() api.FederatedObjectStoresInterface {
 	return c.federatedobjectstores
 }
 
 // Tenants implements the client API.
-func (c *ClientSet) Tenants(ctx context.Context) api.TenantsInterface {
+func (c *ClientSet) Tenants() api.TenantsInterface {
 	return c.tenants
 }
 
 // ObjectUser implements the client API.
-func (c *ClientSet) ObjectUser(ctx context.Context) api.ObjectUserInterface {
+func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
 }
 
 // ObjectMt implements the client API for objMT metrics.
-func (c *ClientSet) ObjectMt(ctx context.Context) api.ObjmtInterface {
+func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objectMt
 }
 
@@ -215,12 +218,15 @@ var _ api.ObjectUserInterface = (*ObjectUsers)(nil) // interface guard
 func NewObjectUsers(blobUsers []model.BlobUser, userSecrets []UserSecret, userInfoList []UserInfo) *ObjectUsers {
 	mappedUserSecrets := map[string]*model.ObjectUserSecret{}
 	mappedUserInfoList := map[string]*model.ObjectUserInfo{}
+
 	for _, s := range userSecrets {
 		mappedUserSecrets[s.UID] = s.Secret
 	}
+
 	for _, i := range userInfoList {
 		mappedUserInfoList[i.UID] = i.Info
 	}
+
 	return &ObjectUsers{
 		&model.ObjectUserList{
 			BlobUser: blobUsers,
@@ -244,10 +250,11 @@ func (o *ObjectUsers) GetSecret(ctx context.Context, uid string, _ map[string]st
 			Code:        model.CodeResourceNotFound,
 		}
 	}
+
 	return o.Secrets[uid], nil
 }
 
-// CreateSecret will create a specific secret
+// CreateSecret will create a specific secret.
 func (o *ObjectUsers) CreateSecret(ctx context.Context, uid string, req model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
 	if _, ok := params["X-TEST/ObjectUser/CreateSecret/force-fail"]; ok {
 		return nil, model.Error{
@@ -260,6 +267,7 @@ func (o *ObjectUsers) CreateSecret(ctx context.Context, uid string, req model.Ob
 		o.Secrets[uid] = &model.ObjectUserSecret{
 			SecretKey1: req.SecretKey,
 		}
+
 		return &model.ObjectUserSecretKeyCreateRes{
 			SecretKey: req.SecretKey,
 		}, nil
@@ -274,18 +282,20 @@ func (o *ObjectUsers) CreateSecret(ctx context.Context, uid string, req model.Ob
 		}
 	case o.Secrets[uid].SecretKey1 != "":
 		o.Secrets[uid].SecretKey2 = req.SecretKey
+
 		return &model.ObjectUserSecretKeyCreateRes{
 			SecretKey: req.SecretKey,
 		}, nil
 	default:
 		o.Secrets[uid].SecretKey1 = req.SecretKey
+
 		return &model.ObjectUserSecretKeyCreateRes{
 			SecretKey: req.SecretKey,
 		}, nil
 	}
 }
 
-// DeleteSecret will delete a specific secret
+// DeleteSecret will delete a specific secret.
 func (o *ObjectUsers) DeleteSecret(ctx context.Context, uid string, req model.ObjectUserSecretKeyDeleteReq, _ map[string]string) error {
 	if _, ok := o.Secrets[uid]; !ok {
 		return model.Error{
@@ -294,10 +304,12 @@ func (o *ObjectUsers) DeleteSecret(ctx context.Context, uid string, req model.Ob
 			Code:        model.CodeResourceNotFound,
 		}
 	}
+
 	switch req.SecretKey {
 	case o.Secrets[uid].SecretKey1:
 		o.Secrets[uid].SecretKey1 = o.Secrets[uid].SecretKey2
 		clearSecretKey2(o.Secrets[uid])
+
 		return nil
 	case o.Secrets[uid].SecretKey2:
 		clearSecretKey2(o.Secrets[uid])
@@ -326,22 +338,23 @@ func (o *ObjectUsers) GetInfo(ctx context.Context, uid string, _ map[string]stri
 			Code:        model.CodeResourceNotFound,
 		}
 	}
+
 	return o.InfoList[uid], nil
 }
 
-// FederatedObjectStores implements the federated object stores API
+// FederatedObjectStores implements the federated object stores API.
 type FederatedObjectStores struct {
 	items []model.FederatedObjectStore
 }
 
 var _ api.FederatedObjectStoresInterface = (*FederatedObjectStores)(nil) // interface guard
 
-// List implements the tenants API
+// List implements the tenants API.
 func (f *FederatedObjectStores) List(ctx context.Context, _ map[string]string) (*model.FederatedObjectStoreList, error) {
 	return &model.FederatedObjectStoreList{Items: f.items}, nil
 }
 
-// Tenants implements the tenants API
+// Tenants implements the tenants API.
 type Tenants struct {
 	items []model.Tenant
 }
@@ -357,6 +370,7 @@ func (t *Tenants) Create(ctx context.Context, payload model.TenantCreate) (*mode
 		BucketBlockSize:   payload.BucketBlockSize,
 	}
 	t.items = append(t.items, *newtenant)
+
 	return newtenant, nil
 }
 
@@ -368,46 +382,50 @@ func (t *Tenants) Delete(ctx context.Context, tenantID string) error {
 			return nil
 		}
 	}
+
 	return model.Error{
 		Description: "tenant not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// Update updates Tenant details default_bucket_size and alias
+// Update updates Tenant details default_bucket_size and alias.
 func (t *Tenants) Update(ctx context.Context, payload model.TenantUpdate, tenantID string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == tenantID {
 			t.items[i].BucketBlockSize = payload.BucketBlockSize
 			t.items[i].Alias = payload.Alias
+
 			return nil
 		}
 	}
+
 	return model.Error{
 		Description: "tenant not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// Get implements the tenants API
+// Get implements the tenants API.
 func (t *Tenants) Get(ctx context.Context, id string, _ map[string]string) (*model.Tenant, error) {
 	for _, tenant := range t.items {
 		if tenant.ID == id {
 			return &tenant, nil
 		}
 	}
+
 	return nil, model.Error{
 		Description: "not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// List implements the tenants API
+// List implements the tenants API.
 func (t *Tenants) List(ctx context.Context, _ map[string]string) (*model.TenantList, error) {
 	return &model.TenantList{Items: t.items}, nil
 }
 
-// GetQuota retrieves the quota settings for the given tenant
+// GetQuota retrieves the quota settings for the given tenant.
 func (t *Tenants) GetQuota(ctx context.Context, id string, _ map[string]string) (*model.TenantQuota, error) {
 	for _, tenant := range t.items {
 		if tenant.ID == id {
@@ -421,13 +439,14 @@ func (t *Tenants) GetQuota(ctx context.Context, id string, _ map[string]string) 
 			}, nil
 		}
 	}
+
 	return nil, model.Error{
 		Description: "not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// SetQuota updates the quota settings for the given tenant
+// SetQuota updates the quota settings for the given tenant.
 func (t *Tenants) SetQuota(ctx context.Context, id string, tenantQuota model.TenantQuotaSet) error {
 	for i, tenant := range t.items {
 		if tenant.ID == id {
@@ -435,6 +454,7 @@ func (t *Tenants) SetQuota(ctx context.Context, id string, tenantQuota model.Ten
 			t.items[i].BlockSizeInCount = tenantQuota.BlockSizeInCount
 			t.items[i].NotificationSize = tenantQuota.NotificationSize
 			t.items[i].NotificationSizeInCount = tenantQuota.NotificationSizeInCount
+
 			return nil
 		}
 	}
@@ -445,7 +465,7 @@ func (t *Tenants) SetQuota(ctx context.Context, id string, tenantQuota model.Ten
 	}
 }
 
-// DeleteQuota deletes the quota settings for the given tenant
+// DeleteQuota deletes the quota settings for the given tenant.
 func (t *Tenants) DeleteQuota(ctx context.Context, id string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == id {
@@ -453,16 +473,18 @@ func (t *Tenants) DeleteQuota(ctx context.Context, id string) error {
 			t.items[i].BlockSizeInCount = ""
 			t.items[i].NotificationSize = ""
 			t.items[i].NotificationSizeInCount = ""
+
 			return nil
 		}
 	}
+
 	return model.Error{
 		Description: "not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// Buckets implements the buckets API
+// Buckets implements the buckets API.
 type Buckets struct {
 	items  []model.Bucket
 	policy map[string]string
@@ -470,12 +492,12 @@ type Buckets struct {
 
 var _ api.BucketsInterface = (*Buckets)(nil) // interface guard
 
-// List implements the buckets API
+// List implements the buckets API.
 func (b *Buckets) List(ctx context.Context, _ map[string]string) (*model.BucketList, error) {
 	return &model.BucketList{Items: b.items}, nil
 }
 
-// Get implements the buckets API
+// Get implements the buckets API.
 func (b *Buckets) Get(ctx context.Context, name string, params map[string]string) (*model.Bucket, error) {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/Get/force-fail"]
@@ -491,13 +513,14 @@ func (b *Buckets) Get(ctx context.Context, name string, params map[string]string
 			return &bucket, nil
 		}
 	}
+
 	return nil, model.Error{
 		Description: "not found",
 		Code:        model.CodeParameterNotFound,
 	}
 }
 
-// GetPolicy implements the buckets API
+// GetPolicy implements the buckets API.
 func (b *Buckets) GetPolicy(ctx context.Context, bucketName string, params map[string]string) (string, error) {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/GetPolicy/force-fail"]
@@ -507,13 +530,15 @@ func (b *Buckets) GetPolicy(ctx context.Context, bucketName string, params map[s
 			Code:        model.CodeInternalException,
 		}
 	}
+
 	if policy, ok := b.policy[fmt.Sprintf("%s/%s", bucketName, params["namespace"])]; ok {
 		return policy, nil
 	}
+
 	return "", nil
 }
 
-// DeletePolicy implements the buckets API
+// DeletePolicy implements the buckets API.
 func (b *Buckets) DeletePolicy(ctx context.Context, bucketName string, params map[string]string) error {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/DeletePolicy/force-fail"]
@@ -523,18 +548,20 @@ func (b *Buckets) DeletePolicy(ctx context.Context, bucketName string, params ma
 			Code:        model.CodeInternalException,
 		}
 	}
+
 	found := false
 	if found {
 		delete(b.policy, fmt.Sprintf("%s/%s", bucketName, params["namespace"]))
 		return nil
 	}
+
 	return model.Error{
 		Description: "bucket not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// UpdatePolicy implements the buckets API
+// UpdatePolicy implements the buckets API.
 func (b *Buckets) UpdatePolicy(ctx context.Context, bucketName string, policy string, params map[string]string) error {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/UpdatePolicy/force-fail"]
@@ -556,18 +583,19 @@ func (b *Buckets) UpdatePolicy(ctx context.Context, bucketName string, policy st
 		b.policy[fmt.Sprintf("%s/%s", bucketName, params["namespace"])] = policy
 		return nil
 	}
+
 	return model.Error{
 		Description: "bucket not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// Create implements the buckets API
+// Create implements the buckets API.
 func (b *Buckets) Create(ctx context.Context, createParams model.Bucket) (*model.Bucket, error) {
 	// This piece of code verifies if the incoming request is for forcing an unexpected error.
 	if strings.Contains(createParams.Name, "FORCEFAIL") {
 		return &createParams, model.Error{
-			Description: "Bucket was not sucessfully created",
+			Description: "Bucket was not successfully created",
 			Code:        model.CodeInternalException,
 		}
 	}
@@ -580,25 +608,29 @@ func (b *Buckets) Create(ctx context.Context, createParams model.Bucket) (*model
 			}
 		}
 	}
+
 	b.items = append(b.items, createParams)
+
 	return &createParams, nil
 }
 
-// Delete implements the buckets API
+// Delete implements the buckets API.
 func (b *Buckets) Delete(ctx context.Context, name string, namespace string, emptyBucket bool) error {
 	// This piece of code verifies if the incoming request is for forcing an unexpected error.
 	if strings.Contains(name, "FORCEFAIL") {
 		return model.Error{
-			Description: "Bucket was not sucessfully deleted",
+			Description: "Bucket was not successfully deleted",
 			Code:        model.CodeInternalException,
 		}
 	}
+
 	for i, existingBucket := range b.items {
 		if existingBucket.Name == name && existingBucket.Namespace == namespace {
 			b.items = append(b.items[:i], b.items[i+1:]...)
 			return nil
 		}
 	}
+
 	return model.Error{
 		Description: "not found",
 		Code:        model.CodeResourceNotFound,
@@ -636,9 +668,11 @@ func (b *Buckets) UpdateQuota(ctx context.Context, bucketQuota model.BucketQuota
 			b.items[i].NotificationSize = bucketQuota.NotificationSize
 			b.items[i].NotificationSizeCount = bucketQuota.NotificationSizeCount
 			b.items[i].BlockSizeCount = bucketQuota.BlockSizeCount
+
 			return nil
 		}
 	}
+
 	return model.Error{
 		Description: "not found",
 		Code:        model.CodeResourceNotFound,
@@ -653,16 +687,18 @@ func (b *Buckets) DeleteQuota(ctx context.Context, bucketName string, _ string) 
 			b.items[i].BlockSizeCount = -1
 			b.items[i].NotificationSize = -1
 			b.items[i].NotificationSizeCount = -1
+
 			return nil
 		}
 	}
+
 	return model.Error{
 		Description: "not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// Objmt is a fake (mocked) implementation of the Objmt interface
+// Objmt is a fake (mocked) implementation of the Objmt interface.
 type Objmt struct {
 	accountBillingInfoList      *model.AccountBillingInfoList
 	accountBillingSampleList    *model.AccountBillingSampleList
@@ -678,64 +714,64 @@ type Objmt struct {
 
 var _ api.ObjmtInterface = (*Objmt)(nil) // interface guard
 
-// GetStoreBillingInfo returns billing info metrics for object store
+// GetStoreBillingInfo returns billing info metrics for object store.
 func (mt *Objmt) GetStoreBillingInfo(ctx context.Context, _ map[string]string) (*model.StoreBillingInfoList, error) {
 	return mt.storeBillingInfoList, nil
 }
 
-// GetStoreBillingSample returns billing sample (time-window) metrics for object store
+// GetStoreBillingSample returns billing sample (time-window) metrics for object store.
 func (mt *Objmt) GetStoreBillingSample(ctx context.Context, _ map[string]string) (*model.StoreBillingSampleList, error) {
 	return mt.storeBillingSampleList, nil
 }
 
-// GetStoreReplicationData returns CRR metrics for defined object stores
+// GetStoreReplicationData returns CRR metrics for defined object stores.
 func (mt *Objmt) GetStoreReplicationData(ctx context.Context, _ []string, _ map[string]string) (*model.StoreReplicationDataList, error) {
 	return mt.storeReplicationDataList, nil
 }
 
-// GetAccountBillingInfo returns billing info metrics for defined accounts
+// GetAccountBillingInfo returns billing info metrics for defined accounts.
 func (mt *Objmt) GetAccountBillingInfo(ctx context.Context, _ []string, _ map[string]string) (*model.AccountBillingInfoList, error) {
 	return mt.accountBillingInfoList, nil
 }
 
-// GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts
+// GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts.
 func (mt *Objmt) GetAccountBillingSample(ctx context.Context, _ []string, _ map[string]string) (*model.AccountBillingSampleList, error) {
 	return mt.accountBillingSampleList, nil
 }
 
-// GetBucketBillingInfo returns billing info metrics for defined buckets and account
+// GetBucketBillingInfo returns billing info metrics for defined buckets and account.
 func (mt *Objmt) GetBucketBillingInfo(ctx context.Context, _ string, _ []string, _ map[string]string) (*model.BucketBillingInfoList, error) {
 	return mt.bucketBillingInfoList, nil
 }
 
-// GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account
+// GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account.
 func (mt *Objmt) GetBucketBillingSample(ctx context.Context, _ string, _ []string, _ map[string]string) (*model.BucketBillingSampleList, error) {
 	return mt.bucketBillingSampleList, nil
 }
 
-// GetBucketBillingPerf returns performance metrics for defined buckets and account
+// GetBucketBillingPerf returns performance metrics for defined buckets and account.
 func (mt *Objmt) GetBucketBillingPerf(ctx context.Context, _ string, _ []string, _ map[string]string) (*model.BucketPerfDataList, error) {
 	return mt.bucketBillingPerfList, nil
 }
 
-// GetReplicationInfo returns billing info metrics for defined replication pairs and account
+// GetReplicationInfo returns billing info metrics for defined replication pairs and account.
 func (mt *Objmt) GetReplicationInfo(ctx context.Context, _ string, _ [][]string, _ map[string]string) (*model.BucketReplicationInfoList, error) {
 	return mt.bucketReplicationInfoList, nil
 }
 
-// GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account
+// GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account.
 func (mt *Objmt) GetReplicationSample(ctx context.Context, _ string, _ [][]string, _ map[string]string) (*model.BucketReplicationSampleList, error) {
 	return mt.bucketReplicationSampleList, nil
 }
 
-// CRR implements the crr API
+// CRR implements the crr API.
 type CRR struct {
 	Config *model.CRR
 }
 
 var _ api.CRRInterface = (*CRR)(nil) // interface guard
 
-// PauseReplication implements the CRR API
+// PauseReplication implements the CRR API.
 func (c *CRR) PauseReplication(ctx context.Context, destObjectScale string, destObjectStore string, params map[string]string) error {
 	// resume, _ := strconv.Atoi(params["pauseEndMills"])
 	resume, _ := strconv.ParseInt(params["pauseEndMills"], 10, 64)
@@ -743,77 +779,84 @@ func (c *CRR) PauseReplication(ctx context.Context, destObjectScale string, dest
 	c.Config.DestObjectStore = destObjectStore
 	c.Config.PauseStartMills = int64(time.Millisecond)
 	c.Config.PauseEndMills = resume
+
 	return nil
 }
 
-// SuspendReplication implements the CRR API
+// SuspendReplication implements the CRR API.
 func (c *CRR) SuspendReplication(ctx context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
+
 	return nil
 }
 
-// ResumeReplication implements the CRR API
+// ResumeReplication implements the CRR API.
 func (c *CRR) ResumeReplication(ctx context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
+
 	return nil
 }
 
-// UnthrottleReplication implements the CRR API
+// UnthrottleReplication implements the CRR API.
 func (c *CRR) UnthrottleReplication(ctx context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
+
 	return nil
 }
 
-// ThrottleReplication implements the CRR API
+// ThrottleReplication implements the CRR API.
 func (c *CRR) ThrottleReplication(ctx context.Context, destObjectScale string, destObjectStore string, param map[string]string) error {
 	throttle, _ := strconv.Atoi(param["throttlePerSecond"])
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 	c.Config.ThrottleBandwidth = throttle
+
 	return nil
 }
 
-// Get implements the CRR API
+// Get implements the CRR API.
 func (c *CRR) Get(ctx context.Context, destObjectScale string, destObjectStore string, _ map[string]string) (*model.CRR, error) {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
+
 	return c.Config, nil
 }
 
-// AlertPolicy implements the AlertPolicy API
+// AlertPolicy implements the AlertPolicy API.
 type AlertPolicy struct {
 	AlertPolicy *model.AlertPolicy
 }
 
-// AlertPolicies implements the AlertPolicies API
+// AlertPolicies implements the AlertPolicies API.
 type AlertPolicies struct {
 	items []model.AlertPolicy
 }
 
 var _ api.AlertPoliciesInterface = (*AlertPolicies)(nil) // interface guard
 
-// Get implements the AlertPolicy API
+// Get implements the AlertPolicy API.
 func (ap *AlertPolicies) Get(ctx context.Context, policyName string) (*model.AlertPolicy, error) {
 	for _, AlertPolicy := range ap.items {
 		if AlertPolicy.PolicyName == policyName {
 			return &AlertPolicy, nil
 		}
 	}
+
 	return nil, model.Error{
 		Description: "not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// List implements the buckets API
+// List implements the buckets API.
 func (ap *AlertPolicies) List(ctx context.Context, _ map[string]string) (*model.AlertPolicies, error) {
 	return &model.AlertPolicies{Items: ap.items}, nil
 }
 
-// Create implements the AlertPolicy API
+// Create implements the AlertPolicy API.
 func (ap *AlertPolicies) Create(ctx context.Context, payload model.AlertPolicy) (*model.AlertPolicy, error) {
 	newAlertPolicy := &model.AlertPolicy{
 		PolicyName:           payload.PolicyName,
@@ -831,10 +874,11 @@ func (ap *AlertPolicies) Create(ctx context.Context, payload model.AlertPolicy) 
 		Condition:            payload.Condition,
 	}
 	ap.items = append(ap.items, *newAlertPolicy)
+
 	return newAlertPolicy, nil
 }
 
-// Delete implements the AlertPolicy API
+// Delete implements the AlertPolicy API.
 func (ap *AlertPolicies) Delete(ctx context.Context, policyName string) error {
 	for i, alertpolicy := range ap.items {
 		if alertpolicy.PolicyName == policyName {
@@ -842,13 +886,14 @@ func (ap *AlertPolicies) Delete(ctx context.Context, policyName string) error {
 			return nil
 		}
 	}
+
 	return model.Error{
 		Description: "alert policy not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// Update implements the AlertPolicy API
+// Update implements the AlertPolicy API.
 func (ap *AlertPolicies) Update(ctx context.Context, payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
 	for i, alertpolicy := range ap.items {
 		if alertpolicy.PolicyName == policyName {
@@ -865,25 +910,28 @@ func (ap *AlertPolicies) Update(ctx context.Context, payload model.AlertPolicy, 
 			ap.items[i].Statistic = payload.Statistic
 			ap.items[i].Operator = payload.Operator
 			ap.items[i].Condition = payload.Condition
+
 			return &alertpolicy, nil
 		}
 	}
+
 	return nil, model.Error{
 		Description: "alert policy not found",
 		Code:        model.CodeResourceNotFound,
 	}
 }
 
-// Status implements the Status API
+// Status implements the Status API.
 type Status struct {
 	RebuildInfo *model.RebuildInfo
 }
 
 var _ api.StatusInterface = (*Status)(nil) // interface guard
 
-// GetRebuildStatus implements the Status API
+// GetRebuildStatus implements the Status API.
 func (s *Status) GetRebuildStatus(ctx context.Context, objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
 	s.RebuildInfo.TotalBytes = 2048
 	s.RebuildInfo.RemainingBytes = 1024
+
 	return s.RebuildInfo, nil
 }

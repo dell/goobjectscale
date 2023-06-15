@@ -20,7 +20,7 @@ import (
 
 //go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name (ClientSet)|(([A-Z][A-Za-z]+)Interface)
 
-// ClientSet represents a client interface of supported resources
+// ClientSet represents a client interface of supported resources.
 type ClientSet interface {
 	// Buckets returns a bucket client interface
 	Buckets() BucketsInterface
@@ -33,7 +33,7 @@ type ClientSet interface {
 	FederatedObjectStores() FederatedObjectStoresInterface
 }
 
-// StatusInterface represents status resource client interface
+// StatusInterface represents status resource client interface.
 type StatusInterface interface {
 	// GetRebuildStatus returns rebuild status of an ObjectScale object store
 	GetRebuildStatus(ctx context.Context, objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error)

@@ -3,6 +3,8 @@
 package mocks
 
 import (
+	context "context"
+
 	model "github.com/dell/goobjectscale/pkg/client/model"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -12,25 +14,28 @@ type FederatedObjectStoresInterface struct {
 	mock.Mock
 }
 
-// List provides a mock function with given fields: params
-func (_m *FederatedObjectStoresInterface) List(params map[string]string) (*model.FederatedObjectStoreList, error) {
-	ret := _m.Called(params)
+// List provides a mock function with given fields: ctx, params
+func (_m *FederatedObjectStoresInterface) List(ctx context.Context, params map[string]string) (*model.FederatedObjectStoreList, error) {
+	ret := _m.Called(ctx, params)
 
 	var r0 *model.FederatedObjectStoreList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(map[string]string) (*model.FederatedObjectStoreList, error)); ok {
-		return rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.FederatedObjectStoreList, error)); ok {
+		return rf(ctx, params)
 	}
-	if rf, ok := ret.Get(0).(func(map[string]string) *model.FederatedObjectStoreList); ok {
-		r0 = rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.FederatedObjectStoreList); ok {
+		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.FederatedObjectStoreList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(map[string]string) error); ok {
-		r1 = rf(params)
+	if rf, ok := ret.Get(1).(func(context.Context, map[string]string) error); ok {
+		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
 	}
