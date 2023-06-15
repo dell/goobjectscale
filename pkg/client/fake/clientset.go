@@ -30,7 +30,7 @@ type ClientSet struct {
 	objectMt              api.ObjmtInterface
 	crr                   api.CRRInterface
 	alertPolicies         api.AlertPoliciesInterface
-	status                api.StatusInterfaces
+	status                api.StatusInterface
 	federatedobjectstores api.FederatedObjectStoresInterface
 }
 
@@ -143,7 +143,7 @@ func NewClientSet(objs ...interface{}) *ClientSet {
 }
 
 // Status implements the client API
-func (c *ClientSet) Status() api.StatusInterfaces {
+func (c *ClientSet) Status() api.StatusInterface {
 	return c.status
 }
 
@@ -878,7 +878,7 @@ type Status struct {
 	RebuildInfo *model.RebuildInfo
 }
 
-var _ api.StatusInterfaces = (*Status)(nil) // interface guard
+var _ api.StatusInterface = (*Status)(nil) // interface guard
 
 // GetRebuildStatus implements the Status API
 func (s *Status) GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {

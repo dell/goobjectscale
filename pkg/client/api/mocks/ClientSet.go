@@ -109,15 +109,15 @@ func (_m *ClientSet) ObjectUser() api.ObjectUserInterface {
 }
 
 // Status provides a mock function with given fields:
-func (_m *ClientSet) Status() api.StatusInterfaces {
+func (_m *ClientSet) Status() api.StatusInterface {
 	ret := _m.Called()
 
-	var r0 api.StatusInterfaces
-	if rf, ok := ret.Get(0).(func() api.StatusInterfaces); ok {
+	var r0 api.StatusInterface
+	if rf, ok := ret.Get(0).(func() api.StatusInterface); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(api.StatusInterfaces)
+			r0 = ret.Get(0).(api.StatusInterface)
 		}
 	}
 
