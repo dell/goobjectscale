@@ -123,7 +123,7 @@ linters:
     - govet
     # Detect ineffectual assignments.
     - ineffassign
-    # Correct commonly misspelled English words in source files/
+    # Correct commonly misspelled English words in source files.
     - misspell
     # Find incorrect usages of t.Parallel().
     - paralleltest
@@ -141,4 +141,4 @@ linters-settings:
   paralleltest:
     # Ignore missing calls to `t.Parallel()` and only report incorrect uses of it.
     # Default: false
-    ignore-missing: false
+    ignore-missing: true

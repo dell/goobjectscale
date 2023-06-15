@@ -58,8 +58,10 @@ parameters := map[string]string{
 
 // NOTE: Create clientset beforehand.
 
+ctx := context.TODO() // Only for demo purpose.
+
 // Get existing bucket.
-bucket, err := clientset.Buckets().Get("example-bucket", parameters)
+bucket, err := clientset.Buckets().Get(ctx, "example-bucket", parameters)
 ```
 
 ### Create new bucket
@@ -69,8 +71,10 @@ import "github.com/dell/goobjectscale/pkg/client/model"
 
 // NOTE: Create clientset beforehand.
 
+ctx := context.TODO() // Only for demo purpose.
+
 // Create new bucket using clientset.
-bucket, err = clientset.Buckets().Create(&model.Bucket{
+bucket, err = clientset.Buckets().Create(ctx, &model.Bucket{
 	Name: "example-bucket",             // Name is a required field.
 	Namespace: "osaia3382ab190a7a3df",  // Namespace is a required field.
 })
@@ -83,9 +87,11 @@ import "github.com/dell/goobjectscale/pkg/client/model"
 
 // NOTE: Create clientset beforehand.
 
+ctx := context.TODO() // Only for demo purpose.
+
 // Delete bucket requires bucket name, namespace (see FAQ on how to get it) and emptyBucket parameters.
 // EmptyBucket indicates if the bucket should be deleted, if it has any objects.
-err := clientset.Buckets().Delete("example-bucket", "osaia3382ab190a7a3df", false)
+err := clientset.Buckets().Delete(ctx, "example-bucket", "osaia3382ab190a7a3df", false)
 ```
 
 ### Initialize IAM client
