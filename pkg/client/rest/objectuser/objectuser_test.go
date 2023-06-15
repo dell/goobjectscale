@@ -13,6 +13,7 @@
 package objectuser_test
 
 import (
+	"context"
 	"crypto/tls"
 	"log"
 	"net/http"
@@ -75,12 +76,12 @@ func TestObjectUser(t *testing.T) {
 }
 
 func testList(t *testing.T, clientset *rest.ClientSet) {
-	data, err := clientset.ObjectUser().List(nil)
+	data, err := clientset.ObjectUser().List(context.TODO(), nil)
 	require.NoError(t, err)
 	require.Len(t, data.BlobUser, 1)
 	require.Equal(t, data.BlobUser[0].UserID, "zmvodjnrbmjxagvwcxf5cg==")
 	require.Equal(t, data.BlobUser[0].Namespace, "small-operator-acceptance")
-	_, err = clientset.ObjectUser().List(map[string]string{"a": "b"})
+	_, err = clientset.ObjectUser().List(context.TODO(), map[string]string{"a": "b"})
 	require.Error(t, err)
 }
 
@@ -107,7 +108,7 @@ var objectUserGetInfoTest = []struct {
 func testGetInfo(t *testing.T, clientset *rest.ClientSet) {
 	for _, tt := range objectUserGetInfoTest {
 		t.Run(tt.in, func(t *testing.T) {
-			data, err := clientset.ObjectUser().GetInfo(tt.in, nil)
+			data, err := clientset.ObjectUser().GetInfo(context.TODO(), tt.in, nil)
 			if tt.withErr {
 				require.Error(t, err)
 			} else {
@@ -144,7 +145,7 @@ var objectUserGetSecretTest = []struct {
 func testGetSecret(t *testing.T, clientset *rest.ClientSet) {
 	for _, tt := range objectUserGetSecretTest {
 		t.Run(tt.in, func(t *testing.T) {
-			data, err := clientset.ObjectUser().GetSecret(tt.in, nil)
+			data, err := clientset.ObjectUser().GetSecret(context.TODO(), tt.in, nil)
 			if tt.withErr {
 				require.Error(t, err)
 			} else {
@@ -182,7 +183,7 @@ var objectUserCreateSecretTest = []struct {
 func testCreateSecret(t *testing.T, clientset *rest.ClientSet) {
 	for _, tt := range objectUserCreateSecretTest {
 		t.Run(tt.in1, func(t *testing.T) {
-			data, err := clientset.ObjectUser().CreateSecret(tt.in1, tt.in2, nil)
+			data, err := clientset.ObjectUser().CreateSecret(context.TODO(), tt.in1, tt.in2, nil)
 			if tt.withErr {
 				require.Error(t, err)
 			} else {
@@ -216,7 +217,7 @@ var objectUserDeleteSecretTest = []struct {
 func testDeleteSecret(t *testing.T, clientset *rest.ClientSet) {
 	for _, tt := range objectUserDeleteSecretTest {
 		t.Run(tt.in1, func(t *testing.T) {
-			err := clientset.ObjectUser().DeleteSecret(tt.in1, tt.in2, nil)
+			err := clientset.ObjectUser().DeleteSecret(context.TODO(), tt.in1, tt.in2, nil)
 			if tt.withErr {
 				require.Error(t, err)
 			} else {

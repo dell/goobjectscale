@@ -13,6 +13,7 @@
 package status
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/dell/goobjectscale/pkg/client/model"
@@ -25,7 +26,7 @@ type Status struct {
 }
 
 // GetRebuildStatus implements the status interface
-func (b *Status) GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
+func (b *Status) GetRebuildStatus(ctx context.Context, objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
 	// URL Example: https://10.240.117.5:4443/vdc/recovery-status/devices/youmin-test-1-ss-0.youmin-test-1-ss.dellemc-globalmarcu-domain-c10.svc.cluster.local/levels/1
 	requestURL := "vdc/recovery-status/devices/" + ssPodName + "." +
 		objStoreName + "-ss." + ssPodNameSpace + ".svc.cluster.local/levels/" + level
@@ -36,7 +37,7 @@ func (b *Status) GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level
 		Params:      params,
 	}
 	rebuildInfo := &model.RebuildInfo{}
-	err := b.Client.MakeRemoteCall(req, rebuildInfo)
+	err := b.Client.MakeRemoteCall(ctx, req, rebuildInfo)
 	if err != nil {
 		return nil, err
 	}

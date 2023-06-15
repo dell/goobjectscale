@@ -12,7 +12,9 @@
 
 package client
 
-import "io"
+import (
+	"io"
+)
 
 var _ io.Writer = (*CountWriter)(nil) // interface guard
 

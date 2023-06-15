@@ -13,6 +13,7 @@
 package alertpolicies_test
 
 import (
+	"context"
 	"encoding/xml"
 	"log"
 	"net/http"
@@ -74,18 +75,18 @@ func TestAlertpolicies(t *testing.T) {
 }
 
 func testList(t *testing.T, clientset *rest.ClientSet) {
-	alertPolicies, err := clientset.AlertPolicies().List(map[string]string{})
+	alertPolicies, err := clientset.AlertPolicies().List(context.TODO(), map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(alertPolicies.Items), 3)
-	_, err = clientset.AlertPolicies().List(map[string]string{"a": "b"})
+	_, err = clientset.AlertPolicies().List(context.TODO(), map[string]string{"a": "b"})
 	require.Error(t, err)
 }
 
 func testGet(t *testing.T, clientset *rest.ClientSet) {
-	alertPolicy, err := clientset.AlertPolicies().Get("testPolicy")
+	alertPolicy, err := clientset.AlertPolicies().Get(context.TODO(), "testPolicy")
 	require.NoError(t, err)
 	assert.Equal(t, alertPolicy.PolicyName, "testPolicy")
-	_, err = clientset.AlertPolicies().Get("nonexistentPolicy")
+	_, err = clientset.AlertPolicies().Get(context.TODO(), "nonexistentPolicy")
 	require.Error(t, err)
 }
 
@@ -94,7 +95,7 @@ func testCreate(t *testing.T, clientset *rest.ClientSet) {
 		XMLName:    xml.Name{},
 		PolicyName: "testPolicy",
 	}
-	alertPolicy, err := clientset.AlertPolicies().Create(payload)
+	alertPolicy, err := clientset.AlertPolicies().Create(context.TODO(), payload)
 	require.NoError(t, err)
 	assert.Equal(t, alertPolicy.PolicyName, "testPolicy")
 }
@@ -103,16 +104,16 @@ func testUpdate(t *testing.T, clientset *rest.ClientSet) {
 	payload := model.AlertPolicy{
 		PolicyName: "testPolicy",
 	}
-	_, err := clientset.AlertPolicies().Update(payload, "testPolicy")
+	_, err := clientset.AlertPolicies().Update(context.TODO(), payload, "testPolicy")
 	require.NoError(t, err)
 	// Updating nonexistent policy
-	_, err = clientset.AlertPolicies().Update(payload, "nonexistentPolicy")
+	_, err = clientset.AlertPolicies().Update(context.TODO(), payload, "nonexistentPolicy")
 	require.Error(t, err)
 }
 
 func testDelete(t *testing.T, clientset *rest.ClientSet) {
-	err := clientset.AlertPolicies().Delete("testPolicy")
+	err := clientset.AlertPolicies().Delete(context.TODO(), "testPolicy")
 	require.NoError(t, err)
-	err = clientset.AlertPolicies().Delete("")
+	err = clientset.AlertPolicies().Delete(context.TODO(), "")
 	require.Error(t, err)
 }

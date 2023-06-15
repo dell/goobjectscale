@@ -13,6 +13,7 @@
 package tenants
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -29,7 +30,7 @@ type Tenants struct {
 var _ api.TenantsInterface = &Tenants{} // interface guard
 
 // List implements the tenants interface
-func (t *Tenants) List(params map[string]string) (*model.TenantList, error) {
+func (t *Tenants) List(ctx context.Context, params map[string]string) (*model.TenantList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        "/object/tenants",
@@ -37,7 +38,7 @@ func (t *Tenants) List(params map[string]string) (*model.TenantList, error) {
 		Params:      params,
 	}
 	tenantList := &model.TenantList{}
-	err := t.Client.MakeRemoteCall(req, tenantList)
+	err := t.Client.MakeRemoteCall(ctx, req, tenantList)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +46,7 @@ func (t *Tenants) List(params map[string]string) (*model.TenantList, error) {
 }
 
 // Get implements the tenants interface
-func (t *Tenants) Get(tenantID string, params map[string]string) (*model.Tenant, error) {
+func (t *Tenants) Get(ctx context.Context, tenantID string, params map[string]string) (*model.Tenant, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s", tenantID),
@@ -53,7 +54,7 @@ func (t *Tenants) Get(tenantID string, params map[string]string) (*model.Tenant,
 		Params:      params,
 	}
 	tenant := &model.Tenant{}
-	err := t.Client.MakeRemoteCall(req, tenant)
+	err := t.Client.MakeRemoteCall(ctx, req, tenant)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +62,7 @@ func (t *Tenants) Get(tenantID string, params map[string]string) (*model.Tenant,
 }
 
 // Create implements the tenants interface
-func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
+func (t *Tenants) Create(ctx context.Context, payload model.TenantCreate) (*model.Tenant, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        "object/tenants/tenant/",
@@ -69,7 +70,7 @@ func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
 		Body:        payload,
 	}
 	tenant := &model.Tenant{}
-	err := t.Client.MakeRemoteCall(req, tenant)
+	err := t.Client.MakeRemoteCall(ctx, req, tenant)
 	if err != nil {
 		return nil, err
 	}
@@ -77,14 +78,14 @@ func (t *Tenants) Create(payload model.TenantCreate) (*model.Tenant, error) {
 }
 
 // Delete implements the tenants interface
-func (t *Tenants) Delete(tenantID string) error {
+func (t *Tenants) Delete(ctx context.Context, tenantID string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s/delete/", tenantID),
 		ContentType: client.ContentTypeXML,
 	}
 	tenant := &model.Tenant{}
-	err := t.Client.MakeRemoteCall(req, tenant)
+	err := t.Client.MakeRemoteCall(ctx, req, tenant)
 	if err != nil {
 		return err
 	}
@@ -92,7 +93,7 @@ func (t *Tenants) Delete(tenantID string) error {
 }
 
 // Update implements the tenants interface
-func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
+func (t *Tenants) Update(ctx context.Context, payload model.TenantUpdate, tenantID string) error {
 	req := client.Request{
 		Method:      http.MethodPut,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s/", tenantID),
@@ -100,7 +101,7 @@ func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
 		Body:        payload,
 	}
 	tenant := &model.Tenant{}
-	err := t.Client.MakeRemoteCall(req, tenant)
+	err := t.Client.MakeRemoteCall(ctx, req, tenant)
 	if err != nil {
 		return err
 	}
@@ -108,7 +109,7 @@ func (t *Tenants) Update(payload model.TenantUpdate, tenantID string) error {
 }
 
 // GetQuota implements the tenants interface
-func (t *Tenants) GetQuota(tenantID string, params map[string]string) (*model.TenantQuota, error) {
+func (t *Tenants) GetQuota(ctx context.Context, tenantID string, params map[string]string) (*model.TenantQuota, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s/quota", tenantID),
@@ -116,24 +117,24 @@ func (t *Tenants) GetQuota(tenantID string, params map[string]string) (*model.Te
 		Params:      params,
 	}
 	quota := &model.TenantQuota{}
-	err := t.Client.MakeRemoteCall(req, quota)
+	err := t.Client.MakeRemoteCall(ctx, req, quota)
 	return quota, err
 }
 
 // DeleteQuota implements the tenants interface
-func (t *Tenants) DeleteQuota(tenantID string) error {
+func (t *Tenants) DeleteQuota(ctx context.Context, tenantID string) error {
 	req := client.Request{
 		Method:      http.MethodDelete,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s/quota", tenantID),
 		ContentType: client.ContentTypeXML,
 	}
 	quota := &model.TenantQuota{}
-	err := t.Client.MakeRemoteCall(req, quota)
+	err := t.Client.MakeRemoteCall(ctx, req, quota)
 	return err
 }
 
 // SetQuota implements the tenants interface
-func (t *Tenants) SetQuota(tenantID string, payload model.TenantQuotaSet) error {
+func (t *Tenants) SetQuota(ctx context.Context, tenantID string, payload model.TenantQuotaSet) error {
 	req := client.Request{
 		Method:      http.MethodPut,
 		Path:        fmt.Sprintf("object/tenants/tenant/%s/quota", tenantID),
@@ -141,6 +142,6 @@ func (t *Tenants) SetQuota(tenantID string, payload model.TenantQuotaSet) error 
 		Body:        payload,
 	}
 	quota := &model.TenantQuota{}
-	err := t.Client.MakeRemoteCall(req, quota)
+	err := t.Client.MakeRemoteCall(ctx, req, quota)
 	return err
 }

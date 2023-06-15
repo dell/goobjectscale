@@ -71,15 +71,15 @@ func (r Request) HTTP(uri string) (*http.Request, error) {
 	default:
 		return nil, fmt.Errorf("request: %s: %w", r.ContentType, ErrContentType)
 	}
-	//
+
 	u, _ := url.Parse(uri)
 	u.Path = r.Path
-	//
+
 	for key, value := range r.Params {
 		q.Add(key, value)
 	}
 	u.RawQuery = q.Encode()
-	//
+
 	req, err := http.NewRequest(r.Method, u.String(), bytes.NewBuffer(obj))
 	if err != nil {
 		return nil, fmt.Errorf("create request: %w", err)
@@ -95,11 +95,11 @@ func (r Request) Validate(uri string) error {
 	default:
 		return fmt.Errorf("request: %s: %w", r.ContentType, ErrContentType)
 	}
-	//
+
 	_, err := url.Parse(uri)
 	if err != nil {
 		return fmt.Errorf("parse uri: %s: %w", uri, err)
 	}
-	//
+
 	return nil
 }

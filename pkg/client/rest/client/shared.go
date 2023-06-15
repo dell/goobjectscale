@@ -13,6 +13,7 @@
 package client
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -26,7 +27,7 @@ import (
 // into represents type, _into_ which data will be unmarshalled.
 // Naming follows Effective Go naming convention https://go.dev/doc/effective_go#interface-names
 type RemoteCaller interface {
-	MakeRemoteCall(r Request, into interface{}) error
+	MakeRemoteCall(ctx context.Context, r Request, into interface{}) error
 }
 
 // HandleResponse handles custom behavior based on server response

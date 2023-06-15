@@ -13,6 +13,7 @@
 package crr
 
 import (
+	"context"
 	"net/http"
 	"path"
 
@@ -26,62 +27,62 @@ type CRR struct {
 }
 
 // PauseReplication implements the CRR interface
-func (c *CRR) PauseReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
+func (c *CRR) PauseReplication(ctx context.Context, destObjectScale string, destObjectStore string, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "pause"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
-	return c.Client.MakeRemoteCall(req, nil)
+	return c.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // SuspendReplication implements the CRR interface
-func (c *CRR) SuspendReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
+func (c *CRR) SuspendReplication(ctx context.Context, destObjectScale string, destObjectStore string, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "suspend"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
-	return c.Client.MakeRemoteCall(req, nil)
+	return c.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // ResumeReplication implements the CRR interface
-func (c *CRR) ResumeReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
+func (c *CRR) ResumeReplication(ctx context.Context, destObjectScale string, destObjectStore string, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "resume"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
-	return c.Client.MakeRemoteCall(req, nil)
+	return c.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // UnthrottleReplication implements the CRR interface
-func (c *CRR) UnthrottleReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
+func (c *CRR) UnthrottleReplication(ctx context.Context, destObjectScale string, destObjectStore string, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "unthrottle"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
-	return c.Client.MakeRemoteCall(req, nil)
+	return c.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // ThrottleReplication implements the CRR interface
-func (c *CRR) ThrottleReplication(destObjectScale string, destObjectStore string, params map[string]string) error {
+func (c *CRR) ThrottleReplication(ctx context.Context, destObjectScale string, destObjectStore string, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        path.Join("replication", "control", destObjectScale, destObjectStore, "throttle"),
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
-	return c.Client.MakeRemoteCall(req, nil)
+	return c.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // Get implements the CRR interface
-func (c *CRR) Get(destObjectScale string, destObjectStore string, params map[string]string) (*model.CRR, error) {
+func (c *CRR) Get(ctx context.Context, destObjectScale string, destObjectStore string, params map[string]string) (*model.CRR, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        path.Join("replication", "control", destObjectScale, destObjectStore),
@@ -89,7 +90,7 @@ func (c *CRR) Get(destObjectScale string, destObjectStore string, params map[str
 		Params:      params,
 	}
 	config := &model.CRR{}
-	err := c.Client.MakeRemoteCall(req, config)
+	err := c.Client.MakeRemoteCall(ctx, req, config)
 	if err != nil {
 		return nil, err
 	}

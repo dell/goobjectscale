@@ -13,6 +13,7 @@
 package alertpolicies
 
 import (
+	"context"
 	"net/http"
 	"path"
 
@@ -29,14 +30,14 @@ type AlertPolicies struct {
 var _ api.AlertPoliciesInterface = &AlertPolicies{} // interface guard
 
 // Get implements the AlertPolicy interface
-func (ap *AlertPolicies) Get(policyName string) (*model.AlertPolicy, error) {
+func (ap *AlertPolicies) Get(ctx context.Context, policyName string) (*model.AlertPolicy, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        path.Join("vdc", "alertpolicy", policyName),
 		ContentType: client.ContentTypeXML,
 	}
 	alertpolicy := &model.AlertPolicy{}
-	err := ap.Client.MakeRemoteCall(req, alertpolicy)
+	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicy)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (ap *AlertPolicies) Get(policyName string) (*model.AlertPolicy, error) {
 }
 
 // List implements the AlertPolicy interface
-func (ap *AlertPolicies) List(params map[string]string) (*model.AlertPolicies, error) {
+func (ap *AlertPolicies) List(ctx context.Context, params map[string]string) (*model.AlertPolicies, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        path.Join("vdc", "alertpolicy", "list"),
@@ -52,7 +53,7 @@ func (ap *AlertPolicies) List(params map[string]string) (*model.AlertPolicies, e
 		Params:      params,
 	}
 	alertpolicies := &model.AlertPolicies{}
-	err := ap.Client.MakeRemoteCall(req, alertpolicies)
+	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicies)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +62,7 @@ func (ap *AlertPolicies) List(params map[string]string) (*model.AlertPolicies, e
 }
 
 // Create implements the AlertPolicy interface
-func (ap *AlertPolicies) Create(payload model.AlertPolicy) (*model.AlertPolicy, error) {
+func (ap *AlertPolicies) Create(ctx context.Context, payload model.AlertPolicy) (*model.AlertPolicy, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        path.Join("vdc", "alertpolicy"),
@@ -69,7 +70,7 @@ func (ap *AlertPolicies) Create(payload model.AlertPolicy) (*model.AlertPolicy, 
 		Body:        &payload,
 	}
 	alertpolicy := &model.AlertPolicy{}
-	err := ap.Client.MakeRemoteCall(req, alertpolicy)
+	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicy)
 	if err != nil {
 		return nil, err
 	}
@@ -77,14 +78,14 @@ func (ap *AlertPolicies) Create(payload model.AlertPolicy) (*model.AlertPolicy, 
 }
 
 // Delete implements the AlertPolicy interface
-func (ap *AlertPolicies) Delete(policyName string) error {
+func (ap *AlertPolicies) Delete(ctx context.Context, policyName string) error {
 	req := client.Request{
 		Method:      http.MethodDelete,
 		Path:        path.Join("vdc", "alertpolicy", policyName),
 		ContentType: client.ContentTypeXML,
 	}
 	alertpolicy := &model.AlertPolicy{}
-	err := ap.Client.MakeRemoteCall(req, alertpolicy)
+	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicy)
 	if err != nil {
 		return err
 	}
@@ -92,7 +93,7 @@ func (ap *AlertPolicies) Delete(policyName string) error {
 }
 
 // Update implements the AlertPolicy interface
-func (ap *AlertPolicies) Update(payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
+func (ap *AlertPolicies) Update(ctx context.Context, payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
 	req := client.Request{
 		Method:      http.MethodPut,
 		Path:        path.Join("vdc", "alertpolicy", policyName),
@@ -100,7 +101,7 @@ func (ap *AlertPolicies) Update(payload model.AlertPolicy, policyName string) (*
 		Body:        &payload,
 	}
 	alertpolicy := &model.AlertPolicy{}
-	err := ap.Client.MakeRemoteCall(req, alertpolicy)
+	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicy)
 	if err != nil {
 		return nil, err
 	}

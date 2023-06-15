@@ -13,6 +13,7 @@
 package federatedobjectstores
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/dell/goobjectscale/pkg/client/api"
@@ -28,7 +29,7 @@ type FederatedObjectStores struct {
 var _ api.FederatedObjectStoresInterface = &FederatedObjectStores{} // interface guard
 
 // List implements the federatedobjectstores interface
-func (t *FederatedObjectStores) List(params map[string]string) (*model.FederatedObjectStoreList, error) {
+func (t *FederatedObjectStores) List(ctx context.Context, params map[string]string) (*model.FederatedObjectStoreList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        "/replication/info",
@@ -36,7 +37,7 @@ func (t *FederatedObjectStores) List(params map[string]string) (*model.Federated
 		Params:      params,
 	}
 	federatedStoreList := &model.FederatedObjectStoreList{}
-	err := t.Client.MakeRemoteCall(req, federatedStoreList)
+	err := t.Client.MakeRemoteCall(ctx, req, federatedStoreList)
 	if err != nil {
 		return nil, err
 	}

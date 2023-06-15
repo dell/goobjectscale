@@ -14,6 +14,7 @@ package client_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"math"
@@ -103,7 +104,7 @@ func testInvalidEndpoint(t *testing.T, auth client.Authenticator) {
 		OverrideHeader: true,
 	}
 	clientset := rest.NewClientSet(&c)
-	err := clientset.Client().MakeRemoteCall(client.Request{
+	err := clientset.Client().MakeRemoteCall(context.TODO(), client.Request{
 		Method:      http.MethodGet,
 		Path:        "",
 		ContentType: client.ContentTypeJSON,
@@ -121,11 +122,12 @@ func testInvalidContentType(t *testing.T, auth client.Authenticator) {
 		OverrideHeader: false,
 	}
 	clientset := rest.NewClientSet(&c)
-	err := clientset.Client().MakeRemoteCall(client.Request{
-		Method:      http.MethodGet,
-		Path:        "",
-		ContentType: "NotAContentType",
-	}, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(),
+		client.Request{
+			Method:      http.MethodGet,
+			Path:        "",
+			ContentType: "NotAContentType",
+		}, nil)
 	require.ErrorIs(t, err, client.ErrContentType)
 }
 func testFailedAuth(t *testing.T, auth client.Authenticator) {
@@ -147,7 +149,7 @@ func testFailedAuth(t *testing.T, auth client.Authenticator) {
 		Path:        "",
 		ContentType: client.ContentTypeJSON,
 	}
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, err)
 }
 
@@ -165,12 +167,12 @@ func testFailedLogin(t *testing.T, auth client.Authenticator) {
 		Path:        "/failedLogin",
 		ContentType: client.ContentTypeJSON,
 	}
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, err)
 	assert.Equal(t, "authorization: exhausted authentication tries", err.Error())
 	c.Authenticator = nil
 	clientset = rest.NewClientSet(&c)
-	err = clientset.Client().MakeRemoteCall(req, nil)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, err)
 }
 
@@ -188,7 +190,7 @@ func testBadRequest(t *testing.T, auth client.Authenticator) {
 		Path:        "/badRequest",
 		ContentType: client.ContentTypeJSON,
 	}
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, err)
 	//Content-type XML
 	req = client.Request{
@@ -196,7 +198,7 @@ func testBadRequest(t *testing.T, auth client.Authenticator) {
 		Path:        "/badRequest",
 		ContentType: client.ContentTypeXML,
 	}
-	nerr := clientset.Client().MakeRemoteCall(req, nil)
+	nerr := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, nerr)
 }
 
@@ -214,7 +216,7 @@ func testEmptyBody(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 	}
 	bucketList := &model.BucketList{}
-	err := clientset.Client().MakeRemoteCall(req, bucketList)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, bucketList)
 	require.Nil(t, err)
 }
 
@@ -234,7 +236,7 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 	}
 	ecsError := &model.Error{}
-	err := clientset.Client().MakeRemoteCall(req, ecsError)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Nil(t, err)
 	//Error
 	req = client.Request{
@@ -243,7 +245,7 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 	}
 	errJSONSyntax := &json.SyntaxError{}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.ErrorAs(t, err, &errJSONSyntax)
 	require.Contains(t, err.Error(), "invalid character '<' looking for beginning of value")
 	// force error in request.go
@@ -253,7 +255,7 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 		Body:        math.Inf(-1),
 	}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Error(t, err)
 	//XML
 	//Success
@@ -262,7 +264,7 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		Path:        "/ok/xml",
 		ContentType: client.ContentTypeXML,
 	}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Nil(t, err)
 	//Error
 	req = client.Request{
@@ -270,7 +272,7 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		Path:        "/ok/json",
 		ContentType: client.ContentTypeXML,
 	}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.ErrorIs(t, err, io.EOF)
 	require.Contains(t, err.Error(), "EOF")
 	// force error in request.go
@@ -280,7 +282,7 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeXML,
 		Body:        map[string]string{},
 	}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Error(t, err)
 }
 
@@ -300,11 +302,11 @@ func testNoErrorsNoObject(t *testing.T, auth client.Authenticator) {
 	}
 
 	//Content-type JSON
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Nil(t, err)
 
 	//Content-type XML
-	err = clientset.Client().MakeRemoteCall(req, nil)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Nil(t, err)
 }
 
@@ -322,7 +324,7 @@ func testNoGateway(t *testing.T, auth client.Authenticator) {
 		Path:        "/badRequest",
 		ContentType: client.ContentTypeJSON,
 	}
-	err := clientset.Client().MakeRemoteCall(req, ecsError)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Error(t, err)
 
 }
@@ -343,7 +345,7 @@ func testOverrideHeader(t *testing.T, auth client.Authenticator) {
 	}
 
 	//Content-type JSON
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Nil(t, err)
 }
 

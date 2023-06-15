@@ -14,6 +14,7 @@
 package objectuser
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -27,7 +28,7 @@ type ObjectUser struct {
 }
 
 // GetInfo returns information about an object user within the ObjectScale object store.
-func (o *ObjectUser) GetInfo(uid string, params map[string]string) (*model.ObjectUserInfo, error) {
+func (o *ObjectUser) GetInfo(ctx context.Context, uid string, params map[string]string) (*model.ObjectUserInfo, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        fmt.Sprintf("object/users/%s/info", uid),
@@ -35,7 +36,7 @@ func (o *ObjectUser) GetInfo(uid string, params map[string]string) (*model.Objec
 		Params:      params,
 	}
 	ou := &model.ObjectUserInfo{}
-	err := o.Client.MakeRemoteCall(req, ou)
+	err := o.Client.MakeRemoteCall(ctx, req, ou)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +44,7 @@ func (o *ObjectUser) GetInfo(uid string, params map[string]string) (*model.Objec
 }
 
 // GetSecret returns information about object user secrets.
-func (o *ObjectUser) GetSecret(uid string, params map[string]string) (*model.ObjectUserSecret, error) {
+func (o *ObjectUser) GetSecret(ctx context.Context, uid string, params map[string]string) (*model.ObjectUserSecret, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        fmt.Sprintf("/object/user-secret-keys/%s", uid),
@@ -51,7 +52,7 @@ func (o *ObjectUser) GetSecret(uid string, params map[string]string) (*model.Obj
 		Params:      params,
 	}
 	ou := &model.ObjectUserSecret{}
-	err := o.Client.MakeRemoteCall(req, ou)
+	err := o.Client.MakeRemoteCall(ctx, req, ou)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +60,7 @@ func (o *ObjectUser) GetSecret(uid string, params map[string]string) (*model.Obj
 }
 
 // CreateSecret creates secret for a user.
-func (o *ObjectUser) CreateSecret(uid string, key model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
+func (o *ObjectUser) CreateSecret(ctx context.Context, uid string, key model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/user-secret-keys/%s", uid),
@@ -68,7 +69,7 @@ func (o *ObjectUser) CreateSecret(uid string, key model.ObjectUserSecretKeyCreat
 		Params:      params,
 	}
 	resp := &model.ObjectUserSecretKeyCreateRes{}
-	err := o.Client.MakeRemoteCall(req, resp)
+	err := o.Client.MakeRemoteCall(ctx, req, resp)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +77,7 @@ func (o *ObjectUser) CreateSecret(uid string, key model.ObjectUserSecretKeyCreat
 }
 
 // DeleteSecret deletes secret for a user.
-func (o *ObjectUser) DeleteSecret(uid string, key model.ObjectUserSecretKeyDeleteReq, params map[string]string) error {
+func (o *ObjectUser) DeleteSecret(ctx context.Context, uid string, key model.ObjectUserSecretKeyDeleteReq, params map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/user-secret-keys/%s/deactivate", uid),
@@ -84,11 +85,11 @@ func (o *ObjectUser) DeleteSecret(uid string, key model.ObjectUserSecretKeyDelet
 		Body:        &key,
 		Params:      params,
 	}
-	return o.Client.MakeRemoteCall(req, nil)
+	return o.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // List returns a list of object users within the ObjectScale object store.
-func (o *ObjectUser) List(params map[string]string) (*model.ObjectUserList, error) {
+func (o *ObjectUser) List(ctx context.Context, params map[string]string) (*model.ObjectUserList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        "object/users",
@@ -96,7 +97,7 @@ func (o *ObjectUser) List(params map[string]string) (*model.ObjectUserList, erro
 		Params:      params,
 	}
 	ouList := &model.ObjectUserList{}
-	err := o.Client.MakeRemoteCall(req, ouList)
+	err := o.Client.MakeRemoteCall(ctx, req, ouList)
 	if err != nil {
 		return nil, err
 	}

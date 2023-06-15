@@ -13,6 +13,7 @@
 package client
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
@@ -35,7 +36,7 @@ type Authenticator interface {
 	IsAuthenticated() bool
 
 	// Login obtains fresh authentication token(s) from the server.
-	Login(*http.Client) error
+	Login(context.Context, *http.Client) error
 
 	// Token returns the current authentication token.
 	Token() string
@@ -72,7 +73,7 @@ func (auth *AuthService) IsAuthenticated() bool {
 }
 
 // Login obtains fresh authentication token(s) from the server.
-func (auth *AuthService) Login(ht *http.Client) error {
+func (auth *AuthService) Login(ctx context.Context, ht *http.Client) error {
 	// urn:osc:{ObjectScaleID}:{ObjectStoreID}:service/{ServiceNameID}
 	serviceUrn := fmt.Sprintf("urn:osc:%s:%s:service/%s", auth.ObjectScaleID, "", auth.PodName)
 	// B64-{ObjectScaleID},{ObjectStoreID},{ServiceK8SNamespace},{ServiceNameID}
@@ -98,6 +99,9 @@ func (auth *AuthService) Login(ht *http.Client) error {
 	if err != nil {
 		return err
 	}
+
+	req = req.WithContext(ctx)
+
 	req.SetBasicAuth(userName, password)
 	resp, err := ht.Do(req)
 	if err != nil {
@@ -140,7 +144,7 @@ func (auth *AuthUser) IsAuthenticated() bool {
 }
 
 // Login obtains fresh authentication token(s) from the server.
-func (auth *AuthUser) Login(ht *http.Client) error {
+func (auth *AuthUser) Login(ctx context.Context, ht *http.Client) error {
 	u, err := url.Parse(auth.Gateway)
 	if err != nil {
 		return err
@@ -150,6 +154,9 @@ func (auth *AuthUser) Login(ht *http.Client) error {
 	if err != nil {
 		return err
 	}
+
+	req = req.WithContext(ctx)
+
 	req.SetBasicAuth(auth.Username, auth.Password)
 	resp, err := ht.Do(req)
 	if err != nil {

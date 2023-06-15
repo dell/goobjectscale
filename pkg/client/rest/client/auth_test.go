@@ -13,6 +13,7 @@
 package client_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -28,12 +29,14 @@ func testLogin(t *testing.T, auth client.Authenticator) {
 		Namespace:     "svc-objectscale-domain-c8",
 		ObjectScaleID: "IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 	}
+
 	badAuth := &fixtureFailedServiceauth
-	err := badAuth.Login(NewTestHTTPClient())
+	err := badAuth.Login(context.TODO(), NewTestHTTPClient())
 	require.Error(t, err)
 	fixtureFailedServiceauth.Gateway = "bad:gate:way"
+
 	badAuth = &fixtureFailedServiceauth
-	err = badAuth.Login(NewTestHTTPClient())
+	err = badAuth.Login(context.TODO(), NewTestHTTPClient())
 	require.Error(t, err)
 
 }

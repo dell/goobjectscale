@@ -13,6 +13,7 @@
 package buckets
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -28,7 +29,7 @@ type Buckets struct {
 }
 
 // Get implements the buckets interface
-func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, error) {
+func (b *Buckets) Get(ctx context.Context, name string, params map[string]string) (*model.Bucket, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        path.Join("object", "bucket", name, "info"),
@@ -36,7 +37,7 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 		Params:      params,
 	}
 	bucket := &model.BucketInfo{}
-	err := b.Client.MakeRemoteCall(req, bucket)
+	err := b.Client.MakeRemoteCall(ctx, req, bucket)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (b *Buckets) Get(name string, params map[string]string) (*model.Bucket, err
 }
 
 // List implements the buckets interface
-func (b *Buckets) List(params map[string]string) (*model.BucketList, error) {
+func (b *Buckets) List(ctx context.Context, params map[string]string) (*model.BucketList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        "/object/bucket",
@@ -52,7 +53,7 @@ func (b *Buckets) List(params map[string]string) (*model.BucketList, error) {
 		Params:      params,
 	}
 	bucketList := &model.BucketList{}
-	err := b.Client.MakeRemoteCall(req, bucketList)
+	err := b.Client.MakeRemoteCall(ctx, req, bucketList)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +61,7 @@ func (b *Buckets) List(params map[string]string) (*model.BucketList, error) {
 }
 
 // GetPolicy implements the buckets interface
-func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string, error) {
+func (b *Buckets) GetPolicy(ctx context.Context, bucketName string, param map[string]string) (string, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        fmt.Sprintf("object/bucket/%s/policy", bucketName),
@@ -68,7 +69,7 @@ func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string,
 		Params:      param,
 	}
 	var bucketPolicy json.RawMessage
-	err := b.Client.MakeRemoteCall(req, &bucketPolicy)
+	err := b.Client.MakeRemoteCall(ctx, req, &bucketPolicy)
 	if err != nil {
 		return "", err
 	}
@@ -77,7 +78,7 @@ func (b *Buckets) GetPolicy(bucketName string, param map[string]string) (string,
 }
 
 // UpdatePolicy implements the buckets interface
-func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[string]string) error {
+func (b *Buckets) UpdatePolicy(ctx context.Context, bucketName string, policy string, param map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPut,
 		Path:        fmt.Sprintf("object/bucket/%s/policy", bucketName),
@@ -85,22 +86,22 @@ func (b *Buckets) UpdatePolicy(bucketName string, policy string, param map[strin
 		Params:      param,
 		Body:        json.RawMessage(policy),
 	}
-	return b.Client.MakeRemoteCall(req, nil)
+	return b.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // DeletePolicy implements the buckets interface
-func (b *Buckets) DeletePolicy(bucketName string, param map[string]string) error {
+func (b *Buckets) DeletePolicy(ctx context.Context, bucketName string, param map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodDelete,
 		Path:        fmt.Sprintf("object/bucket/%s/policy", bucketName),
 		ContentType: client.ContentTypeJSON,
 		Params:      param,
 	}
-	return b.Client.MakeRemoteCall(req, nil)
+	return b.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // Create implements the buckets interface
-func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
+func (b *Buckets) Create(ctx context.Context, createParam model.Bucket) (*model.Bucket, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        "/object/bucket",
@@ -108,7 +109,7 @@ func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 		Body:        &model.BucketCreate{Bucket: createParam},
 	}
 	bucket := &model.Bucket{}
-	err := b.Client.MakeRemoteCall(req, bucket)
+	err := b.Client.MakeRemoteCall(ctx, req, bucket)
 	if err != nil {
 		return nil, err
 	}
@@ -116,14 +117,14 @@ func (b *Buckets) Create(createParam model.Bucket) (*model.Bucket, error) {
 }
 
 // Delete implements the buckets interface
-func (b *Buckets) Delete(name string, namespace string, emptyBucket bool) error {
+func (b *Buckets) Delete(ctx context.Context, name string, namespace string, emptyBucket bool) error {
 	req := client.Request{
 		Method:      http.MethodPost,
 		Path:        path.Join("object", "bucket", name, "deactivate"),
 		Params:      map[string]string{"namespace": namespace, "emptyBucket": fmt.Sprint(emptyBucket)},
 		ContentType: client.ContentTypeJSON,
 	}
-	err := b.Client.MakeRemoteCall(req, nil)
+	err := b.Client.MakeRemoteCall(ctx, req, nil)
 	if err != nil {
 		return err
 	}
@@ -131,7 +132,7 @@ func (b *Buckets) Delete(name string, namespace string, emptyBucket bool) error 
 }
 
 // GetQuota gets the quota for the given bucket and namespace.
-func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQuotaInfo, error) {
+func (b *Buckets) GetQuota(ctx context.Context, bucketName string, namespace string) (*model.BucketQuotaInfo, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketName),
@@ -139,7 +140,7 @@ func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQu
 		Params:      map[string]string{"namespace": namespace},
 	}
 	bucketQuota := &model.BucketQuotaInfo{}
-	err := b.Client.MakeRemoteCall(req, bucketQuota)
+	err := b.Client.MakeRemoteCall(ctx, req, bucketQuota)
 	if err != nil {
 		return nil, err
 	}
@@ -147,23 +148,23 @@ func (b *Buckets) GetQuota(bucketName string, namespace string) (*model.BucketQu
 }
 
 // UpdateQuota updates the quota for the specified bucket.
-func (b *Buckets) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
+func (b *Buckets) UpdateQuota(ctx context.Context, bucketQuota model.BucketQuotaUpdate) error {
 	req := client.Request{
 		Method:      http.MethodPut,
 		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketQuota.BucketName),
 		ContentType: client.ContentTypeXML,
 		Body:        bucketQuota,
 	}
-	return b.Client.MakeRemoteCall(req, nil)
+	return b.Client.MakeRemoteCall(ctx, req, nil)
 }
 
 // DeleteQuota deletes the quota setting for the given bucket and namespace.
-func (b *Buckets) DeleteQuota(bucketName string, namespace string) error {
+func (b *Buckets) DeleteQuota(ctx context.Context, bucketName string, namespace string) error {
 	req := client.Request{
 		Method:      http.MethodDelete,
 		Path:        fmt.Sprintf("object/bucket/%s/quota", bucketName),
 		ContentType: client.ContentTypeXML,
 		Params:      map[string]string{"namespace": namespace},
 	}
-	return b.Client.MakeRemoteCall(req, nil)
+	return b.Client.MakeRemoteCall(ctx, req, nil)
 }
