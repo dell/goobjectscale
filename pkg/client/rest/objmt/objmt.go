@@ -50,19 +50,21 @@ type replicationIds struct {
 
 func newReplicationIds(ids [][]string) *replicationPairsReqBody {
 	ret := &replicationPairsReqBody{}
+
 	ret.Replications = []replicationIds{}
 	for _, id := range ids {
 		ret.Replications = append(ret.Replications, replicationIds{Src: id[0], Dest: id[1]})
 	}
+
 	return ret
 }
 
-// Objmt is a REST implementation of the Objmt interface
+// Objmt is a REST implementation of the Objmt interface.
 type Objmt struct {
 	Client client.RemoteCaller
 }
 
-// GetAccountBillingInfo returns billing info metrics for defined accounts
+// GetAccountBillingInfo returns billing info metrics for defined accounts.
 func (o *Objmt) GetAccountBillingInfo(ctx context.Context, ids []string, params map[string]string) (*model.AccountBillingInfoList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -71,15 +73,18 @@ func (o *Objmt) GetAccountBillingInfo(ctx context.Context, ids []string, params 
 		Body:        accountIdsReqBody{Ids: ids},
 		Params:      params,
 	}
+
 	ret := &model.AccountBillingInfoList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts
+// GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts.
 func (o *Objmt) GetAccountBillingSample(ctx context.Context, ids []string, params map[string]string) (*model.AccountBillingSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -88,15 +93,18 @@ func (o *Objmt) GetAccountBillingSample(ctx context.Context, ids []string, param
 		Body:        accountIdsReqBody{Ids: ids},
 		Params:      params,
 	}
+
 	ret := &model.AccountBillingSampleList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetBucketBillingInfo returns billing info metrics for defined buckets and account
+// GetBucketBillingInfo returns billing info metrics for defined buckets and account.
 func (o *Objmt) GetBucketBillingInfo(ctx context.Context, account string, ids []string, params map[string]string) (*model.BucketBillingInfoList, error) {
 	// TODO prepare request body with IDs
 	req := client.Request{
@@ -106,15 +114,18 @@ func (o *Objmt) GetBucketBillingInfo(ctx context.Context, account string, ids []
 		Body:        bucketIdsReqBody{Ids: ids},
 		Params:      params,
 	}
+
 	ret := &model.BucketBillingInfoList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account
+// GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account.
 func (o *Objmt) GetBucketBillingSample(ctx context.Context, account string, ids []string, params map[string]string) (*model.BucketBillingSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -123,15 +134,18 @@ func (o *Objmt) GetBucketBillingSample(ctx context.Context, account string, ids 
 		Body:        bucketIdsReqBody{Ids: ids},
 		Params:      params,
 	}
+
 	ret := &model.BucketBillingSampleList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetBucketBillingPerf returns performance metrics for defined buckets and account
+// GetBucketBillingPerf returns performance metrics for defined buckets and account.
 func (o *Objmt) GetBucketBillingPerf(ctx context.Context, account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -140,15 +154,18 @@ func (o *Objmt) GetBucketBillingPerf(ctx context.Context, account string, ids []
 		Body:        bucketIdsReqBody{Ids: ids},
 		Params:      params,
 	}
+
 	ret := &model.BucketPerfDataList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetReplicationInfo returns billing info metrics for defined replication pairs and account
+// GetReplicationInfo returns billing info metrics for defined replication pairs and account.
 func (o *Objmt) GetReplicationInfo(ctx context.Context, account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -157,15 +174,18 @@ func (o *Objmt) GetReplicationInfo(ctx context.Context, account string, replicat
 		Body:        newReplicationIds(replicationPairs),
 		Params:      params,
 	}
+
 	ret := &model.BucketReplicationInfoList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account
+// GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account.
 func (o *Objmt) GetReplicationSample(ctx context.Context, account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -174,15 +194,18 @@ func (o *Objmt) GetReplicationSample(ctx context.Context, account string, replic
 		Body:        newReplicationIds(replicationPairs),
 		Params:      params,
 	}
+
 	ret := &model.BucketReplicationSampleList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetStoreBillingInfo returns billing info metrics for object store
+// GetStoreBillingInfo returns billing info metrics for object store.
 func (o *Objmt) GetStoreBillingInfo(ctx context.Context, params map[string]string) (*model.StoreBillingInfoList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
@@ -190,15 +213,18 @@ func (o *Objmt) GetStoreBillingInfo(ctx context.Context, params map[string]strin
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
+
 	ret := &model.StoreBillingInfoList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetStoreBillingSample returns billing sample (time-window) metrics for object store
+// GetStoreBillingSample returns billing sample (time-window) metrics for object store.
 func (o *Objmt) GetStoreBillingSample(ctx context.Context, params map[string]string) (*model.StoreBillingSampleList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
@@ -206,15 +232,18 @@ func (o *Objmt) GetStoreBillingSample(ctx context.Context, params map[string]str
 		ContentType: client.ContentTypeXML,
 		Params:      params,
 	}
+
 	ret := &model.StoreBillingSampleList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }
 
-// GetStoreReplicationData returns CRR metrics for defined object stores
+// GetStoreReplicationData returns CRR metrics for defined object stores.
 func (o *Objmt) GetStoreReplicationData(ctx context.Context, ids []string, params map[string]string) (*model.StoreReplicationDataList, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -223,10 +252,13 @@ func (o *Objmt) GetStoreReplicationData(ctx context.Context, ids []string, param
 		Body:        storeIdsReqBody{Ids: ids},
 		Params:      params,
 	}
+
 	ret := &model.StoreReplicationDataList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ret)
 	if err != nil {
 		return nil, err
 	}
+
 	return ret, nil
 }

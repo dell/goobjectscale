@@ -14,7 +14,7 @@ package model
 
 import "encoding/xml"
 
-// AlertPolicy implements the AlertPolicy API
+// AlertPolicy implements the AlertPolicy API.
 type AlertPolicy struct {
 	XMLName              xml.Name             `xml:"alert_policy"`
 	PolicyName           string               `json:"policyName" xml:"policyName"`
@@ -32,14 +32,14 @@ type AlertPolicy struct {
 	Condition            AlertPolicyCondition `json:"condition" xml:"condition"`
 }
 
-// AlertPolicyCondition describes AlerPolicy
+// AlertPolicyCondition describes AlerPolicy.
 type AlertPolicyCondition struct {
 	ThresholdUnits string `json:"thresholdUnits,omitempty" xml:"thresholdUnits,omitempty"`
 	ThresholdValue string `json:"thresholdValue,omitempty" xml:"thresholdValue,omitempty"`
 	SeverityType   string `json:"severityType,omitempty" xml:"severityType,omitempty"`
 }
 
-// AlertPolicies is a list of alert policies
+// AlertPolicies is a list of alert policies.
 type AlertPolicies struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `json:"alert_policies" xml:"alert_policies"`

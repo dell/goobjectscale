@@ -22,7 +22,7 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-// ObjectUser is a REST implementation of the object user interface
+// ObjectUser is a REST implementation of the object user interface.
 type ObjectUser struct {
 	Client client.RemoteCaller
 }
@@ -36,10 +36,12 @@ func (o *ObjectUser) GetInfo(ctx context.Context, uid string, params map[string]
 		Params:      params,
 	}
 	ou := &model.ObjectUserInfo{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ou)
 	if err != nil {
 		return nil, err
 	}
+
 	return ou, nil
 }
 
@@ -52,10 +54,12 @@ func (o *ObjectUser) GetSecret(ctx context.Context, uid string, params map[strin
 		Params:      params,
 	}
 	ou := &model.ObjectUserSecret{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ou)
 	if err != nil {
 		return nil, err
 	}
+
 	return ou, nil
 }
 
@@ -69,10 +73,12 @@ func (o *ObjectUser) CreateSecret(ctx context.Context, uid string, key model.Obj
 		Params:      params,
 	}
 	resp := &model.ObjectUserSecretKeyCreateRes{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, resp)
 	if err != nil {
 		return nil, err
 	}
+
 	return resp, nil
 }
 
@@ -85,6 +91,7 @@ func (o *ObjectUser) DeleteSecret(ctx context.Context, uid string, key model.Obj
 		Body:        &key,
 		Params:      params,
 	}
+
 	return o.Client.MakeRemoteCall(ctx, req, nil)
 }
 
@@ -97,9 +104,11 @@ func (o *ObjectUser) List(ctx context.Context, params map[string]string) (*model
 		Params:      params,
 	}
 	ouList := &model.ObjectUserList{}
+
 	err := o.Client.MakeRemoteCall(ctx, req, ouList)
 	if err != nil {
 		return nil, err
 	}
+
 	return ouList, nil
 }

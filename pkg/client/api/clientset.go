@@ -39,13 +39,13 @@ type StatusInterface interface {
 	GetRebuildStatus(ctx context.Context, objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error)
 }
 
-// FederatedObjectStoresInterface represents a replication store client interface
+// FederatedObjectStoresInterface represents a replication store client interface.
 type FederatedObjectStoresInterface interface {
 	// List returns a list of federated object stores
 	List(ctx context.Context, params map[string]string) (*model.FederatedObjectStoreList, error)
 }
 
-// BucketsInterface represents a bucket resource client interface
+// BucketsInterface represents a bucket resource client interface.
 type BucketsInterface interface {
 	// List returns a list of buckets within the ObjectScale object store
 	List(ctx context.Context, params map[string]string) (*model.BucketList, error)
@@ -174,7 +174,7 @@ type ObjmtInterface interface {
 	GetStoreReplicationData(ctx context.Context, ids []string, params map[string]string) (*model.StoreReplicationDataList, error)
 }
 
-// CRRInterface represents an interface for Cross Region Replication (CRR)
+// CRRInterface represents an interface for Cross Region Replication (CRR).
 type CRRInterface interface {
 	// PauseReplication temporarily pauses source and destination object stores' replication communication
 	// pauses for the provided future epoch time in milliseconds

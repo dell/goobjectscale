@@ -22,14 +22,14 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-// AlertPolicies is a REST implementation of the AlertPolicies interface
+// AlertPolicies is a REST implementation of the AlertPolicies interface.
 type AlertPolicies struct {
 	Client client.RemoteCaller
 }
 
 var _ api.AlertPoliciesInterface = &AlertPolicies{} // interface guard
 
-// Get implements the AlertPolicy interface
+// Get implements the AlertPolicy interface.
 func (ap *AlertPolicies) Get(ctx context.Context, policyName string) (*model.AlertPolicy, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
@@ -37,14 +37,16 @@ func (ap *AlertPolicies) Get(ctx context.Context, policyName string) (*model.Ale
 		ContentType: client.ContentTypeXML,
 	}
 	alertpolicy := &model.AlertPolicy{}
+
 	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicy)
 	if err != nil {
 		return nil, err
 	}
+
 	return alertpolicy, nil
 }
 
-// List implements the AlertPolicy interface
+// List implements the AlertPolicy interface.
 func (ap *AlertPolicies) List(ctx context.Context, params map[string]string) (*model.AlertPolicies, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
@@ -53,6 +55,7 @@ func (ap *AlertPolicies) List(ctx context.Context, params map[string]string) (*m
 		Params:      params,
 	}
 	alertpolicies := &model.AlertPolicies{}
+
 	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicies)
 	if err != nil {
 		return nil, err
@@ -61,7 +64,7 @@ func (ap *AlertPolicies) List(ctx context.Context, params map[string]string) (*m
 	return alertpolicies, nil
 }
 
-// Create implements the AlertPolicy interface
+// Create implements the AlertPolicy interface.
 func (ap *AlertPolicies) Create(ctx context.Context, payload model.AlertPolicy) (*model.AlertPolicy, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -70,14 +73,16 @@ func (ap *AlertPolicies) Create(ctx context.Context, payload model.AlertPolicy) 
 		Body:        &payload,
 	}
 	alertpolicy := &model.AlertPolicy{}
+
 	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicy)
 	if err != nil {
 		return nil, err
 	}
+
 	return alertpolicy, nil
 }
 
-// Delete implements the AlertPolicy interface
+// Delete implements the AlertPolicy interface.
 func (ap *AlertPolicies) Delete(ctx context.Context, policyName string) error {
 	req := client.Request{
 		Method:      http.MethodDelete,
@@ -85,14 +90,16 @@ func (ap *AlertPolicies) Delete(ctx context.Context, policyName string) error {
 		ContentType: client.ContentTypeXML,
 	}
 	alertpolicy := &model.AlertPolicy{}
+
 	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicy)
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
-// Update implements the AlertPolicy interface
+// Update implements the AlertPolicy interface.
 func (ap *AlertPolicies) Update(ctx context.Context, payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
 	req := client.Request{
 		Method:      http.MethodPut,
@@ -101,9 +108,11 @@ func (ap *AlertPolicies) Update(ctx context.Context, payload model.AlertPolicy, 
 		Body:        &payload,
 	}
 	alertpolicy := &model.AlertPolicy{}
+
 	err := ap.Client.MakeRemoteCall(ctx, req, alertpolicy)
 	if err != nil {
 		return nil, err
 	}
+
 	return alertpolicy, nil
 }

@@ -19,7 +19,7 @@ run:
   skip-dirs-use-default: true
 
   # Default empty, allowed options are readonly, vendor and mod.
-  modules-download-mode: vendor
+  modules-download-mode: readonly
 
   # Define the Go version limit.
   # Mainly related to generics support since go1.18.

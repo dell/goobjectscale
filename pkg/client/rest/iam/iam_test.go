@@ -50,15 +50,15 @@ var FixtureServiceauth = client.AuthService{
 	ObjectScaleID: "IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 }
 
-// RoundTripFunc is a transport mock that makes a fake HTTP response locally
+// RoundTripFunc is a transport mock that makes a fake HTTP response locally.
 type RoundTripFunc func(req *http.Request) *http.Response
 
-// RoundTrip mocks an http request and returns an http response
+// RoundTrip mocks an http request and returns an http response.
 func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return f(req), nil
 }
 
-// newTestClient returns *http.Client with Transport replaced to avoid making real calls
+// newTestClient returns *http.Client with Transport replaced to avoid making real calls.
 func newTestClient(fn RoundTripFunc) *http.Client {
 	return &http.Client{
 		Transport: RoundTripFunc(fn),
@@ -89,7 +89,7 @@ func TestIam(t *testing.T) {
 	})
 }
 
-// This must fail because we need iam.AIM and not iamiface.IAMAPI
+// This must fail because we need iam.AIM and not iamiface.IAMAPI.
 func TestInvalidInjectTokenInterface(t *testing.T) {
 	type invalidIAMClient struct {
 		iamiface.IAMAPI
@@ -121,6 +121,7 @@ func testInjectTokenToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 	if err != nil {
 		t.Errorf("Error injecting token to IAM client: %v", err)
 	}
+
 	r := &request.Request{
 		HTTPRequest: &http.Request{
 			Header: http.Header{},
@@ -133,6 +134,7 @@ func testInjectTokenToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 	if err != nil {
 		t.Errorf("Error injecting token to IAM client: %v", err)
 	}
+
 	r = &request.Request{
 		HTTPRequest: &http.Request{
 			Header: http.Header{},
@@ -147,6 +149,7 @@ func testInjectAccountIDToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 	if err != nil {
 		t.Errorf("Error injecting AccountID to IAM client: %v", err)
 	}
+
 	r := &request.Request{
 		HTTPRequest: &http.Request{
 			Header: http.Header{},
@@ -159,6 +162,7 @@ func testInjectAccountIDToIAMClient(t *testing.T, iamClient *awsIAM.IAM) {
 	if err != nil {
 		t.Errorf("Error injecting AccountID to IAM client: %v", err)
 	}
+
 	r = &request.Request{
 		HTTPRequest: &http.Request{
 			Header: http.Header{},
@@ -173,6 +177,7 @@ func checkHeader(t *testing.T, request request.Request, expectedHeader string, e
 	if !ok {
 		t.Errorf("expect %v header", expectedHeader)
 	}
+
 	actualHeaderValue := sdsHeader[0]
 	if actualHeaderValue != expectedHeaderValue {
 		t.Fatalf("expected: %v actual: %v token in %v header", expectedHeaderValue, actualHeaderValue, expectedHeader)
@@ -182,14 +187,18 @@ func checkHeader(t *testing.T, request request.Request, expectedHeader string, e
 func newTestHTTPClient() *http.Client {
 	return newTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
+
 		switch req.URL.String() {
 		case "https://testgateway/mgmt/login":
 			reqAuth := fmt.Sprint(req.Header["Authorization"])
-			defaultAuthCreds := "[Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk]"
+			defaultAuthCreds := "[Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk]" //nolint:gosec
+
 			header.Set("X-Sds-Auth-Token", "")
+
 			if reqAuth == defaultAuthCreds {
 				header.Set("X-Sds-Auth-Token", "TESTTOKEN")
 			}
+
 			return &http.Response{
 				StatusCode: 200,
 				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"OK"}`))),
@@ -198,13 +207,14 @@ func newTestHTTPClient() *http.Client {
 
 		case "https://testgateway/mgmt/serviceLogin":
 			header.Set("X-SDS-AUTH-TOKEN", "TESTTOKEN")
+
 			return &http.Response{
 				StatusCode: 200,
 				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"OK"}`))),
 				Header:     header,
 			}
-
 		}
+
 		return nil
 	})
 }

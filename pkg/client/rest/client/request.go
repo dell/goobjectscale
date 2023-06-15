@@ -18,6 +18,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -25,7 +26,7 @@ import (
 	"net/url"
 )
 
-// Request is an ObjectScale API request wrapper
+// Request is an ObjectScale API request wrapper.
 type Request struct {
 	// Method is the method of REST API request
 	Method string
@@ -43,13 +44,14 @@ type Request struct {
 	Params map[string]string
 }
 
-// HTTP converts the Request data into an http.Request object.
-func (r Request) HTTP(uri string) (*http.Request, error) {
+// HTTPWithContext converts the Request data into an http.Request object.
+func (r Request) HTTPWithContext(ctx context.Context, uri string) (*http.Request, error) {
 	var (
 		obj []byte
 		err error
 		q   = url.Values{}
 	)
+
 	switch r.ContentType {
 	case ContentTypeXML:
 		obj, err = xml.Marshal(r.Body)
@@ -78,12 +80,14 @@ func (r Request) HTTP(uri string) (*http.Request, error) {
 	for key, value := range r.Params {
 		q.Add(key, value)
 	}
+
 	u.RawQuery = q.Encode()
 
-	req, err := http.NewRequest(r.Method, u.String(), bytes.NewBuffer(obj))
+	req, err := http.NewRequestWithContext(ctx, r.Method, u.String(), bytes.NewBuffer(obj))
 	if err != nil {
 		return nil, fmt.Errorf("create request: %w", err)
 	}
+
 	return req, nil
 }
 

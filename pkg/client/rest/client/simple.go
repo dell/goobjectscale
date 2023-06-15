@@ -48,7 +48,7 @@ type Simple struct {
 }
 
 // MakeRemoteCall executes an API request against the client endpoint, returning
-// the object body of the response into a response object
+// the object body of the response into a response object.
 func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}) error {
 	err := r.Validate(c.Endpoint)
 	if err != nil {
@@ -82,8 +82,10 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 			if (errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF)) && cw.N == 0 /* && v == nil TODO Causes problems -- see note */ {
 				return nil
 			}
+
 			return err
 		}
+
 		switch contentType {
 		case ContentTypeJSON:
 			decoder := json.NewDecoder(body)
@@ -98,41 +100,45 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 		default:
 			return fmt.Errorf("response: %s: %w", r.ContentType, ErrContentType)
 		}
+
 		return nil
 	}
 
 	// Do performs a single http request.
 	Do := func(ctx context.Context) error {
-		req, err := r.HTTP(c.Endpoint)
+		req, err := r.HTTPWithContext(ctx, c.Endpoint)
 		if err != nil {
 			return fmt.Errorf("simple client: %w", err)
 		}
 
-		reqWithContext := req.WithContext(ctx)
+		req.Header.Add("Accept", r.ContentType)
+		req.Header.Add("Content-Type", r.ContentType)
+		req.Header.Add("Accept", "application/xml")
 
-		reqWithContext.Header.Add("Accept", r.ContentType)
-		reqWithContext.Header.Add("Content-Type", r.ContentType)
-		reqWithContext.Header.Add("Accept", "application/xml")
 		if c.Authenticator != nil {
-			reqWithContext.Header.Add("X-SDS-AUTH-TOKEN", c.Authenticator.Token())
+			req.Header.Add("X-SDS-AUTH-TOKEN", c.Authenticator.Token())
 		}
+
 		if c.OverrideHeader {
-			reqWithContext.Header.Add("X-EMC-Override", "true")
+			req.Header.Add("X-EMC-Override", "true")
 		}
-		resp, err := c.HTTPClient.Do(reqWithContext)
+
+		resp, err := c.HTTPClient.Do(req)
 		if err != nil {
 			return err
 		}
-		defer resp.Body.Close() // #nosec
+
+		defer resp.Body.Close()
 
 		switch {
 		case resp.StatusCode == http.StatusUnauthorized:
 			return ErrAuthorization
-		case resp.StatusCode > 399:
+		case resp.StatusCode >= http.StatusBadRequest:
 			var ecsError model.Error
 			if err = Unmarshal(resp, &ecsError); err != nil {
 				return err
 			}
+
 			return ecsError
 		case into == nil:
 			// No errors found, and no response object defined, so just return
@@ -143,6 +149,7 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 				return err
 			}
 		}
+
 		return nil
 	}
 
@@ -152,13 +159,16 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 	if c.Authenticator == nil {
 		return Do(ctx)
 	}
+
 	if !c.Authenticator.IsAuthenticated() {
 		if err := c.Authenticator.Login(ctx, c.HTTPClient); err != nil {
 			return fmt.Errorf("%w: login: %s", ErrAuthorization, err.Error())
 		}
 	}
+
 	for tries := 0; tries < AuthRetriesMax; tries++ {
 		err := Do(ctx)
+
 		switch {
 		case errors.Is(err, ErrAuthorization):
 			if err = c.Authenticator.Login(ctx, c.HTTPClient); err != nil {
@@ -166,10 +176,12 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 				//      leak credentials here.  Must be careful.
 				return fmt.Errorf("%w: retry login", err)
 			}
+
 			continue
 		default:
 			return err
 		}
 	}
+
 	return fmt.Errorf("%w: exhausted authentication tries", ErrAuthorization)
 }

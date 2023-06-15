@@ -46,7 +46,7 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-// Name of handlers and headers added to IAM
+// Name of handlers and headers added to IAM.
 const (
 	SDSHandlerName       = "X-Sds-Handler"
 	SDSHeaderName        = "X-Sds-Auth-Token"
@@ -54,7 +54,7 @@ const (
 	AccountIDHeaderName  = "X-Emc-Namespace"
 )
 
-// InjectTokenToIAMClient configure IAM client to connect with Objectscale
+// InjectTokenToIAMClient configure IAM client to connect with Objectscale.
 func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.Authenticator, httpClient http.Client) error {
 	realIam, ok := clientIam.(*iam.IAM)
 	if !ok {
@@ -86,8 +86,8 @@ func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.
 	return nil
 }
 
-// InjectAccountIDToIAMClient configure IAM client to connect with Objectscale Accont
-func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, AccountID string) error {
+// InjectAccountIDToIAMClient configure IAM client to connect with Objectscale Account.
+func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, accountID string) error {
 	realIam, ok := clientIam.(*iam.IAM)
 	if !ok {
 		return errors.New("invalid iam client")
@@ -97,7 +97,7 @@ func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, AccountID string) err
 	handler := request.NamedHandler{
 		Name: AccountIDHandlerName,
 		Fn: func(r *request.Request) {
-			r.HTTPRequest.Header.Add(AccountIDHeaderName, AccountID)
+			r.HTTPRequest.Header.Add(AccountIDHeaderName, accountID)
 		},
 	}
 

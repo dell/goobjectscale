@@ -25,7 +25,7 @@ import (
 )
 
 // AuthRetriesMax is the maximum number of times the client will attempt to
-// login before returning an error
+// login before returning an error.
 const AuthRetriesMax = 3
 
 // Authenticator can perform a Login to the gateway.
@@ -42,8 +42,10 @@ type Authenticator interface {
 	Token() string
 }
 
-var _ Authenticator = (*AuthUser)(nil)    // interface guard
-var _ Authenticator = (*AuthService)(nil) // interface guard
+var (
+	_ Authenticator = (*AuthUser)(nil)    // interface guard
+	_ Authenticator = (*AuthService)(nil) // interface guard
+)
 
 // AuthService is an in-cluster Authenticator.
 type AuthService struct {
@@ -81,39 +83,47 @@ func (auth *AuthService) Login(ctx context.Context, ht *http.Client) error {
 	userNameEncoded := base64.StdEncoding.EncodeToString([]byte(userNameRaw))
 	userName := "B64-" + userNameEncoded
 	// current time in milliseconds (rounded to nearest 30 seconds)
-	timeFactor := time.Now().UTC().Round(30*time.Second).UnixNano() / int64(time.Millisecond)
+	timeFactor := time.Now().UTC().Round(30*time.Second).UnixNano() / int64(time.Millisecond) //nolint:gomnd
 
 	data := serviceUrn + strconv.FormatInt(timeFactor, 10)
 	h := hmac.New(sha256.New, []byte(auth.SharedSecret))
+
 	if _, wrr := h.Write([]byte(data)); wrr != nil {
 		return fmt.Errorf("server error: problem writing hmac sha256 %w", wrr)
 	}
+
 	password := base64.StdEncoding.EncodeToString(h.Sum(nil))
 
 	u, err := url.Parse(auth.Gateway)
 	if err != nil {
 		return err
 	}
+
 	u.Path = "/mgmt/serviceLogin"
-	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
 	}
 
-	req = req.WithContext(ctx)
-
 	req.SetBasicAuth(userName, password)
+
 	resp, err := ht.Do(req)
 	if err != nil {
 		return err
 	}
+
+	defer resp.Body.Close()
+
 	if err = HandleResponse(resp); err != nil {
 		return err
 	}
+
 	auth.token = resp.Header.Get("X-SDS-AUTH-TOKEN")
 	if auth.token == "" {
 		return fmt.Errorf("server error: login failed")
 	}
+
 	return nil
 }
 
@@ -149,26 +159,32 @@ func (auth *AuthUser) Login(ctx context.Context, ht *http.Client) error {
 	if err != nil {
 		return err
 	}
+
 	u.Path = "/mgmt/login"
-	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
 	}
 
-	req = req.WithContext(ctx)
-
 	req.SetBasicAuth(auth.Username, auth.Password)
+
 	resp, err := ht.Do(req)
 	if err != nil {
 		return err
 	}
+
+	defer resp.Body.Close()
+
 	if err = HandleResponse(resp); err != nil {
 		return err
 	}
+
 	auth.token = resp.Header.Get("X-SDS-AUTH-TOKEN")
 	if auth.token == "" {
 		return fmt.Errorf("server error: login failed")
 	}
+
 	return nil
 }
 

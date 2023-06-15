@@ -12,7 +12,7 @@
 
 package model
 
-// RebuildInfo is the information about the rebuild status
+// RebuildInfo is the information about the rebuild status.
 type RebuildInfo struct {
 	// Status of the storage server
 	Status string `json:"status"`

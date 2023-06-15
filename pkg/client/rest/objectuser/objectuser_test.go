@@ -33,22 +33,29 @@ func newRecordedHTTPClient(r *recorder.Recorder) *http.Client {
 }
 
 func TestObjectUser(t *testing.T) {
-	var r *recorder.Recorder
-	var err error
+	var (
+		r   *recorder.Recorder
+		err error
+	)
+
 	r, err = recorder.New("fixtures")
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	r.AddHook(func(i *cassette.Interaction) error {
 		delete(i.Request.Headers, "Authorization")
 		delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
+
 		return nil
 	}, recorder.BeforeSaveHook)
+
 	r.SetRealTransport(&http.Transport{
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: true,
+			InsecureSkipVerify: true, //nolint:gosec
 		},
 	})
+
 	c := client.Simple{
 		Endpoint: "https://testserver",
 		Authenticator: &client.AuthService{
@@ -62,6 +69,7 @@ func TestObjectUser(t *testing.T) {
 		OverrideHeader: false,
 	}
 	clientset := rest.NewClientSet(&c)
+
 	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
 		"list":         testList,
 		"getInfo":      testGetInfo,
@@ -81,6 +89,7 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	require.Len(t, data.BlobUser, 1)
 	require.Equal(t, data.BlobUser[0].UserID, "zmvodjnrbmjxagvwcxf5cg==")
 	require.Equal(t, data.BlobUser[0].Namespace, "small-operator-acceptance")
+
 	_, err = clientset.ObjectUser().List(context.TODO(), map[string]string{"a": "b"})
 	require.Error(t, err)
 }
@@ -114,6 +123,7 @@ func testGetInfo(t *testing.T, clientset *rest.ClientSet) {
 			} else {
 				require.NoError(t, err)
 			}
+
 			require.Equal(t, data, tt.out)
 		})
 	}
@@ -151,6 +161,7 @@ func testGetSecret(t *testing.T, clientset *rest.ClientSet) {
 			} else {
 				require.NoError(t, err)
 			}
+
 			require.Equal(t, data, tt.out)
 		})
 	}
@@ -189,6 +200,7 @@ func testCreateSecret(t *testing.T, clientset *rest.ClientSet) {
 			} else {
 				require.NoError(t, err)
 			}
+
 			require.Equal(t, data, tt.out)
 		})
 	}

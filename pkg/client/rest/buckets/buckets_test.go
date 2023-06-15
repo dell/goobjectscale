@@ -37,6 +37,7 @@ func TestBuckets(t *testing.T) {
 		r   *recorder.Recorder
 		err error
 	)
+
 	r, err = recorder.New("fixtures")
 	if err != nil {
 		log.Fatal(err)
@@ -45,8 +46,10 @@ func TestBuckets(t *testing.T) {
 	r.AddHook(func(i *cassette.Interaction) error {
 		delete(i.Request.Headers, "Authorization")
 		delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
+
 		return nil
 	}, recorder.BeforeSaveHook)
+
 	c := client.Simple{
 		Endpoint: "https://testserver",
 		Authenticator: &client.AuthService{
@@ -60,6 +63,7 @@ func TestBuckets(t *testing.T) {
 		OverrideHeader: false,
 	}
 	clientset := rest.NewClientSet(&c)
+
 	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
 		"list":         testList,
 		"get":          testGet,
@@ -82,6 +86,7 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	buckets, err := clientset.Buckets().List(context.TODO(), map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(buckets.Items), 18)
+
 	_, err = clientset.Buckets().List(context.TODO(), map[string]string{"a": "b"})
 	require.Error(t, err)
 }
@@ -90,6 +95,7 @@ func testGet(t *testing.T, clientset *rest.ClientSet) {
 	bucket, err := clientset.Buckets().Get(context.TODO(), "Files", map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, bucket.Name, "Files")
+
 	_, err = clientset.Buckets().Get(context.TODO(), "Flies", map[string]string{})
 	require.Error(t, err)
 }
@@ -105,7 +111,7 @@ func testCreate(t *testing.T, clientset *rest.ClientSet) {
 	require.NoError(t, err)
 	assert.Equal(t, bucket.Name, "testbucket1")
 
-	//Delete bucket after
+	// Delete bucket after
 	delErr := clientset.Buckets().Delete(context.TODO(), "testbucket1", "130820808912778549", true)
 	if delErr != nil {
 		panic(delErr)
@@ -118,10 +124,12 @@ func testDelete(t *testing.T, clientset *rest.ClientSet) {
 		ReplicationGroup: "urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global",
 		Namespace:        "130820808912778549",
 	}
+
 	_, createErr := clientset.Buckets().Create(context.TODO(), createBucket)
 	if createErr != nil {
 		panic(createErr)
 	}
+
 	err := clientset.Buckets().Delete(context.TODO(), "testbucket1", "130820808912778549", true)
 	require.NoError(t, err)
 	err = clientset.Buckets().Delete(context.TODO(), "unknownbucket", "130820808912778549", true)
@@ -132,6 +140,7 @@ func testGetQuota(t *testing.T, clientset *rest.ClientSet) {
 	quota, err := clientset.Buckets().GetQuota(context.TODO(), "testbucket1", "130820808912778549")
 	require.NoError(t, err)
 	assert.Equal(t, int(quota.BlockSize), -1)
+
 	_, err = clientset.Buckets().GetQuota(context.TODO(), "testbucket", "130820808912778549")
 	require.Error(t, err)
 }
@@ -161,7 +170,6 @@ func testUpdateQuota(t *testing.T, clientset *rest.ClientSet) {
 	bucketQuotaUpdate.BucketQuota = bucketQuota
 	err := clientset.Buckets().UpdateQuota(context.TODO(), bucketQuotaUpdate)
 	require.Nil(t, err)
-
 }
 
 func testDeleteQuota(t *testing.T, clientset *rest.ClientSet) {

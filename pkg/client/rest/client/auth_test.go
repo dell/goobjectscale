@@ -33,10 +33,10 @@ func testLogin(t *testing.T, auth client.Authenticator) {
 	badAuth := &fixtureFailedServiceauth
 	err := badAuth.Login(context.TODO(), NewTestHTTPClient())
 	require.Error(t, err)
+
 	fixtureFailedServiceauth.Gateway = "bad:gate:way"
 
 	badAuth = &fixtureFailedServiceauth
 	err = badAuth.Login(context.TODO(), NewTestHTTPClient())
 	require.Error(t, err)
-
 }

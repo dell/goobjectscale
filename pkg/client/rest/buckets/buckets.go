@@ -23,12 +23,12 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-// Buckets is a REST implementation of the Buckets interface
+// Buckets is a REST implementation of the Buckets interface.
 type Buckets struct {
 	Client client.RemoteCaller
 }
 
-// Get implements the buckets interface
+// Get implements the buckets interface.
 func (b *Buckets) Get(ctx context.Context, name string, params map[string]string) (*model.Bucket, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
@@ -37,14 +37,16 @@ func (b *Buckets) Get(ctx context.Context, name string, params map[string]string
 		Params:      params,
 	}
 	bucket := &model.BucketInfo{}
+
 	err := b.Client.MakeRemoteCall(ctx, req, bucket)
 	if err != nil {
 		return nil, err
 	}
+
 	return &bucket.Bucket, nil
 }
 
-// List implements the buckets interface
+// List implements the buckets interface.
 func (b *Buckets) List(ctx context.Context, params map[string]string) (*model.BucketList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
@@ -53,14 +55,16 @@ func (b *Buckets) List(ctx context.Context, params map[string]string) (*model.Bu
 		Params:      params,
 	}
 	bucketList := &model.BucketList{}
+
 	err := b.Client.MakeRemoteCall(ctx, req, bucketList)
 	if err != nil {
 		return nil, err
 	}
+
 	return bucketList, nil
 }
 
-// GetPolicy implements the buckets interface
+// GetPolicy implements the buckets interface.
 func (b *Buckets) GetPolicy(ctx context.Context, bucketName string, param map[string]string) (string, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
@@ -68,16 +72,20 @@ func (b *Buckets) GetPolicy(ctx context.Context, bucketName string, param map[st
 		ContentType: client.ContentTypeJSON,
 		Params:      param,
 	}
+
 	var bucketPolicy json.RawMessage
+
 	err := b.Client.MakeRemoteCall(ctx, req, &bucketPolicy)
 	if err != nil {
 		return "", err
 	}
+
 	policy, err := bucketPolicy.MarshalJSON()
+
 	return string(policy), err
 }
 
-// UpdatePolicy implements the buckets interface
+// UpdatePolicy implements the buckets interface.
 func (b *Buckets) UpdatePolicy(ctx context.Context, bucketName string, policy string, param map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodPut,
@@ -86,10 +94,11 @@ func (b *Buckets) UpdatePolicy(ctx context.Context, bucketName string, policy st
 		Params:      param,
 		Body:        json.RawMessage(policy),
 	}
+
 	return b.Client.MakeRemoteCall(ctx, req, nil)
 }
 
-// DeletePolicy implements the buckets interface
+// DeletePolicy implements the buckets interface.
 func (b *Buckets) DeletePolicy(ctx context.Context, bucketName string, param map[string]string) error {
 	req := client.Request{
 		Method:      http.MethodDelete,
@@ -97,10 +106,11 @@ func (b *Buckets) DeletePolicy(ctx context.Context, bucketName string, param map
 		ContentType: client.ContentTypeJSON,
 		Params:      param,
 	}
+
 	return b.Client.MakeRemoteCall(ctx, req, nil)
 }
 
-// Create implements the buckets interface
+// Create implements the buckets interface.
 func (b *Buckets) Create(ctx context.Context, createParam model.Bucket) (*model.Bucket, error) {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -109,14 +119,16 @@ func (b *Buckets) Create(ctx context.Context, createParam model.Bucket) (*model.
 		Body:        &model.BucketCreate{Bucket: createParam},
 	}
 	bucket := &model.Bucket{}
+
 	err := b.Client.MakeRemoteCall(ctx, req, bucket)
 	if err != nil {
 		return nil, err
 	}
+
 	return bucket, nil
 }
 
-// Delete implements the buckets interface
+// Delete implements the buckets interface.
 func (b *Buckets) Delete(ctx context.Context, name string, namespace string, emptyBucket bool) error {
 	req := client.Request{
 		Method:      http.MethodPost,
@@ -124,10 +136,12 @@ func (b *Buckets) Delete(ctx context.Context, name string, namespace string, emp
 		Params:      map[string]string{"namespace": namespace, "emptyBucket": fmt.Sprint(emptyBucket)},
 		ContentType: client.ContentTypeJSON,
 	}
+
 	err := b.Client.MakeRemoteCall(ctx, req, nil)
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -140,10 +154,12 @@ func (b *Buckets) GetQuota(ctx context.Context, bucketName string, namespace str
 		Params:      map[string]string{"namespace": namespace},
 	}
 	bucketQuota := &model.BucketQuotaInfo{}
+
 	err := b.Client.MakeRemoteCall(ctx, req, bucketQuota)
 	if err != nil {
 		return nil, err
 	}
+
 	return bucketQuota, err
 }
 
@@ -155,6 +171,7 @@ func (b *Buckets) UpdateQuota(ctx context.Context, bucketQuota model.BucketQuota
 		ContentType: client.ContentTypeXML,
 		Body:        bucketQuota,
 	}
+
 	return b.Client.MakeRemoteCall(ctx, req, nil)
 }
 
@@ -166,5 +183,6 @@ func (b *Buckets) DeleteQuota(ctx context.Context, bucketName string, namespace 
 		ContentType: client.ContentTypeXML,
 		Params:      map[string]string{"namespace": namespace},
 	}
+
 	return b.Client.MakeRemoteCall(ctx, req, nil)
 }

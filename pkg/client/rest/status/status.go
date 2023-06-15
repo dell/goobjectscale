@@ -20,12 +20,12 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-// Status is a REST implementation of the Status interface
+// Status is a REST implementation of the Status interface.
 type Status struct {
 	Client client.RemoteCaller
 }
 
-// GetRebuildStatus implements the status interface
+// GetRebuildStatus implements the status interface.
 func (b *Status) GetRebuildStatus(ctx context.Context, objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
 	// URL Example: https://10.240.117.5:4443/vdc/recovery-status/devices/youmin-test-1-ss-0.youmin-test-1-ss.dellemc-globalmarcu-domain-c10.svc.cluster.local/levels/1
 	requestURL := "vdc/recovery-status/devices/" + ssPodName + "." +
@@ -37,6 +37,7 @@ func (b *Status) GetRebuildStatus(ctx context.Context, objStoreName, ssPodName, 
 		Params:      params,
 	}
 	rebuildInfo := &model.RebuildInfo{}
+
 	err := b.Client.MakeRemoteCall(ctx, req, rebuildInfo)
 	if err != nil {
 		return nil, err

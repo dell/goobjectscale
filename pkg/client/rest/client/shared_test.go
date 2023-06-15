@@ -25,7 +25,7 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-// Required to force io.ReadAll error
+// Required to force io.ReadAll error.
 type errReader int
 
 func (errReader) Read(p []byte) (n int, err error) {
@@ -86,5 +86,4 @@ func TestHandleResponse(t *testing.T) {
 
 	err = client.HandleResponse(failUnmarshalResponse)
 	require.Equal(t, "expected element type <error> but have <badformat>", err.Error())
-
 }

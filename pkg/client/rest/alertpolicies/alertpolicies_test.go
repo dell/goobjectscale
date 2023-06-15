@@ -38,6 +38,7 @@ func TestAlertpolicies(t *testing.T) {
 		r   *recorder.Recorder
 		err error
 	)
+
 	r, err = recorder.New("fixtures")
 	if err != nil {
 		log.Fatal(err)
@@ -46,8 +47,10 @@ func TestAlertpolicies(t *testing.T) {
 	r.AddHook(func(i *cassette.Interaction) error {
 		delete(i.Request.Headers, "Authorization")
 		delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
+
 		return nil
 	}, recorder.BeforeSaveHook)
+
 	c := client.Simple{
 		Endpoint: "https://testserver",
 		Authenticator: &client.AuthService{
@@ -61,6 +64,7 @@ func TestAlertpolicies(t *testing.T) {
 		OverrideHeader: false,
 	}
 	clientset := rest.NewClientSet(&c)
+
 	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
 		"list":   testList,
 		"get":    testGet,
@@ -78,6 +82,7 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	alertPolicies, err := clientset.AlertPolicies().List(context.TODO(), map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(alertPolicies.Items), 3)
+
 	_, err = clientset.AlertPolicies().List(context.TODO(), map[string]string{"a": "b"})
 	require.Error(t, err)
 }
@@ -86,6 +91,7 @@ func testGet(t *testing.T, clientset *rest.ClientSet) {
 	alertPolicy, err := clientset.AlertPolicies().Get(context.TODO(), "testPolicy")
 	require.NoError(t, err)
 	assert.Equal(t, alertPolicy.PolicyName, "testPolicy")
+
 	_, err = clientset.AlertPolicies().Get(context.TODO(), "nonexistentPolicy")
 	require.Error(t, err)
 }
