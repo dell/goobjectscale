@@ -32,18 +32,24 @@ type ClientSet interface {
 }
 
 // StatusInterfaces represents status resource client interface
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name StatusInterfaces
 type StatusInterfaces interface {
 	// GetRebuildStatus returns rebuild status of an ObjectScale object store
 	GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error)
 }
 
 // FederatedObjectStoresInterface represents a replication store client interface
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name FederatedObjectStoresInterface
 type FederatedObjectStoresInterface interface {
 	// List returns a list of federated object stores
 	List(params map[string]string) (*model.FederatedObjectStoreList, error)
 }
 
 // BucketsInterface represents a bucket resource client interface
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name BucketsInterface
 type BucketsInterface interface {
 	// List returns a list of buckets within the ObjectScale object store
 	List(params map[string]string) (*model.BucketList, error)
@@ -77,6 +83,8 @@ type BucketsInterface interface {
 }
 
 // ObjectUserInterface represents an object user resource client interface.
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name ObjectUserInterface
 type ObjectUserInterface interface {
 	// List returns a list of object users within the ObjectScale object store.
 	List(params map[string]string) (*model.ObjectUserList, error)
@@ -95,6 +103,8 @@ type ObjectUserInterface interface {
 }
 
 // AlertPoliciesInterface represents a alert policy resource client interface.
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name AlertPoliciesInterface
 type AlertPoliciesInterface interface {
 	// List returns a list of alert policies within the ObjectScale object store.
 	List(params map[string]string) (*model.AlertPolicies, error)
@@ -113,6 +123,8 @@ type AlertPoliciesInterface interface {
 }
 
 // TenantsInterface represents an tenant resource client interface.
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name TenantsInterface
 type TenantsInterface interface {
 	// List returns a list of tenants within the ObjectScale object store.
 	List(params map[string]string) (*model.TenantList, error)
@@ -140,6 +152,8 @@ type TenantsInterface interface {
 }
 
 // ObjmtInterface represents an interface for objMT service metrics.
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name ObjmtInterface
 type ObjmtInterface interface {
 	// GetAccountBillingInfo returns billing info metrics for defined accounts
 	GetAccountBillingInfo(ids []string, params map[string]string) (*model.AccountBillingInfoList, error)
@@ -173,6 +187,8 @@ type ObjmtInterface interface {
 }
 
 // CRRInterface represents an interface for Cross Region Replication (CRR)
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name CRRInterface
 type CRRInterface interface {
 	// PauseReplication temporarily pauses source and destination object stores' replication communication
 	// pauses for the provided future epoch time in milliseconds
