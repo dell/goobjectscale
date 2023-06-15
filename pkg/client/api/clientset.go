@@ -17,6 +17,8 @@ import (
 )
 
 // ClientSet represents a client interface of supported resources
+//
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name ClientSet
 type ClientSet interface {
 	// Buckets returns a bucket client interface
 	Buckets() BucketsInterface
