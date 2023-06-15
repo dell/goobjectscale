@@ -33,7 +33,7 @@ type ClientSet struct {
 	tenants               api.TenantsInterface
 	objmt                 api.ObjmtInterface
 	crr                   api.CRRInterface
-	status                api.StatusInterfaces
+	status                api.StatusInterface
 	alertPolicies         api.AlertPoliciesInterface
 	federatedObjectStores api.FederatedObjectStoresInterface
 }
@@ -89,7 +89,7 @@ func (c *ClientSet) CRR() api.CRRInterface {
 }
 
 // Status implements the client API
-func (c *ClientSet) Status() api.StatusInterfaces {
+func (c *ClientSet) Status() api.StatusInterface {
 	return c.status
 }
 

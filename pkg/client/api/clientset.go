@@ -16,6 +16,8 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/model"
 )
 
+//go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name (ClientSet)|(([A-Z][A-Za-z]+)Interface)
+
 // ClientSet represents a client interface of supported resources
 type ClientSet interface {
 	// Buckets returns a bucket client interface
@@ -25,12 +27,12 @@ type ClientSet interface {
 	ObjectMt() ObjmtInterface
 	AlertPolicies() AlertPoliciesInterface
 	CRR() CRRInterface
-	Status() StatusInterfaces
+	Status() StatusInterface
 	FederatedObjectStores() FederatedObjectStoresInterface
 }
 
-// StatusInterfaces represents status resource client interface
-type StatusInterfaces interface {
+// StatusInterface represents status resource client interface
+type StatusInterface interface {
 	// GetRebuildStatus returns rebuild status of an ObjectScale object store
 	GetRebuildStatus(objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error)
 }
