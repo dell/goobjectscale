@@ -14,11 +14,11 @@ package client_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
-	"math"
-
 	"io"
+	"math"
 	"net/http"
 	"net/url"
 	"testing"
@@ -45,15 +45,15 @@ var FixtureServiceauth = client.AuthService{
 	ObjectScaleID: "IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 }
 
-// RoundTripFunc is a transport mock that makes a fake HTTP response locally
+// RoundTripFunc is a transport mock that makes a fake HTTP response locally.
 type RoundTripFunc func(req *http.Request) *http.Response
 
-// RoundTrip mocks an http request and returns an http response
+// RoundTrip mocks an http request and returns an http response.
 func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return f(req), nil
 }
 
-// NewTestClient returns *http.Client with Transport replaced to avoid making real calls
+// NewTestClient returns *http.Client with Transport replaced to avoid making real calls.
 func NewTestClient(fn RoundTripFunc) *http.Client {
 	return &http.Client{
 		Transport: RoundTripFunc(fn),
@@ -103,12 +103,13 @@ func testInvalidEndpoint(t *testing.T, auth client.Authenticator) {
 		OverrideHeader: true,
 	}
 	clientset := rest.NewClientSet(&c)
-	err := clientset.Client().MakeRemoteCall(client.Request{
+	err := clientset.Client().MakeRemoteCall(context.TODO(), client.Request{
 		Method:      http.MethodGet,
 		Path:        "",
 		ContentType: client.ContentTypeJSON,
 	}, nil)
 	errUrl := &url.Error{}
+
 	require.Error(t, err)
 	assert.ErrorAs(t, err, &errUrl)
 }
@@ -121,13 +122,15 @@ func testInvalidContentType(t *testing.T, auth client.Authenticator) {
 		OverrideHeader: false,
 	}
 	clientset := rest.NewClientSet(&c)
-	err := clientset.Client().MakeRemoteCall(client.Request{
-		Method:      http.MethodGet,
-		Path:        "",
-		ContentType: "NotAContentType",
-	}, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(),
+		client.Request{
+			Method:      http.MethodGet,
+			Path:        "",
+			ContentType: "NotAContentType",
+		}, nil)
 	require.ErrorIs(t, err, client.ErrContentType)
 }
+
 func testFailedAuth(t *testing.T, auth client.Authenticator) {
 	badUser := client.AuthUser{
 		Gateway:  "https://testgateway",
@@ -147,7 +150,7 @@ func testFailedAuth(t *testing.T, auth client.Authenticator) {
 		Path:        "",
 		ContentType: client.ContentTypeJSON,
 	}
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, err)
 }
 
@@ -165,12 +168,13 @@ func testFailedLogin(t *testing.T, auth client.Authenticator) {
 		Path:        "/failedLogin",
 		ContentType: client.ContentTypeJSON,
 	}
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, err)
 	assert.Equal(t, "authorization: exhausted authentication tries", err.Error())
+
 	c.Authenticator = nil
 	clientset = rest.NewClientSet(&c)
-	err = clientset.Client().MakeRemoteCall(req, nil)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, err)
 }
 
@@ -182,21 +186,21 @@ func testBadRequest(t *testing.T, auth client.Authenticator) {
 		OverrideHeader: false,
 	}
 	clientset := rest.NewClientSet(&c)
-	//Content-type JSON
+	// Content-type JSON
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        "/badRequest",
 		ContentType: client.ContentTypeJSON,
 	}
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, err)
-	//Content-type XML
+	// Content-type XML
 	req = client.Request{
 		Method:      http.MethodGet,
 		Path:        "/badRequest",
 		ContentType: client.ContentTypeXML,
 	}
-	nerr := clientset.Client().MakeRemoteCall(req, nil)
+	nerr := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Error(t, nerr)
 }
 
@@ -214,7 +218,7 @@ func testEmptyBody(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 	}
 	bucketList := &model.BucketList{}
-	err := clientset.Client().MakeRemoteCall(req, bucketList)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, bucketList)
 	require.Nil(t, err)
 }
 
@@ -226,24 +230,24 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		OverrideHeader: false,
 	}
 	clientset := rest.NewClientSet(&c)
-	//JSON
-	//Success
+	// JSON
+	// Success
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        "/ok/json",
 		ContentType: client.ContentTypeJSON,
 	}
 	ecsError := &model.Error{}
-	err := clientset.Client().MakeRemoteCall(req, ecsError)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Nil(t, err)
-	//Error
+	// Error
 	req = client.Request{
 		Method:      http.MethodGet,
 		Path:        "/ok/xml",
 		ContentType: client.ContentTypeJSON,
 	}
 	errJSONSyntax := &json.SyntaxError{}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.ErrorAs(t, err, &errJSONSyntax)
 	require.Contains(t, err.Error(), "invalid character '<' looking for beginning of value")
 	// force error in request.go
@@ -253,24 +257,24 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 		Body:        math.Inf(-1),
 	}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Error(t, err)
-	//XML
-	//Success
+	// XML
+	// Success
 	req = client.Request{
 		Method:      http.MethodGet,
 		Path:        "/ok/xml",
 		ContentType: client.ContentTypeXML,
 	}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Nil(t, err)
-	//Error
+	// Error
 	req = client.Request{
 		Method:      http.MethodGet,
 		Path:        "/ok/json",
 		ContentType: client.ContentTypeXML,
 	}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.ErrorIs(t, err, io.EOF)
 	require.Contains(t, err.Error(), "EOF")
 	// force error in request.go
@@ -280,7 +284,7 @@ func testWithBody(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeXML,
 		Body:        map[string]string{},
 	}
-	err = clientset.Client().MakeRemoteCall(req, ecsError)
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Error(t, err)
 }
 
@@ -299,12 +303,12 @@ func testNoErrorsNoObject(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 	}
 
-	//Content-type JSON
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	// Content-type JSON
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Nil(t, err)
 
-	//Content-type XML
-	err = clientset.Client().MakeRemoteCall(req, nil)
+	// Content-type XML
+	err = clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Nil(t, err)
 }
 
@@ -322,9 +326,8 @@ func testNoGateway(t *testing.T, auth client.Authenticator) {
 		Path:        "/badRequest",
 		ContentType: client.ContentTypeJSON,
 	}
-	err := clientset.Client().MakeRemoteCall(req, ecsError)
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, ecsError)
 	require.Error(t, err)
-
 }
 
 func testOverrideHeader(t *testing.T, auth client.Authenticator) {
@@ -342,8 +345,8 @@ func testOverrideHeader(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 	}
 
-	//Content-type JSON
-	err := clientset.Client().MakeRemoteCall(req, nil)
+	// Content-type JSON
+	err := clientset.Client().MakeRemoteCall(context.TODO(), req, nil)
 	require.Nil(t, err)
 }
 
@@ -360,15 +363,16 @@ func testHTTP(t *testing.T, auth client.Authenticator) {
 		ContentType: "NotAContentType",
 		Params:      map[string]string{"param1": "param"},
 	}
-	_, err := req.HTTP(c.Endpoint)
+	_, err := req.HTTPWithContext(context.TODO(), c.Endpoint)
 	require.Error(t, err)
+
 	req = client.Request{
 		Method:      http.MethodGet,
 		Path:        "/test",
 		ContentType: client.ContentTypeJSON,
 		Params:      map[string]string{"param1": "param"},
 	}
-	_, err = req.HTTP(c.Endpoint)
+	_, err = req.HTTPWithContext(context.TODO(), c.Endpoint)
 	require.NoError(t, err)
 
 	req = client.Request{
@@ -377,7 +381,7 @@ func testHTTP(t *testing.T, auth client.Authenticator) {
 		ContentType: client.ContentTypeJSON,
 		Params:      map[string]string{"param1": "param"},
 	}
-	_, err = req.HTTP(c.Endpoint)
+	_, err = req.HTTPWithContext(context.TODO(), c.Endpoint)
 	require.Error(t, err)
 	require.Equal(t, "create request: net/http: invalid method \"not a method\"", err.Error())
 }
@@ -385,6 +389,7 @@ func testHTTP(t *testing.T, auth client.Authenticator) {
 func NewTestHTTPClient() *http.Client {
 	return NewTestClient(func(req *http.Request) *http.Response {
 		header := make(http.Header)
+
 		switch req.URL.String() {
 		case "https://testserver/ok/json":
 			return &http.Response{
@@ -422,11 +427,14 @@ func NewTestHTTPClient() *http.Client {
 
 		case "https://testgateway/mgmt/login":
 			reqAuth := fmt.Sprint(req.Header["Authorization"])
-			defaultAuthCreds := "[Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk]"
+			defaultAuthCreds := "[Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk]" //nolint:gosec
+
 			header.Set("X-Sds-Auth-Token", "")
+
 			if reqAuth == defaultAuthCreds {
 				header.Set("X-Sds-Auth-Token", "TESTTOKEN")
 			}
+
 			return &http.Response{
 				StatusCode: 200,
 				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"OK"}`))),
@@ -435,13 +443,14 @@ func NewTestHTTPClient() *http.Client {
 
 		case "https://testgateway/mgmt/serviceLogin":
 			header.Set("X-SDS-AUTH-TOKEN", "TESTTOKEN")
+
 			return &http.Response{
 				StatusCode: 200,
 				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"OK"}`))),
 				Header:     header,
 			}
-
 		}
+
 		return nil
 	})
 }

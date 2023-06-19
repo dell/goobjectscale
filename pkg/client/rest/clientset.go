@@ -25,7 +25,7 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/tenants"
 )
 
-// ClientSet is a set of clients for each API section
+// ClientSet is a set of clients for each API section.
 type ClientSet struct {
 	client                client.RemoteCaller
 	buckets               api.BucketsInterface
@@ -38,7 +38,9 @@ type ClientSet struct {
 	federatedObjectStores api.FederatedObjectStoresInterface
 }
 
-// NewClientSet returns a new client set based on the provided REST client parameters
+var _ api.ClientSet = (*ClientSet)(nil)
+
+// NewClientSet returns a new client set based on the provided REST client parameters.
 func NewClientSet(c client.RemoteCaller) *ClientSet {
 	return &ClientSet{
 		client:                c,
@@ -53,47 +55,47 @@ func NewClientSet(c client.RemoteCaller) *ClientSet {
 	}
 }
 
-// Client returns the REST client used in the ClientSet
+// Client returns the REST client used in the ClientSet.
 func (c *ClientSet) Client() client.RemoteCaller {
 	return c.client
 }
 
-// Buckets implements the client API
+// Buckets implements the client API.
 func (c *ClientSet) Buckets() api.BucketsInterface {
 	return c.buckets
 }
 
-// ObjectUser implements the client API
+// ObjectUser implements the client API.
 func (c *ClientSet) ObjectUser() api.ObjectUserInterface {
 	return c.objectUser
 }
 
-// AlertPolicies implements the client API
+// AlertPolicies implements the client API.
 func (c *ClientSet) AlertPolicies() api.AlertPoliciesInterface {
 	return c.alertPolicies
 }
 
-// Tenants implements the client API
+// Tenants implements the client API.
 func (c *ClientSet) Tenants() api.TenantsInterface {
 	return c.tenants
 }
 
-// ObjectMt implements the client API for objMT metrics
+// ObjectMt implements the client API for objMT metrics.
 func (c *ClientSet) ObjectMt() api.ObjmtInterface {
 	return c.objmt
 }
 
-// CRR implements the client API for Cross Region Replication
+// CRR implements the client API for Cross Region Replication.
 func (c *ClientSet) CRR() api.CRRInterface {
 	return c.crr
 }
 
-// Status implements the client API
+// Status implements the client API.
 func (c *ClientSet) Status() api.StatusInterface {
 	return c.status
 }
 
-// FederatedObjectStores implements the client API
+// FederatedObjectStores implements the client API.
 func (c *ClientSet) FederatedObjectStores() api.FederatedObjectStoresInterface {
 	return c.federatedObjectStores
 }

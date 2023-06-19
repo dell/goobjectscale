@@ -3,6 +3,8 @@
 package mocks
 
 import (
+	context "context"
+
 	model "github.com/dell/goobjectscale/pkg/client/model"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -12,25 +14,28 @@ type BucketsInterface struct {
 	mock.Mock
 }
 
-// Create provides a mock function with given fields: createParam
-func (_m *BucketsInterface) Create(createParam model.Bucket) (*model.Bucket, error) {
-	ret := _m.Called(createParam)
+// Create provides a mock function with given fields: ctx, createParam
+func (_m *BucketsInterface) Create(ctx context.Context, createParam model.Bucket) (*model.Bucket, error) {
+	ret := _m.Called(ctx, createParam)
 
 	var r0 *model.Bucket
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(model.Bucket) (*model.Bucket, error)); ok {
-		return rf(createParam)
+
+	if rf, ok := ret.Get(0).(func(context.Context, model.Bucket) (*model.Bucket, error)); ok {
+		return rf(ctx, createParam)
 	}
-	if rf, ok := ret.Get(0).(func(model.Bucket) *model.Bucket); ok {
-		r0 = rf(createParam)
+
+	if rf, ok := ret.Get(0).(func(context.Context, model.Bucket) *model.Bucket); ok {
+		r0 = rf(ctx, createParam)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.Bucket)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(model.Bucket) error); ok {
-		r1 = rf(createParam)
+	if rf, ok := ret.Get(1).(func(context.Context, model.Bucket) error); ok {
+		r1 = rf(ctx, createParam)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -38,13 +43,13 @@ func (_m *BucketsInterface) Create(createParam model.Bucket) (*model.Bucket, err
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: name, namespace, emptyBucket
-func (_m *BucketsInterface) Delete(name string, namespace string, emptyBucket bool) error {
-	ret := _m.Called(name, namespace, emptyBucket)
+// Delete provides a mock function with given fields: ctx, name, namespace, emptyBucket
+func (_m *BucketsInterface) Delete(ctx context.Context, name string, namespace string, emptyBucket bool) error {
+	ret := _m.Called(ctx, name, namespace, emptyBucket)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string, bool) error); ok {
-		r0 = rf(name, namespace, emptyBucket)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, bool) error); ok {
+		r0 = rf(ctx, name, namespace, emptyBucket)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -52,13 +57,13 @@ func (_m *BucketsInterface) Delete(name string, namespace string, emptyBucket bo
 	return r0
 }
 
-// DeletePolicy provides a mock function with given fields: bucketName, param
-func (_m *BucketsInterface) DeletePolicy(bucketName string, param map[string]string) error {
-	ret := _m.Called(bucketName, param)
+// DeletePolicy provides a mock function with given fields: ctx, bucketName, param
+func (_m *BucketsInterface) DeletePolicy(ctx context.Context, bucketName string, param map[string]string) error {
+	ret := _m.Called(ctx, bucketName, param)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, map[string]string) error); ok {
-		r0 = rf(bucketName, param)
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) error); ok {
+		r0 = rf(ctx, bucketName, param)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -66,13 +71,13 @@ func (_m *BucketsInterface) DeletePolicy(bucketName string, param map[string]str
 	return r0
 }
 
-// DeleteQuota provides a mock function with given fields: bucketName, namespace
-func (_m *BucketsInterface) DeleteQuota(bucketName string, namespace string) error {
-	ret := _m.Called(bucketName, namespace)
+// DeleteQuota provides a mock function with given fields: ctx, bucketName, namespace
+func (_m *BucketsInterface) DeleteQuota(ctx context.Context, bucketName string, namespace string) error {
+	ret := _m.Called(ctx, bucketName, namespace)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string) error); ok {
-		r0 = rf(bucketName, namespace)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) error); ok {
+		r0 = rf(ctx, bucketName, namespace)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -80,25 +85,28 @@ func (_m *BucketsInterface) DeleteQuota(bucketName string, namespace string) err
 	return r0
 }
 
-// Get provides a mock function with given fields: name, params
-func (_m *BucketsInterface) Get(name string, params map[string]string) (*model.Bucket, error) {
-	ret := _m.Called(name, params)
+// Get provides a mock function with given fields: ctx, name, params
+func (_m *BucketsInterface) Get(ctx context.Context, name string, params map[string]string) (*model.Bucket, error) {
+	ret := _m.Called(ctx, name, params)
 
 	var r0 *model.Bucket
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, map[string]string) (*model.Bucket, error)); ok {
-		return rf(name, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (*model.Bucket, error)); ok {
+		return rf(ctx, name, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, map[string]string) *model.Bucket); ok {
-		r0 = rf(name, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) *model.Bucket); ok {
+		r0 = rf(ctx, name, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.Bucket)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, map[string]string) error); ok {
-		r1 = rf(name, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, map[string]string) error); ok {
+		r1 = rf(ctx, name, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -106,23 +114,26 @@ func (_m *BucketsInterface) Get(name string, params map[string]string) (*model.B
 	return r0, r1
 }
 
-// GetPolicy provides a mock function with given fields: bucketName, param
-func (_m *BucketsInterface) GetPolicy(bucketName string, param map[string]string) (string, error) {
-	ret := _m.Called(bucketName, param)
+// GetPolicy provides a mock function with given fields: ctx, bucketName, param
+func (_m *BucketsInterface) GetPolicy(ctx context.Context, bucketName string, param map[string]string) (string, error) {
+	ret := _m.Called(ctx, bucketName, param)
 
 	var r0 string
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, map[string]string) (string, error)); ok {
-		return rf(bucketName, param)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (string, error)); ok {
+		return rf(ctx, bucketName, param)
 	}
-	if rf, ok := ret.Get(0).(func(string, map[string]string) string); ok {
-		r0 = rf(bucketName, param)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) string); ok {
+		r0 = rf(ctx, bucketName, param)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 
-	if rf, ok := ret.Get(1).(func(string, map[string]string) error); ok {
-		r1 = rf(bucketName, param)
+	if rf, ok := ret.Get(1).(func(context.Context, string, map[string]string) error); ok {
+		r1 = rf(ctx, bucketName, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -130,25 +141,28 @@ func (_m *BucketsInterface) GetPolicy(bucketName string, param map[string]string
 	return r0, r1
 }
 
-// GetQuota provides a mock function with given fields: bucketName, namespace
-func (_m *BucketsInterface) GetQuota(bucketName string, namespace string) (*model.BucketQuotaInfo, error) {
-	ret := _m.Called(bucketName, namespace)
+// GetQuota provides a mock function with given fields: ctx, bucketName, namespace
+func (_m *BucketsInterface) GetQuota(ctx context.Context, bucketName string, namespace string) (*model.BucketQuotaInfo, error) {
+	ret := _m.Called(ctx, bucketName, namespace)
 
 	var r0 *model.BucketQuotaInfo
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, string) (*model.BucketQuotaInfo, error)); ok {
-		return rf(bucketName, namespace)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) (*model.BucketQuotaInfo, error)); ok {
+		return rf(ctx, bucketName, namespace)
 	}
-	if rf, ok := ret.Get(0).(func(string, string) *model.BucketQuotaInfo); ok {
-		r0 = rf(bucketName, namespace)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) *model.BucketQuotaInfo); ok {
+		r0 = rf(ctx, bucketName, namespace)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.BucketQuotaInfo)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, string) error); ok {
-		r1 = rf(bucketName, namespace)
+	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
+		r1 = rf(ctx, bucketName, namespace)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -156,25 +170,28 @@ func (_m *BucketsInterface) GetQuota(bucketName string, namespace string) (*mode
 	return r0, r1
 }
 
-// List provides a mock function with given fields: params
-func (_m *BucketsInterface) List(params map[string]string) (*model.BucketList, error) {
-	ret := _m.Called(params)
+// List provides a mock function with given fields: ctx, params
+func (_m *BucketsInterface) List(ctx context.Context, params map[string]string) (*model.BucketList, error) {
+	ret := _m.Called(ctx, params)
 
 	var r0 *model.BucketList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(map[string]string) (*model.BucketList, error)); ok {
-		return rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.BucketList, error)); ok {
+		return rf(ctx, params)
 	}
-	if rf, ok := ret.Get(0).(func(map[string]string) *model.BucketList); ok {
-		r0 = rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.BucketList); ok {
+		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.BucketList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(map[string]string) error); ok {
-		r1 = rf(params)
+	if rf, ok := ret.Get(1).(func(context.Context, map[string]string) error); ok {
+		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -182,13 +199,13 @@ func (_m *BucketsInterface) List(params map[string]string) (*model.BucketList, e
 	return r0, r1
 }
 
-// UpdatePolicy provides a mock function with given fields: bucketName, policy, param
-func (_m *BucketsInterface) UpdatePolicy(bucketName string, policy string, param map[string]string) error {
-	ret := _m.Called(bucketName, policy, param)
+// UpdatePolicy provides a mock function with given fields: ctx, bucketName, policy, param
+func (_m *BucketsInterface) UpdatePolicy(ctx context.Context, bucketName string, policy string, param map[string]string) error {
+	ret := _m.Called(ctx, bucketName, policy, param)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string, map[string]string) error); ok {
-		r0 = rf(bucketName, policy, param)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) error); ok {
+		r0 = rf(ctx, bucketName, policy, param)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -196,13 +213,13 @@ func (_m *BucketsInterface) UpdatePolicy(bucketName string, policy string, param
 	return r0
 }
 
-// UpdateQuota provides a mock function with given fields: bucketQuota
-func (_m *BucketsInterface) UpdateQuota(bucketQuota model.BucketQuotaUpdate) error {
-	ret := _m.Called(bucketQuota)
+// UpdateQuota provides a mock function with given fields: ctx, bucketQuota
+func (_m *BucketsInterface) UpdateQuota(ctx context.Context, bucketQuota model.BucketQuotaUpdate) error {
+	ret := _m.Called(ctx, bucketQuota)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(model.BucketQuotaUpdate) error); ok {
-		r0 = rf(bucketQuota)
+	if rf, ok := ret.Get(0).(func(context.Context, model.BucketQuotaUpdate) error); ok {
+		r0 = rf(ctx, bucketQuota)
 	} else {
 		r0 = ret.Error(0)
 	}

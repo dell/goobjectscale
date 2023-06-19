@@ -16,7 +16,7 @@ import (
 	"encoding/xml"
 )
 
-// AccountBillingInfoList list of the billing info per users
+// AccountBillingInfoList list of the billing info per users.
 type AccountBillingInfoList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"account_billing_objmt_infos" json:"account_billing_objmt_infos"`
@@ -34,7 +34,7 @@ type AccountBillingInfoList struct {
 	Info []AccountBillingInfo `xml:"account_billing_objmt_info" json:"account_billing_objmt_info"`
 }
 
-// AccountBillingInfo contains latest billing metrics info for one user
+// AccountBillingInfo contains latest billing metrics info for one user.
 type AccountBillingInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"account_billing_objmt_info" json:"account_billing_objmt_info"`
@@ -85,7 +85,7 @@ type AccountBillingInfo struct {
 	BucketBillingInfo []BucketBillingInfo `xml:"bucket_billing_info,omitempty"`
 }
 
-// AccountBillingSampleList contains time range based billing metrics for users
+// AccountBillingSampleList contains time range based billing metrics for users.
 type AccountBillingSampleList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"account_billing_objmt_samples" json:"account_billing_objmt_samples"`
@@ -109,7 +109,7 @@ type AccountBillingSampleList struct {
 	Samples []AccountBillingSample `json:"account_billing_objmt_sample" xml:"account_billing_objmt_sample"`
 }
 
-// AccountBillingSample contains time range based billing metrics info for one user
+// AccountBillingSample contains time range based billing metrics info for one user.
 type AccountBillingSample struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"account_billing_objmt_sample" json:"account_billing_objmt_sample"`
@@ -184,7 +184,7 @@ type AccountBillingSample struct {
 	BucketBillingSample []BucketBillingSample `xml:"bucket_billing_sample,omitempty"`
 }
 
-// StorageClassBasedCountSize contains logical and physical size and count of objects per storage class
+// StorageClassBasedCountSize contains logical and physical size and count of objects per storage class.
 type StorageClassBasedCountSize struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `json:"storage_class_counts" xml:"storage_class_counts"`
@@ -214,7 +214,7 @@ type StorageClassBasedCountSize struct {
 	DeletePhysicalSize int64 `xml:"count_size>delete_physical_size,omitempty"`
 }
 
-// BucketBillingInfoList list of the billing info per buckets
+// BucketBillingInfoList list of the billing info per buckets.
 type BucketBillingInfoList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_billing_objmt_infos" json:"bucket_billing_objmt_infos"`
@@ -232,7 +232,7 @@ type BucketBillingInfoList struct {
 	Info []BucketBillingInfo `xml:"bucket_billing_objmt_info" json:"bucket_billing_objmt_info"`
 }
 
-// BucketBillingInfo contains latest billing metrics info for one bucket
+// BucketBillingInfo contains latest billing metrics info for one bucket.
 type BucketBillingInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_billing_objmt_info" json:"bucket_billing_objmt_info"`
@@ -286,7 +286,7 @@ type BucketBillingInfo struct {
 	TotalReplicaMetadataMetric []StorageClassBasedCountSize `xml:"total_replica_metadata_metric>storage_class_counts"`
 }
 
-// BucketBillingSampleList contains time range based billing metrics for buckets
+// BucketBillingSampleList contains time range based billing metrics for buckets.
 type BucketBillingSampleList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_billing_objmt_samples" json:"bucket_billing_objmt_samples"`
@@ -310,7 +310,7 @@ type BucketBillingSampleList struct {
 	Samples []BucketBillingSample `json:"bucket_billing_objmt_sample" xml:"bucket_billing_objmt_sample"`
 }
 
-// BucketBillingSample contains time range based billing metrics info for one bucket
+// BucketBillingSample contains time range based billing metrics info for one bucket.
 type BucketBillingSample struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_billing_objmt_sample" json:"bucket_billing_objmt_sample"`
@@ -382,7 +382,7 @@ type BucketBillingSample struct {
 	ReplicaMetadataDeletionDelta []StorageClassBasedCountSize `xml:"replica_metadata_delete_delta>storage_class_counts"`
 }
 
-// BucketBillingTag contains ingress and egress metrics for bucket
+// BucketBillingTag contains ingress and egress metrics for bucket.
 type BucketBillingTag struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_billing_tag" json:"bucket_billing_tag"`
@@ -397,7 +397,7 @@ type BucketBillingTag struct {
 	Egress int64 `xml:"egress,omitempty"`
 }
 
-// BucketPerfDataList time range based list of performance bucket billing metrics
+// BucketPerfDataList time range based list of performance bucket billing metrics.
 type BucketPerfDataList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_perf_samples" json:"bucket_perf_samples"`
@@ -421,7 +421,7 @@ type BucketPerfDataList struct {
 	Samples []BucketPerfSample `xml:"bucket_perf_sample" json:"bucket_perf_sample" `
 }
 
-// BucketPerfSample time range based bucket performance billing metrics
+// BucketPerfSample time range based bucket performance billing metrics.
 type BucketPerfSample struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_perf_sample" json:"bucket_perf_sample"`
@@ -451,7 +451,7 @@ type BucketPerfSample struct {
 	EgressCounts int64 `xml:"egress_counts,omitempty"`
 }
 
-// BucketReplicationSampleList time range based list of bucket replication billing metrics
+// BucketReplicationSampleList time range based list of bucket replication billing metrics.
 type BucketReplicationSampleList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_replication_samples" json:"bucket_replication_samples"`
@@ -475,7 +475,7 @@ type BucketReplicationSampleList struct {
 	Samples []BucketReplicationSample `xml:"bucket_replication_sample,omitempty" json:"bucket_replication_sample,omitempty"`
 }
 
-// BucketReplicationSample time range based replication billing metrics for one bucket
+// BucketReplicationSample time range based replication billing metrics for one bucket.
 type BucketReplicationSample struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_replication_sample" json:"bucket_replication_sample"`
@@ -504,7 +504,7 @@ type BucketReplicationSample struct {
 	ReplicatedFailureDelta []StorageClassBasedCountSize `xml:"replicated_failure_delta>storage_class_counts,omitempty"`
 }
 
-// BucketReplicationInfoList list of latest bucket replication billing metrics
+// BucketReplicationInfoList list of latest bucket replication billing metrics.
 type BucketReplicationInfoList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"replication_info_list" json:"replication_info_list"`
@@ -522,7 +522,7 @@ type BucketReplicationInfoList struct {
 	Info []ReplicationBillingInfo `xml:"replication_billing_info" json:"replication_billing_info"`
 }
 
-// ReplicationBillingInfo latest replication billing metrics for one bucket
+// ReplicationBillingInfo latest replication billing metrics for one bucket.
 type ReplicationBillingInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"replication_billing_info" json:"replication_billing_info"`
@@ -540,7 +540,7 @@ type ReplicationBillingInfo struct {
 	PendingToReplicate []StorageClassBasedCountSize `xml:"pending_to_replicate>storage_class_counts,omitempty"`
 }
 
-// StoreBillingInfoList list of object store latest billing info metrics
+// StoreBillingInfoList list of object store latest billing info metrics.
 type StoreBillingInfoList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"store_billing_info_list" json:"store_billing_info_list"`
@@ -558,7 +558,7 @@ type StoreBillingInfoList struct {
 	Info StoreBillingInfo `xml:"store_billing_info,omitempty" json:"store_billing_info,omitempty"`
 }
 
-// StoreBillingInfo object store latest billing info metrics
+// StoreBillingInfo object store latest billing info metrics.
 type StoreBillingInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"store_billing_info" json:"store_billing_info"`
@@ -600,7 +600,7 @@ type StoreBillingInfo struct {
 	TopBucketsByObjectSize []TopNBucket `xml:"top_n_buckets_by_object_size>top_n_bucket"`
 }
 
-// StoreBillingSampleList time range based list of billing metrics in object store
+// StoreBillingSampleList time range based list of billing metrics in object store.
 type StoreBillingSampleList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"store_billing_samples" json:"store_billing_samples"`
@@ -624,7 +624,7 @@ type StoreBillingSampleList struct {
 	Samples []StoreBillingSample `xml:"store_billing_sample,omitempty" json:"store_billing_sample,omitempty"`
 }
 
-// StoreBillingSample time range based billing metrics in object store
+// StoreBillingSample time range based billing metrics in object store.
 type StoreBillingSample struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"store_billing_sample" json:"store_billing_sample"`
@@ -675,7 +675,7 @@ type StoreBillingSample struct {
 	ReplicaMetadataDeletionDelta []StorageClassBasedCountSize `xml:"replica_metadata_delete_delta>storage_class_counts"`
 }
 
-// TopNBucket top bucket metric
+// TopNBucket top bucket metric.
 type TopNBucket struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"top_n_bucket" json:"top_n_bucket"`
@@ -687,7 +687,7 @@ type TopNBucket struct {
 	MetricNumber int64 `xml:"metric_number,omitempty" json:"metric_number,omitempty"`
 }
 
-// StoreReplicationDataList time range based list of replication data metrics in object stores
+// StoreReplicationDataList time range based list of replication data metrics in object stores.
 type StoreReplicationDataList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"store_replication_list" json:"store_replication_list"`
@@ -711,7 +711,7 @@ type StoreReplicationDataList struct {
 	Samples []StoreReplicationThroughputRto `xml:"store_replication_throughput_rto,omitempty" json:"store_replication_throughput_rto,omitempty"`
 }
 
-// StoreReplicationThroughputRto replication data metrics per one object store
+// StoreReplicationThroughputRto replication data metrics per one object store.
 type StoreReplicationThroughputRto struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"store_replication_throughput_rto" json:"store_replication_throughput_rto"`

@@ -12,7 +12,7 @@
 
 package model
 
-// BlobUser is an object user
+// BlobUser is an object user.
 type BlobUser struct {
 	UserID    string `json:"userid"`
 	Namespace string `json:"namespace"`
@@ -43,20 +43,20 @@ type ObjectUserSecret struct {
 	Link                Link   `json:"link"`
 }
 
-// ObjectUserSecretKeyCreateReq to marshal ObjectUserSecretKey create req
+// ObjectUserSecretKeyCreateReq to marshal ObjectUserSecretKey create req.
 type ObjectUserSecretKeyCreateReq struct {
 	SecretKey          string `json:"secretkey"`
 	Namespace          string `json:"namespace"`
 	ExistingKeyExpTime string `json:"existing_key_expiry_time_mins,omitempty"`
 }
 
-// ObjectUserSecretKeyDeleteReq to marshal ObjectUserSecretKey delete req
+// ObjectUserSecretKeyDeleteReq to marshal ObjectUserSecretKey delete req.
 type ObjectUserSecretKeyDeleteReq struct {
 	SecretKey string `json:"secret_key"`
 	Namespace string `json:"namespace"`
 }
 
-// ObjectUserSecretKeyCreateRes to unmarshal ObjectUserSecretKey create resp
+// ObjectUserSecretKeyCreateRes to unmarshal ObjectUserSecretKey create resp.
 type ObjectUserSecretKeyCreateRes struct {
 	SecretKey          string `json:"secret_key"`
 	KeyTimeStamp       string `json:"key_timestamp"`

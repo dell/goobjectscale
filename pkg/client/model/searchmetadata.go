@@ -13,7 +13,7 @@
 package model
 
 // SearchMetadata is the custom metadata for enabled for querying on the
-// bucket
+// bucket.
 type SearchMetadata struct {
 	// MaxKeys indicates the maximum number of metadata search keys for the
 	// bucket
@@ -26,7 +26,7 @@ type SearchMetadata struct {
 	Metadata `json:"metadata" xml:"metadata"`
 }
 
-// Metadata defines the fields that can be searched upon
+// Metadata defines the fields that can be searched upon.
 type Metadata struct {
 	// Type is the metadata key type
 	Type string `json:"type" xml:"type"`

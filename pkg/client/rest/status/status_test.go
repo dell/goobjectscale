@@ -13,6 +13,7 @@
 package status_test
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"testing"
@@ -32,15 +33,19 @@ func TestStatus(t *testing.T) {
 			r   *recorder.Recorder
 			err error
 		)
+
 		r, err = recorder.New("fixtures")
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		r.AddHook(func(i *cassette.Interaction) error {
 			delete(i.Request.Headers, "Authorization")
 			delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
+
 			return nil
 		}, recorder.BeforeSaveHook)
+
 		c := client.Simple{
 			Endpoint: "https://testserver",
 			Authenticator: &client.AuthService{
@@ -54,13 +59,14 @@ func TestStatus(t *testing.T) {
 			OverrideHeader: false,
 		}
 		clientset := rest.NewClientSet(&c)
-		rebuildInfo, err := clientset.Status().GetRebuildStatus("testdevice1",
+		rebuildInfo, err := clientset.Status().GetRebuildStatus(context.TODO(), "testdevice1",
 			"testdevice1-ss-0", "testdomain", "1", nil)
 		require.NoError(t, err)
 		assert.Equal(t, rebuildInfo.Level, 1)
 		assert.Equal(t, rebuildInfo.RemainingBytes, 1024)
 		require.Equal(t, rebuildInfo.TotalBytes, 2048)
-		_, err = clientset.Status().GetRebuildStatus("testdevice1",
+
+		_, err = clientset.Status().GetRebuildStatus(context.TODO(), "testdevice1",
 			"testdevice1-ss-1", "testdomain", "1", nil)
 		require.Error(t, err)
 	})

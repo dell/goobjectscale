@@ -13,6 +13,7 @@
 package client
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -26,12 +27,12 @@ import (
 // into represents type, _into_ which data will be unmarshalled.
 // Naming follows Effective Go naming convention https://go.dev/doc/effective_go#interface-names
 type RemoteCaller interface {
-	MakeRemoteCall(r Request, into interface{}) error
+	MakeRemoteCall(ctx context.Context, r Request, into interface{}) error
 }
 
-// HandleResponse handles custom behavior based on server response
+// HandleResponse handles custom behavior based on server response.
 func HandleResponse(resp *http.Response) error {
-	if resp.StatusCode > 399 {
+	if resp.StatusCode >= http.StatusBadRequest {
 		switch resp.Body {
 		case nil:
 			switch {
@@ -45,13 +46,17 @@ func HandleResponse(resp *http.Response) error {
 			if err != nil {
 				return err
 			}
+
 			apiError := &model.Error{}
+
 			err = xml.Unmarshal(body, apiError)
 			if err != nil {
 				return err
 			}
+
 			return fmt.Errorf("server error: %w", apiError)
 		}
 	}
+
 	return nil
 }

@@ -13,6 +13,7 @@
 package federatedobjectstores
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/dell/goobjectscale/pkg/client/api"
@@ -20,15 +21,15 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-// FederatedObjectStores is a REST implementation of the FederateObjectStores interface
+// FederatedObjectStores is a REST implementation of the FederateObjectStores interface.
 type FederatedObjectStores struct {
 	Client client.RemoteCaller
 }
 
 var _ api.FederatedObjectStoresInterface = &FederatedObjectStores{} // interface guard
 
-// List implements the federatedobjectstores interface
-func (t *FederatedObjectStores) List(params map[string]string) (*model.FederatedObjectStoreList, error) {
+// List implements the federatedobjectstores interface.
+func (t *FederatedObjectStores) List(ctx context.Context, params map[string]string) (*model.FederatedObjectStoreList, error) {
 	req := client.Request{
 		Method:      http.MethodGet,
 		Path:        "/replication/info",
@@ -36,9 +37,11 @@ func (t *FederatedObjectStores) List(params map[string]string) (*model.Federated
 		Params:      params,
 	}
 	federatedStoreList := &model.FederatedObjectStoreList{}
-	err := t.Client.MakeRemoteCall(req, federatedStoreList)
+
+	err := t.Client.MakeRemoteCall(ctx, req, federatedStoreList)
 	if err != nil {
 		return nil, err
 	}
+
 	return federatedStoreList, nil
 }

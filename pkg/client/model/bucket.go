@@ -14,7 +14,7 @@ package model
 
 import "encoding/xml"
 
-// BucketInfo is an object storage bucket with an alternate XML tag name
+// BucketInfo is an object storage bucket with an alternate XML tag name.
 type BucketInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_info"`
@@ -22,7 +22,7 @@ type BucketInfo struct {
 	Bucket
 }
 
-// BucketCreate is an object storage bucket with an alternate XML tag name
+// BucketCreate is an object storage bucket with an alternate XML tag name.
 type BucketCreate struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"object_bucket_create"`
@@ -30,7 +30,7 @@ type BucketCreate struct {
 	Bucket
 }
 
-// BucketQuotaUpdate is the struct of quota updating
+// BucketQuotaUpdate is the struct of quota updating.
 type BucketQuotaUpdate struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_quota_param"`
@@ -38,7 +38,7 @@ type BucketQuotaUpdate struct {
 	BucketQuota
 }
 
-// BucketQuotaInfo is the struct of quota information
+// BucketQuotaInfo is the struct of quota information.
 type BucketQuotaInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_quota_details"`
@@ -46,7 +46,7 @@ type BucketQuotaInfo struct {
 	BucketQuota
 }
 
-// BucketQuota is quota struct
+// BucketQuota is quota struct.
 type BucketQuota struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"bucket_quota"`
@@ -70,7 +70,7 @@ type BucketQuota struct {
 	NotificationSizeCount int64 `json:"notificationSizeInCount,omitempty" xml:"notificationSizeInCount,omitempty"`
 }
 
-// Bucket is an object storage bucket
+// Bucket is an object storage bucket.
 type Bucket struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"object_bucket"`
@@ -193,7 +193,7 @@ type Bucket struct {
 	StoragePolicy string `json:"storagePolicy,omitempty" xml:"storage_policy,omitempty"`
 }
 
-// BucketList is a list of object storage buckets
+// BucketList is a list of object storage buckets.
 type BucketList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `json:"object_buckets" xml:"object_buckets"`
@@ -215,9 +215,8 @@ type BucketList struct {
 	NextPageLink string `json:"next_page_link,omitempty" xml:"NextPageLink,omitempty"`
 }
 
-// MinMaxGovenor enforces minimum and maximum retention for bucket objects
+// MinMaxGovenor enforces minimum and maximum retention for bucket objects.
 type MinMaxGovenor struct {
-
 	// EnforceRetention indicates if retention should be enforced for this
 	// min-max-govenor
 	EnforceRetention bool `json:"enforce_retention" xml:"enforce_retention"`
@@ -258,7 +257,7 @@ type MinMaxGovenor struct {
 	VDCLink `json:"vdc" xml:"vdc"`
 }
 
-// VDCLink is a link from a bucket to a VDC
+// VDCLink is a link from a bucket to a VDC.
 type VDCLink struct {
 	// ID is the identifier for the VDC
 	ID string `json:"id" xml:"id"`

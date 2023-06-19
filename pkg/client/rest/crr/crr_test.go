@@ -13,6 +13,7 @@
 package crr_test
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"testing"
@@ -35,6 +36,7 @@ func TestCRR(t *testing.T) {
 		r   *recorder.Recorder
 		err error
 	)
+
 	r, err = recorder.New("fixtures")
 	if err != nil {
 		log.Fatal(err)
@@ -43,8 +45,10 @@ func TestCRR(t *testing.T) {
 	r.AddHook(func(i *cassette.Interaction) error {
 		delete(i.Request.Headers, "Authorization")
 		delete(i.Request.Headers, "X-SDS-AUTH-TOKEN")
+
 		return nil
 	}, recorder.BeforeSaveHook)
+
 	c := client.Simple{
 		Endpoint: "https://testserver",
 		Authenticator: &client.AuthService{
@@ -57,7 +61,9 @@ func TestCRR(t *testing.T) {
 		HTTPClient:     newRecordedHTTPClient(r),
 		OverrideHeader: false,
 	}
+
 	clientset := rest.NewClientSet(&c)
+
 	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
 		"pause":      testPause,
 		"suspend":    testSuspend,
@@ -73,32 +79,35 @@ func TestCRR(t *testing.T) {
 }
 
 func testPause(t *testing.T, clientset *rest.ClientSet) {
-	err := clientset.CRR().PauseReplication("test-objectscale", "test-objectstore", map[string]string{"pauseEndMills": "3000"})
+	err := clientset.CRR().PauseReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{"pauseEndMills": "3000"})
 	require.NoError(t, err)
 }
 
 func testSuspend(t *testing.T, clientset *rest.ClientSet) {
-	err := clientset.CRR().SuspendReplication("test-objectscale", "test-objectstore", map[string]string{})
+	err := clientset.CRR().SuspendReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 }
 
 func testResume(t *testing.T, clientset *rest.ClientSet) {
-	err := clientset.CRR().ResumeReplication("test-objectscale", "test-objectstore", map[string]string{})
+	err := clientset.CRR().ResumeReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 }
+
 func testThrottle(t *testing.T, clientset *rest.ClientSet) {
-	err := clientset.CRR().ThrottleReplication("test-objectscale", "test-objectstore", map[string]string{"throttleMBPerSecond": "3000"})
+	err := clientset.CRR().ThrottleReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{"throttleMBPerSecond": "3000"})
 	require.NoError(t, err)
 }
+
 func testUnthrottle(t *testing.T, clientset *rest.ClientSet) {
-	err := clientset.CRR().UnthrottleReplication("test-objectscale", "test-objectstore", map[string]string{})
+	err := clientset.CRR().UnthrottleReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 }
 
 func testGet(t *testing.T, clientset *rest.ClientSet) {
-	crr, err := clientset.CRR().Get("test-objectscale", "test-objectstore", map[string]string{})
+	crr, err := clientset.CRR().Get(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, crr.DestObjectStore, "test-objectstore")
-	_, err = clientset.CRR().Get("bad-objectscale", "bad-objectstore", map[string]string{})
+
+	_, err = clientset.CRR().Get(context.TODO(), "bad-objectscale", "bad-objectstore", map[string]string{})
 	require.Error(t, err)
 }

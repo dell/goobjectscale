@@ -3,6 +3,8 @@
 package mocks
 
 import (
+	context "context"
+
 	model "github.com/dell/goobjectscale/pkg/client/model"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -12,25 +14,28 @@ type StatusInterface struct {
 	mock.Mock
 }
 
-// GetRebuildStatus provides a mock function with given fields: objStoreName, ssPodName, ssPodNameSpace, level, params
-func (_m *StatusInterface) GetRebuildStatus(objStoreName string, ssPodName string, ssPodNameSpace string, level string, params map[string]string) (*model.RebuildInfo, error) {
-	ret := _m.Called(objStoreName, ssPodName, ssPodNameSpace, level, params)
+// GetRebuildStatus provides a mock function with given fields: ctx, objStoreName, ssPodName, ssPodNameSpace, level, params
+func (_m *StatusInterface) GetRebuildStatus(ctx context.Context, objStoreName string, ssPodName string, ssPodNameSpace string, level string, params map[string]string) (*model.RebuildInfo, error) {
+	ret := _m.Called(ctx, objStoreName, ssPodName, ssPodNameSpace, level, params)
 
 	var r0 *model.RebuildInfo
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, string, string, string, map[string]string) (*model.RebuildInfo, error)); ok {
-		return rf(objStoreName, ssPodName, ssPodNameSpace, level, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, string, string, map[string]string) (*model.RebuildInfo, error)); ok {
+		return rf(ctx, objStoreName, ssPodName, ssPodNameSpace, level, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, string, string, string, map[string]string) *model.RebuildInfo); ok {
-		r0 = rf(objStoreName, ssPodName, ssPodNameSpace, level, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, string, string, map[string]string) *model.RebuildInfo); ok {
+		r0 = rf(ctx, objStoreName, ssPodName, ssPodNameSpace, level, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.RebuildInfo)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, string, string, string, map[string]string) error); ok {
-		r1 = rf(objStoreName, ssPodName, ssPodNameSpace, level, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, string, string, string, map[string]string) error); ok {
+		r1 = rf(ctx, objStoreName, ssPodName, ssPodNameSpace, level, params)
 	} else {
 		r1 = ret.Error(1)
 	}

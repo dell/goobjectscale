@@ -18,7 +18,7 @@ import (
 	"strings"
 )
 
-// Error implements custom error
+// Error implements custom error.
 type Error struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"error"`
@@ -39,7 +39,7 @@ type Error struct {
 
 var _ error = Error{}
 
-// Error is a method that allows us to use the Error model as go error
+// Error is a method that allows us to use the Error model as go error.
 func (err Error) Error() string {
 	if err.Description == "" {
 		err.Description = "Unknown"
@@ -48,17 +48,18 @@ func (err Error) Error() string {
 	if err.Details != "" {
 		return fmt.Sprintf("%s: %s", err.Description, err.Details)
 	}
+
 	return err.Description
 }
 
-// StatusCode is there so we can reference the Code field in Is method
+// StatusCode is there so we can reference the Code field in Is method.
 func (err Error) StatusCode() int64 {
 	return err.Code
 }
 
-// Is compare errors status
+// Is compare errors status.
 func (err Error) Is(target error) bool {
-	// create intermidiate interface
+	// create intermediate interface
 	type statusCoder interface {
 		StatusCode() int64
 	}
@@ -70,23 +71,23 @@ func (err Error) Is(target error) bool {
 		return err.StatusCode() == target.StatusCode()
 
 	default:
-		// if someone is already relying on error message comparission, then don't break it
+		// if someone is already relying on error message comparisons, then don't break it
 		return strings.EqualFold(err.Error(), target.Error())
 	}
 }
 
-// Error Codes
+// Error Codes.
 const (
-	// Request parameter cannot be found
+	// Request parameter cannot be found.
 	CodeParameterNotFound int64 = 1004
-	// Required parameter is missing or empty
+	// Required parameter is missing or empty.
 	CodeMissingParameter int64 = 1005
-	// Resource not found
+	// Resource not found.
 	CodeResourceNotFound int64 = 1019
-	// Exceeding limit
+	// Exceeding limit.
 	CodeExceedingLimit int64 = 1031
-	// Internal exception occurred
+	// Internal exception occurred.
 	CodeInternalException int64 = 30024
-	// Bucket already exists
+	// Bucket already exists.
 	CodeBucketAlreadyExists int64 = 40008
 )

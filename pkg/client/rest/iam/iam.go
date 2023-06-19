@@ -1,17 +1,14 @@
+// Copyright © 2023 Dell Inc. or its subsidiaries. All Rights Reserved.
 //
-//
-//  Copyright © 2021 - 2023 Dell Inc. or its subsidiaries. All Rights Reserved.
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//       http://www.apache.org/licenses/LICENSE-2.0
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//      http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 // Package iam provides funtions for managing objectscale IAM
 //
@@ -49,7 +46,7 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-// Name of handlers and headers added to IAM
+// Name of handlers and headers added to IAM.
 const (
 	SDSHandlerName       = "X-Sds-Handler"
 	SDSHeaderName        = "X-Sds-Auth-Token"
@@ -57,7 +54,7 @@ const (
 	AccountIDHeaderName  = "X-Emc-Namespace"
 )
 
-// InjectTokenToIAMClient configure IAM client to connect with Objectscale
+// InjectTokenToIAMClient configure IAM client to connect with Objectscale.
 func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.Authenticator, httpClient http.Client) error {
 	realIam, ok := clientIam.(*iam.IAM)
 	if !ok {
@@ -70,7 +67,7 @@ func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.
 		Name: SDSHandlerName,
 		Fn: func(r *request.Request) {
 			if !clientObjectscale.IsAuthenticated() {
-				err := clientObjectscale.Login(&httpClient)
+				err := clientObjectscale.Login(r.Context(), &httpClient)
 				if err != nil {
 					r.Error = err // no return intentional
 				}
@@ -89,8 +86,8 @@ func InjectTokenToIAMClient(clientIam iamiface.IAMAPI, clientObjectscale client.
 	return nil
 }
 
-// InjectAccountIDToIAMClient configure IAM client to connect with Objectscale Accont
-func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, AccountID string) error {
+// InjectAccountIDToIAMClient configure IAM client to connect with Objectscale Account.
+func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, accountID string) error {
 	realIam, ok := clientIam.(*iam.IAM)
 	if !ok {
 		return errors.New("invalid iam client")
@@ -100,7 +97,7 @@ func InjectAccountIDToIAMClient(clientIam iamiface.IAMAPI, AccountID string) err
 	handler := request.NamedHandler{
 		Name: AccountIDHandlerName,
 		Fn: func(r *request.Request) {
-			r.HTTPRequest.Header.Add(AccountIDHeaderName, AccountID)
+			r.HTTPRequest.Header.Add(AccountIDHeaderName, accountID)
 		},
 	}
 

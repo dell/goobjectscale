@@ -14,7 +14,7 @@ package model
 
 import "encoding/xml"
 
-// FederatedObjectStoreList is a list of federated object stores
+// FederatedObjectStoreList is a list of federated object stores.
 type FederatedObjectStoreList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"ReplicationInfo"`
@@ -23,7 +23,7 @@ type FederatedObjectStoreList struct {
 	Items []FederatedObjectStore `xml:"ReplicationStoreInfo"`
 }
 
-// FederatedObjectStore is an ObjectStore which is Federated
+// FederatedObjectStore is an ObjectStore which is Federated.
 type FederatedObjectStore struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"ReplicationStoreInfo"`
@@ -45,7 +45,7 @@ type FederatedObjectStore struct {
 	CRRControlParameters CRRControlParameters `xml:"CRRControlParameters"`
 }
 
-// CRRControlParameters represents parameters for Cross Region Replication
+// CRRControlParameters represents parameters for Cross Region Replication.
 type CRRControlParameters struct {
 	XMLName xml.Name `xml:"CRRControlParameters"`
 

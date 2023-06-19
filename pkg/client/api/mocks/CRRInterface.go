@@ -3,6 +3,8 @@
 package mocks
 
 import (
+	context "context"
+
 	model "github.com/dell/goobjectscale/pkg/client/model"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -12,25 +14,28 @@ type CRRInterface struct {
 	mock.Mock
 }
 
-// Get provides a mock function with given fields: destObjectScale, destObjectStore, param
-func (_m *CRRInterface) Get(destObjectScale string, destObjectStore string, param map[string]string) (*model.CRR, error) {
-	ret := _m.Called(destObjectScale, destObjectStore, param)
+// Get provides a mock function with given fields: ctx, destObjectScale, destObjectStore, param
+func (_m *CRRInterface) Get(ctx context.Context, destObjectScale string, destObjectStore string, param map[string]string) (*model.CRR, error) {
+	ret := _m.Called(ctx, destObjectScale, destObjectStore, param)
 
 	var r0 *model.CRR
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, string, map[string]string) (*model.CRR, error)); ok {
-		return rf(destObjectScale, destObjectStore, param)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) (*model.CRR, error)); ok {
+		return rf(ctx, destObjectScale, destObjectStore, param)
 	}
-	if rf, ok := ret.Get(0).(func(string, string, map[string]string) *model.CRR); ok {
-		r0 = rf(destObjectScale, destObjectStore, param)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) *model.CRR); ok {
+		r0 = rf(ctx, destObjectScale, destObjectStore, param)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.CRR)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, string, map[string]string) error); ok {
-		r1 = rf(destObjectScale, destObjectStore, param)
+	if rf, ok := ret.Get(1).(func(context.Context, string, string, map[string]string) error); ok {
+		r1 = rf(ctx, destObjectScale, destObjectStore, param)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -38,13 +43,13 @@ func (_m *CRRInterface) Get(destObjectScale string, destObjectStore string, para
 	return r0, r1
 }
 
-// PauseReplication provides a mock function with given fields: destObjectScale, destObjectStore, param
-func (_m *CRRInterface) PauseReplication(destObjectScale string, destObjectStore string, param map[string]string) error {
-	ret := _m.Called(destObjectScale, destObjectStore, param)
+// PauseReplication provides a mock function with given fields: ctx, destObjectScale, destObjectStore, param
+func (_m *CRRInterface) PauseReplication(ctx context.Context, destObjectScale string, destObjectStore string, param map[string]string) error {
+	ret := _m.Called(ctx, destObjectScale, destObjectStore, param)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string, map[string]string) error); ok {
-		r0 = rf(destObjectScale, destObjectStore, param)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) error); ok {
+		r0 = rf(ctx, destObjectScale, destObjectStore, param)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -52,13 +57,13 @@ func (_m *CRRInterface) PauseReplication(destObjectScale string, destObjectStore
 	return r0
 }
 
-// ResumeReplication provides a mock function with given fields: destObjectScale, destObjectStore, param
-func (_m *CRRInterface) ResumeReplication(destObjectScale string, destObjectStore string, param map[string]string) error {
-	ret := _m.Called(destObjectScale, destObjectStore, param)
+// ResumeReplication provides a mock function with given fields: ctx, destObjectScale, destObjectStore, param
+func (_m *CRRInterface) ResumeReplication(ctx context.Context, destObjectScale string, destObjectStore string, param map[string]string) error {
+	ret := _m.Called(ctx, destObjectScale, destObjectStore, param)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string, map[string]string) error); ok {
-		r0 = rf(destObjectScale, destObjectStore, param)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) error); ok {
+		r0 = rf(ctx, destObjectScale, destObjectStore, param)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -66,13 +71,13 @@ func (_m *CRRInterface) ResumeReplication(destObjectScale string, destObjectStor
 	return r0
 }
 
-// SuspendReplication provides a mock function with given fields: destObjectScale, destObjectStore, param
-func (_m *CRRInterface) SuspendReplication(destObjectScale string, destObjectStore string, param map[string]string) error {
-	ret := _m.Called(destObjectScale, destObjectStore, param)
+// SuspendReplication provides a mock function with given fields: ctx, destObjectScale, destObjectStore, param
+func (_m *CRRInterface) SuspendReplication(ctx context.Context, destObjectScale string, destObjectStore string, param map[string]string) error {
+	ret := _m.Called(ctx, destObjectScale, destObjectStore, param)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string, map[string]string) error); ok {
-		r0 = rf(destObjectScale, destObjectStore, param)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) error); ok {
+		r0 = rf(ctx, destObjectScale, destObjectStore, param)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -80,13 +85,13 @@ func (_m *CRRInterface) SuspendReplication(destObjectScale string, destObjectSto
 	return r0
 }
 
-// ThrottleReplication provides a mock function with given fields: destObjectScale, destObjectStore, param
-func (_m *CRRInterface) ThrottleReplication(destObjectScale string, destObjectStore string, param map[string]string) error {
-	ret := _m.Called(destObjectScale, destObjectStore, param)
+// ThrottleReplication provides a mock function with given fields: ctx, destObjectScale, destObjectStore, param
+func (_m *CRRInterface) ThrottleReplication(ctx context.Context, destObjectScale string, destObjectStore string, param map[string]string) error {
+	ret := _m.Called(ctx, destObjectScale, destObjectStore, param)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string, map[string]string) error); ok {
-		r0 = rf(destObjectScale, destObjectStore, param)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) error); ok {
+		r0 = rf(ctx, destObjectScale, destObjectStore, param)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -94,13 +99,13 @@ func (_m *CRRInterface) ThrottleReplication(destObjectScale string, destObjectSt
 	return r0
 }
 
-// UnthrottleReplication provides a mock function with given fields: destObjectScale, destObjectStore, param
-func (_m *CRRInterface) UnthrottleReplication(destObjectScale string, destObjectStore string, param map[string]string) error {
-	ret := _m.Called(destObjectScale, destObjectStore, param)
+// UnthrottleReplication provides a mock function with given fields: ctx, destObjectScale, destObjectStore, param
+func (_m *CRRInterface) UnthrottleReplication(ctx context.Context, destObjectScale string, destObjectStore string, param map[string]string) error {
+	ret := _m.Called(ctx, destObjectScale, destObjectStore, param)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(string, string, map[string]string) error); ok {
-		r0 = rf(destObjectScale, destObjectStore, param)
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) error); ok {
+		r0 = rf(ctx, destObjectScale, destObjectStore, param)
 	} else {
 		r0 = ret.Error(0)
 	}

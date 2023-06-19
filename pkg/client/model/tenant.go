@@ -14,7 +14,7 @@ package model
 
 import "encoding/xml"
 
-// TenantInfo is an object store tenant with an alternate XML tag name
+// TenantInfo is an object store tenant with an alternate XML tag name.
 type TenantInfo struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"tenant_info"`
@@ -22,7 +22,7 @@ type TenantInfo struct {
 	Tenant
 }
 
-// Tenant is an object store tenant
+// Tenant is an object store tenant.
 type Tenant struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"tenant"`
@@ -50,7 +50,7 @@ type Tenant struct {
 	Alias                   string `xml:"alias"`
 }
 
-// TenantCreate is an object store tenant creation input
+// TenantCreate is an object store tenant creation input.
 type TenantCreate struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"tenant_create"`
@@ -70,7 +70,7 @@ type TenantCreate struct {
 	BucketBlockSize int64 `json:"default_bucket_block_size,omitempty" xml:"default_bucket_block_size"`
 }
 
-// TenantUpdate is an object store tenant update input
+// TenantUpdate is an object store tenant update input.
 type TenantUpdate struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"tenant_update"`
@@ -82,7 +82,7 @@ type TenantUpdate struct {
 	Alias string `xml:"alias"`
 }
 
-// TenantList is a list of object store tenants
+// TenantList is a list of object store tenants.
 type TenantList struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `json:"tenants" xml:"tenants"`
@@ -91,7 +91,7 @@ type TenantList struct {
 	Items []Tenant `json:"tenant" xml:"tenant"`
 }
 
-// TenantQuota is an object store tenant quota
+// TenantQuota is an object store tenant quota.
 type TenantQuota struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"tenant_quota_details"`
@@ -107,7 +107,7 @@ type TenantQuota struct {
 	ID string `json:"id,omitempty" xml:"id,omitempty"`
 }
 
-// TenantQuotaSet is an object store tenant quota
+// TenantQuotaSet is an object store tenant quota.
 type TenantQuotaSet struct {
 	// XMLName is the name of the xml tag used XML marshalling
 	XMLName xml.Name `xml:"tenant_quota_details"`

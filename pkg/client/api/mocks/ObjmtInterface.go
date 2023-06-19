@@ -3,6 +3,8 @@
 package mocks
 
 import (
+	context "context"
+
 	model "github.com/dell/goobjectscale/pkg/client/model"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -12,25 +14,28 @@ type ObjmtInterface struct {
 	mock.Mock
 }
 
-// GetAccountBillingInfo provides a mock function with given fields: ids, params
-func (_m *ObjmtInterface) GetAccountBillingInfo(ids []string, params map[string]string) (*model.AccountBillingInfoList, error) {
-	ret := _m.Called(ids, params)
+// GetAccountBillingInfo provides a mock function with given fields: ctx, ids, params
+func (_m *ObjmtInterface) GetAccountBillingInfo(ctx context.Context, ids []string, params map[string]string) (*model.AccountBillingInfoList, error) {
+	ret := _m.Called(ctx, ids, params)
 
 	var r0 *model.AccountBillingInfoList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func([]string, map[string]string) (*model.AccountBillingInfoList, error)); ok {
-		return rf(ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) (*model.AccountBillingInfoList, error)); ok {
+		return rf(ctx, ids, params)
 	}
-	if rf, ok := ret.Get(0).(func([]string, map[string]string) *model.AccountBillingInfoList); ok {
-		r0 = rf(ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) *model.AccountBillingInfoList); ok {
+		r0 = rf(ctx, ids, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.AccountBillingInfoList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func([]string, map[string]string) error); ok {
-		r1 = rf(ids, params)
+	if rf, ok := ret.Get(1).(func(context.Context, []string, map[string]string) error); ok {
+		r1 = rf(ctx, ids, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -38,25 +43,28 @@ func (_m *ObjmtInterface) GetAccountBillingInfo(ids []string, params map[string]
 	return r0, r1
 }
 
-// GetAccountBillingSample provides a mock function with given fields: ids, params
-func (_m *ObjmtInterface) GetAccountBillingSample(ids []string, params map[string]string) (*model.AccountBillingSampleList, error) {
-	ret := _m.Called(ids, params)
+// GetAccountBillingSample provides a mock function with given fields: ctx, ids, params
+func (_m *ObjmtInterface) GetAccountBillingSample(ctx context.Context, ids []string, params map[string]string) (*model.AccountBillingSampleList, error) {
+	ret := _m.Called(ctx, ids, params)
 
 	var r0 *model.AccountBillingSampleList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func([]string, map[string]string) (*model.AccountBillingSampleList, error)); ok {
-		return rf(ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) (*model.AccountBillingSampleList, error)); ok {
+		return rf(ctx, ids, params)
 	}
-	if rf, ok := ret.Get(0).(func([]string, map[string]string) *model.AccountBillingSampleList); ok {
-		r0 = rf(ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) *model.AccountBillingSampleList); ok {
+		r0 = rf(ctx, ids, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.AccountBillingSampleList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func([]string, map[string]string) error); ok {
-		r1 = rf(ids, params)
+	if rf, ok := ret.Get(1).(func(context.Context, []string, map[string]string) error); ok {
+		r1 = rf(ctx, ids, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -64,25 +72,28 @@ func (_m *ObjmtInterface) GetAccountBillingSample(ids []string, params map[strin
 	return r0, r1
 }
 
-// GetBucketBillingInfo provides a mock function with given fields: account, ids, params
-func (_m *ObjmtInterface) GetBucketBillingInfo(account string, ids []string, params map[string]string) (*model.BucketBillingInfoList, error) {
-	ret := _m.Called(account, ids, params)
+// GetBucketBillingInfo provides a mock function with given fields: ctx, account, ids, params
+func (_m *ObjmtInterface) GetBucketBillingInfo(ctx context.Context, account string, ids []string, params map[string]string) (*model.BucketBillingInfoList, error) {
+	ret := _m.Called(ctx, account, ids, params)
 
 	var r0 *model.BucketBillingInfoList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) (*model.BucketBillingInfoList, error)); ok {
-		return rf(account, ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) (*model.BucketBillingInfoList, error)); ok {
+		return rf(ctx, account, ids, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) *model.BucketBillingInfoList); ok {
-		r0 = rf(account, ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) *model.BucketBillingInfoList); ok {
+		r0 = rf(ctx, account, ids, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.BucketBillingInfoList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, []string, map[string]string) error); ok {
-		r1 = rf(account, ids, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, []string, map[string]string) error); ok {
+		r1 = rf(ctx, account, ids, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -90,25 +101,28 @@ func (_m *ObjmtInterface) GetBucketBillingInfo(account string, ids []string, par
 	return r0, r1
 }
 
-// GetBucketBillingPerf provides a mock function with given fields: account, ids, params
-func (_m *ObjmtInterface) GetBucketBillingPerf(account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error) {
-	ret := _m.Called(account, ids, params)
+// GetBucketBillingPerf provides a mock function with given fields: ctx, account, ids, params
+func (_m *ObjmtInterface) GetBucketBillingPerf(ctx context.Context, account string, ids []string, params map[string]string) (*model.BucketPerfDataList, error) {
+	ret := _m.Called(ctx, account, ids, params)
 
 	var r0 *model.BucketPerfDataList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) (*model.BucketPerfDataList, error)); ok {
-		return rf(account, ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) (*model.BucketPerfDataList, error)); ok {
+		return rf(ctx, account, ids, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) *model.BucketPerfDataList); ok {
-		r0 = rf(account, ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) *model.BucketPerfDataList); ok {
+		r0 = rf(ctx, account, ids, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.BucketPerfDataList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, []string, map[string]string) error); ok {
-		r1 = rf(account, ids, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, []string, map[string]string) error); ok {
+		r1 = rf(ctx, account, ids, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -116,25 +130,28 @@ func (_m *ObjmtInterface) GetBucketBillingPerf(account string, ids []string, par
 	return r0, r1
 }
 
-// GetBucketBillingSample provides a mock function with given fields: account, ids, params
-func (_m *ObjmtInterface) GetBucketBillingSample(account string, ids []string, params map[string]string) (*model.BucketBillingSampleList, error) {
-	ret := _m.Called(account, ids, params)
+// GetBucketBillingSample provides a mock function with given fields: ctx, account, ids, params
+func (_m *ObjmtInterface) GetBucketBillingSample(ctx context.Context, account string, ids []string, params map[string]string) (*model.BucketBillingSampleList, error) {
+	ret := _m.Called(ctx, account, ids, params)
 
 	var r0 *model.BucketBillingSampleList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) (*model.BucketBillingSampleList, error)); ok {
-		return rf(account, ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) (*model.BucketBillingSampleList, error)); ok {
+		return rf(ctx, account, ids, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, []string, map[string]string) *model.BucketBillingSampleList); ok {
-		r0 = rf(account, ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) *model.BucketBillingSampleList); ok {
+		r0 = rf(ctx, account, ids, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.BucketBillingSampleList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, []string, map[string]string) error); ok {
-		r1 = rf(account, ids, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, []string, map[string]string) error); ok {
+		r1 = rf(ctx, account, ids, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -142,25 +159,28 @@ func (_m *ObjmtInterface) GetBucketBillingSample(account string, ids []string, p
 	return r0, r1
 }
 
-// GetReplicationInfo provides a mock function with given fields: account, replicationPairs, params
-func (_m *ObjmtInterface) GetReplicationInfo(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error) {
-	ret := _m.Called(account, replicationPairs, params)
+// GetReplicationInfo provides a mock function with given fields: ctx, account, replicationPairs, params
+func (_m *ObjmtInterface) GetReplicationInfo(ctx context.Context, account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationInfoList, error) {
+	ret := _m.Called(ctx, account, replicationPairs, params)
 
 	var r0 *model.BucketReplicationInfoList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, [][]string, map[string]string) (*model.BucketReplicationInfoList, error)); ok {
-		return rf(account, replicationPairs, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, [][]string, map[string]string) (*model.BucketReplicationInfoList, error)); ok {
+		return rf(ctx, account, replicationPairs, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, [][]string, map[string]string) *model.BucketReplicationInfoList); ok {
-		r0 = rf(account, replicationPairs, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, [][]string, map[string]string) *model.BucketReplicationInfoList); ok {
+		r0 = rf(ctx, account, replicationPairs, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.BucketReplicationInfoList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, [][]string, map[string]string) error); ok {
-		r1 = rf(account, replicationPairs, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, [][]string, map[string]string) error); ok {
+		r1 = rf(ctx, account, replicationPairs, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -168,25 +188,28 @@ func (_m *ObjmtInterface) GetReplicationInfo(account string, replicationPairs []
 	return r0, r1
 }
 
-// GetReplicationSample provides a mock function with given fields: account, replicationPairs, params
-func (_m *ObjmtInterface) GetReplicationSample(account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error) {
-	ret := _m.Called(account, replicationPairs, params)
+// GetReplicationSample provides a mock function with given fields: ctx, account, replicationPairs, params
+func (_m *ObjmtInterface) GetReplicationSample(ctx context.Context, account string, replicationPairs [][]string, params map[string]string) (*model.BucketReplicationSampleList, error) {
+	ret := _m.Called(ctx, account, replicationPairs, params)
 
 	var r0 *model.BucketReplicationSampleList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, [][]string, map[string]string) (*model.BucketReplicationSampleList, error)); ok {
-		return rf(account, replicationPairs, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, [][]string, map[string]string) (*model.BucketReplicationSampleList, error)); ok {
+		return rf(ctx, account, replicationPairs, params)
 	}
-	if rf, ok := ret.Get(0).(func(string, [][]string, map[string]string) *model.BucketReplicationSampleList); ok {
-		r0 = rf(account, replicationPairs, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, string, [][]string, map[string]string) *model.BucketReplicationSampleList); ok {
+		r0 = rf(ctx, account, replicationPairs, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.BucketReplicationSampleList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(string, [][]string, map[string]string) error); ok {
-		r1 = rf(account, replicationPairs, params)
+	if rf, ok := ret.Get(1).(func(context.Context, string, [][]string, map[string]string) error); ok {
+		r1 = rf(ctx, account, replicationPairs, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -194,25 +217,28 @@ func (_m *ObjmtInterface) GetReplicationSample(account string, replicationPairs 
 	return r0, r1
 }
 
-// GetStoreBillingInfo provides a mock function with given fields: params
-func (_m *ObjmtInterface) GetStoreBillingInfo(params map[string]string) (*model.StoreBillingInfoList, error) {
-	ret := _m.Called(params)
+// GetStoreBillingInfo provides a mock function with given fields: ctx, params
+func (_m *ObjmtInterface) GetStoreBillingInfo(ctx context.Context, params map[string]string) (*model.StoreBillingInfoList, error) {
+	ret := _m.Called(ctx, params)
 
 	var r0 *model.StoreBillingInfoList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(map[string]string) (*model.StoreBillingInfoList, error)); ok {
-		return rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.StoreBillingInfoList, error)); ok {
+		return rf(ctx, params)
 	}
-	if rf, ok := ret.Get(0).(func(map[string]string) *model.StoreBillingInfoList); ok {
-		r0 = rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.StoreBillingInfoList); ok {
+		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.StoreBillingInfoList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(map[string]string) error); ok {
-		r1 = rf(params)
+	if rf, ok := ret.Get(1).(func(context.Context, map[string]string) error); ok {
+		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -220,25 +246,28 @@ func (_m *ObjmtInterface) GetStoreBillingInfo(params map[string]string) (*model.
 	return r0, r1
 }
 
-// GetStoreBillingSample provides a mock function with given fields: params
-func (_m *ObjmtInterface) GetStoreBillingSample(params map[string]string) (*model.StoreBillingSampleList, error) {
-	ret := _m.Called(params)
+// GetStoreBillingSample provides a mock function with given fields: ctx, params
+func (_m *ObjmtInterface) GetStoreBillingSample(ctx context.Context, params map[string]string) (*model.StoreBillingSampleList, error) {
+	ret := _m.Called(ctx, params)
 
 	var r0 *model.StoreBillingSampleList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func(map[string]string) (*model.StoreBillingSampleList, error)); ok {
-		return rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.StoreBillingSampleList, error)); ok {
+		return rf(ctx, params)
 	}
-	if rf, ok := ret.Get(0).(func(map[string]string) *model.StoreBillingSampleList); ok {
-		r0 = rf(params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.StoreBillingSampleList); ok {
+		r0 = rf(ctx, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.StoreBillingSampleList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(map[string]string) error); ok {
-		r1 = rf(params)
+	if rf, ok := ret.Get(1).(func(context.Context, map[string]string) error); ok {
+		r1 = rf(ctx, params)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -246,25 +275,28 @@ func (_m *ObjmtInterface) GetStoreBillingSample(params map[string]string) (*mode
 	return r0, r1
 }
 
-// GetStoreReplicationData provides a mock function with given fields: ids, params
-func (_m *ObjmtInterface) GetStoreReplicationData(ids []string, params map[string]string) (*model.StoreReplicationDataList, error) {
-	ret := _m.Called(ids, params)
+// GetStoreReplicationData provides a mock function with given fields: ctx, ids, params
+func (_m *ObjmtInterface) GetStoreReplicationData(ctx context.Context, ids []string, params map[string]string) (*model.StoreReplicationDataList, error) {
+	ret := _m.Called(ctx, ids, params)
 
 	var r0 *model.StoreReplicationDataList
+
 	var r1 error
-	if rf, ok := ret.Get(0).(func([]string, map[string]string) (*model.StoreReplicationDataList, error)); ok {
-		return rf(ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) (*model.StoreReplicationDataList, error)); ok {
+		return rf(ctx, ids, params)
 	}
-	if rf, ok := ret.Get(0).(func([]string, map[string]string) *model.StoreReplicationDataList); ok {
-		r0 = rf(ids, params)
+
+	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) *model.StoreReplicationDataList); ok {
+		r0 = rf(ctx, ids, params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*model.StoreReplicationDataList)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func([]string, map[string]string) error); ok {
-		r1 = rf(ids, params)
+	if rf, ok := ret.Get(1).(func(context.Context, []string, map[string]string) error); ok {
+		r1 = rf(ctx, ids, params)
 	} else {
 		r1 = ret.Error(1)
 	}
