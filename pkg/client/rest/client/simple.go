@@ -57,7 +57,7 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 
 	// Do performs a single http request.
 	Do := func(ctx context.Context) error {
-		req, err := c.buildHttpRequest(r, ctx)
+		req, err := c.buildHTTPRequest(ctx, r)
 		if err != nil {
 			return err
 		}
@@ -116,7 +116,7 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 	return fmt.Errorf("%w: exhausted authentication tries", ErrAuthorization)
 }
 
-func (c *Simple) buildHttpRequest(r Request, ctx context.Context) (*http.Request, error) {
+func (c *Simple) buildHTTPRequest(ctx context.Context, r Request) (*http.Request, error) {
 	req, err := r.HTTPWithContext(ctx, c.Endpoint)
 	if err != nil {
 		return nil, fmt.Errorf("simple client: %w", err)
