@@ -58,6 +58,10 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 	// Do performs a single http request.
 	Do := func(ctx context.Context) error {
 		req, err := c.buildHttpRequest(r, ctx)
+		if err != nil {
+			return err
+		}
+
 		resp, err := c.HTTPClient.Do(req)
 		if err != nil {
 			return err
@@ -66,6 +70,9 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 		defer resp.Body.Close()
 
 		err = validateResponse(r, resp)
+		if err != nil {
+			return err
+		}
 
 		if into != nil {
 			if err := unmarshal(r, resp, into); err != nil {
@@ -173,6 +180,7 @@ func unmarshal(r Request, resp *http.Response, v interface{}) error {
 		if (errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF)) && cw.N == 0 /* && v == nil TODO Causes problems -- see note */ {
 			return nil
 		}
+
 		return err
 	}
 
