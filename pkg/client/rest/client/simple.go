@@ -55,74 +55,9 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 		return fmt.Errorf("invalid request: %w", err)
 	}
 
-	// Unmarshal unmarshals resp.Body into v with respect to returned Content-Type or
-	// original requested Content-Type.
-	Unmarshal := func(resp *http.Response, v interface{}) error {
-		// Use content type sent by server first but fall back to original request content type.
-		contentType := resp.Header.Get("Content-Type")
-		if contentType == "" {
-			contentType = r.ContentType
-		}
-
-		// Reading all of resp.Body into memory is inefficient and it's better to send
-		// it directly into decoders.  However if body is empty the decoders will
-		// receive an EOF.  They can also receive EOF for malformed responses.
-		// We need to differentiate between EOF from empty responses and malformed
-		// responsed.
-		var cw CountWriter
-		body := io.TeeReader(resp.Body, &cw)
-
-		// HandleError handles a decoding error.
-		// If incoming error is EOF and cw.N == 0 then it's EOF due to empty response
-		// and error is discarded if-and-only-if v is non-nil; i.e. it's an error
-		// if we got empty body but expected a response.
-		HandleError := func(err error) error {
-			// v == nil check disabled because some test fixtures are missing proper response and/or some API
-			// calls are written strangely -- Tenants.SetQuota for example.
-			if (errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF)) && cw.N == 0 /* && v == nil TODO Causes problems -- see note */ {
-				return nil
-			}
-
-			return err
-		}
-
-		switch contentType {
-		case ContentTypeJSON:
-			decoder := json.NewDecoder(body)
-			if err := HandleError(decoder.Decode(v)); err != nil {
-				return fmt.Errorf("response: json: %w", err)
-			}
-		case ContentTypeXML:
-			decoder := xml.NewDecoder(body)
-			if err := HandleError(decoder.Decode(v)); err != nil {
-				return fmt.Errorf("response: xml: %w", err)
-			}
-		default:
-			return fmt.Errorf("response: %s: %w", r.ContentType, ErrContentType)
-		}
-
-		return nil
-	}
-
 	// Do performs a single http request.
 	Do := func(ctx context.Context) error {
-		req, err := r.HTTPWithContext(ctx, c.Endpoint)
-		if err != nil {
-			return fmt.Errorf("simple client: %w", err)
-		}
-
-		req.Header.Add("Accept", r.ContentType)
-		req.Header.Add("Content-Type", r.ContentType)
-		req.Header.Add("Accept", "application/xml")
-
-		if c.Authenticator != nil {
-			req.Header.Add("X-SDS-AUTH-TOKEN", c.Authenticator.Token())
-		}
-
-		if c.OverrideHeader {
-			req.Header.Add("X-EMC-Override", "true")
-		}
-
+		req, err := c.buildHttpRequest(r, ctx)
 		resp, err := c.HTTPClient.Do(req)
 		if err != nil {
 			return err
@@ -130,22 +65,10 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 
 		defer resp.Body.Close()
 
-		switch {
-		case resp.StatusCode == http.StatusUnauthorized:
-			return ErrAuthorization
-		case resp.StatusCode >= http.StatusBadRequest:
-			var ecsError model.Error
-			if err = Unmarshal(resp, &ecsError); err != nil {
-				return err
-			}
+		err = validateResponse(r, resp)
 
-			return ecsError
-		case into == nil:
-			// No errors found, and no response object defined, so just return
-			// without error
-			return nil
-		default:
-			if err = Unmarshal(resp, into); err != nil {
+		if into != nil {
+			if err := unmarshal(r, resp, into); err != nil {
 				return err
 			}
 		}
@@ -184,4 +107,89 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 	}
 
 	return fmt.Errorf("%w: exhausted authentication tries", ErrAuthorization)
+}
+
+func (c *Simple) buildHttpRequest(r Request, ctx context.Context) (*http.Request, error) {
+	req, err := r.HTTPWithContext(ctx, c.Endpoint)
+	if err != nil {
+		return nil, fmt.Errorf("simple client: %w", err)
+	}
+
+	req.Header.Add("Accept", r.ContentType)
+	req.Header.Add("Content-Type", r.ContentType)
+	req.Header.Add("Accept", "application/xml")
+
+	if c.Authenticator != nil {
+		req.Header.Add("X-SDS-AUTH-TOKEN", c.Authenticator.Token())
+	}
+
+	if c.OverrideHeader {
+		req.Header.Add("X-EMC-Override", "true")
+	}
+
+	return req, nil
+}
+
+func validateResponse(r Request, resp *http.Response) error {
+	switch {
+	case resp.StatusCode == http.StatusUnauthorized:
+		return ErrAuthorization
+	case resp.StatusCode >= http.StatusBadRequest:
+		var ecsError model.Error
+		if err := unmarshal(r, resp, &ecsError); err != nil {
+			return err
+		}
+
+		return ecsError
+	}
+
+	return nil
+}
+
+// Unmarshal unmarshals resp.Body into v with respect to returned Content-Type or
+// original requested Content-Type.
+func unmarshal(r Request, resp *http.Response, v interface{}) error {
+	// Use content type sent by server first but fall back to original request content type.
+	contentType := resp.Header.Get("Content-Type")
+	if contentType == "" {
+		contentType = r.ContentType
+	}
+
+	// Reading all of resp.Body into memory is inefficient, and it's better to send
+	// it directly into decoders.  However if body is empty the decoders will
+	// receive an EOF.  They can also receive EOF for malformed responses.
+	// We need to differentiate between EOF from empty responses and malformed
+	// responsed.
+	var cw CountWriter
+	body := io.TeeReader(resp.Body, &cw)
+
+	// HandleError handles a decoding error.
+	// If incoming error is EOF and cw.N == 0 then it's EOF due to empty response
+	// and error is discarded if-and-only-if v is non-nil; i.e. it's an error
+	// if we got empty body but expected a response.
+	HandleError := func(err error) error {
+		// v == nil check disabled because some test fixtures are missing proper response and/or some API
+		// calls are written strangely -- Tenants.SetQuota for example.
+		if (errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF)) && cw.N == 0 /* && v == nil TODO Causes problems -- see note */ {
+			return nil
+		}
+		return err
+	}
+
+	switch contentType {
+	case ContentTypeJSON:
+		decoder := json.NewDecoder(body)
+		if err := HandleError(decoder.Decode(v)); err != nil {
+			return fmt.Errorf("response: json: %w", err)
+		}
+	case ContentTypeXML:
+		decoder := xml.NewDecoder(body)
+		if err := HandleError(decoder.Decode(v)); err != nil {
+			return fmt.Errorf("response: xml: %w", err)
+		}
+	default:
+		return fmt.Errorf("response: %s: %w", r.ContentType, ErrContentType)
+	}
+
+	return nil
 }

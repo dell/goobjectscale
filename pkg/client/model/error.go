@@ -14,6 +14,7 @@ package model
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -64,16 +65,15 @@ func (err Error) Is(target error) bool {
 		StatusCode() int64
 	}
 
+	var statusCoderErr statusCoder
 	// validate if target implements statusCoder interface,
 	// and compare the status codes
-	switch target := target.(type) {
-	case statusCoder:
-		return err.StatusCode() == target.StatusCode()
-
-	default:
-		// if someone is already relying on error message comparisons, then don't break it
-		return strings.EqualFold(err.Error(), target.Error())
+	if errors.As(target, &statusCoderErr) {
+		return err.StatusCode() == statusCoderErr.StatusCode()
 	}
+
+	// if someone is already relying on error message comparisons, then don't break it
+	return strings.EqualFold(err.Error(), target.Error())
 }
 
 // Error Codes.
