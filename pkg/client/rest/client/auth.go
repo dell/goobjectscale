@@ -237,7 +237,12 @@ func (auth *AuthUser) loginRKE(ctx context.Context, ht *http.Client) error {
 		return err
 	}
 
-	resp, err := auth.login(ctx, ht, "/mgmt/auth/login", http.MethodPost, bytes.NewReader(b))
+	headers := func(r *http.Request) {
+		r.Header.Add("Content-Type", "application/json")
+		r.Header.Add("Accept", "application/json")
+	}
+
+	resp, err := auth.login(ctx, ht, "/mgmt/auth/login", http.MethodPost, bytes.NewReader(b), headers)
 	if err != nil {
 		return fmt.Errorf("login failed: %w", err)
 	}

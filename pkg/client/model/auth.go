@@ -21,7 +21,7 @@ type RKELoginRequest struct {
 // RKELoginResponse is a model of login response body, received from /mgmt/auth/login on RKE platform.
 type RKELoginResponse struct {
 	AccessToken      string `json:"access_token"`
-	AccessExpiresIn  string `json:"expires_in"`
+	AccessExpiresIn  int    `json:"expires_in"`
 	RefreshToken     string `json:"refresh_token"`
-	RefreshExpiresIn string `json:"refresh_expires_in"`
+	RefreshExpiresIn int    `json:"refresh_expires_in"`
 }
