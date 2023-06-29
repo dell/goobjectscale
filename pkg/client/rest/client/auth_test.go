@@ -21,7 +21,7 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-func testLogin(t *testing.T, auth client.Authenticator) {
+func testServiceLogin(t *testing.T, auth client.Authenticator) {
 	fixtureFailedServiceAuth := client.AuthService{
 		Gateway:       ":not:a:valid:url",
 		SharedSecret:  "",
@@ -37,6 +37,24 @@ func testLogin(t *testing.T, auth client.Authenticator) {
 	fixtureFailedServiceAuth.Gateway = "bad:gate:way"
 
 	badAuth = &fixtureFailedServiceAuth
+	err = badAuth.Login(context.TODO(), NewTestHTTPClient())
+	require.Error(t, err)
+}
+
+func testUserLogin(t *testing.T, auth client.Authenticator) {
+	fixtureFailedUserAuth := client.AuthUser{
+		Gateway:  ":not:a:valid:url",
+		Username: "testuser",
+		Password: "testpassword",
+	}
+
+	badAuth := &fixtureFailedUserAuth
+	err := badAuth.Login(context.TODO(), NewTestHTTPClient())
+	require.Error(t, err)
+
+	fixtureFailedUserAuth.Gateway = "bad:gate:way"
+
+	badAuth = &fixtureFailedUserAuth
 	err = badAuth.Login(context.TODO(), NewTestHTTPClient())
 	require.Error(t, err)
 }

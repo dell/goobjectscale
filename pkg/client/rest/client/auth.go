@@ -155,6 +155,7 @@ type AuthUser struct {
 	log logr.Logger
 }
 
+// SetLogger configures the logger used internally to AuthUser.
 func (auth *AuthUser) SetLogger(log logr.Logger) {
 	auth.log = log
 }
@@ -178,6 +179,7 @@ func (auth *AuthUser) Login(ctx context.Context, ht *http.Client) error {
 	return nil
 }
 
+// login is wrapper for common functionality between loginRKE and loginLegacy.
 func (auth *AuthUser) login(ctx context.Context, ht *http.Client,
 	path, method string, body io.Reader, mutators ...func(*http.Request),
 ) (*http.Response, error) {
@@ -193,6 +195,8 @@ func (auth *AuthUser) login(ctx context.Context, ht *http.Client,
 		return nil, err
 	}
 
+	// Mutators are used to modify request without duplication of code.
+	// Those can be used to inject headers, add basic authentication to request, etc.
 	for _, m := range mutators {
 		m(req)
 	}

@@ -73,7 +73,8 @@ func TestSimple(t *testing.T) {
 		"OverriderHeader":    testOverrideHeader,
 		"FailedAuth":         testFailedAuth,
 		"TestHttp":           testHTTP,
-		"TestLogin":          testLogin,
+		"TestServiceLogin":   testServiceLogin,
+		"TestUserLogin":      testUserLogin,
 	}
 
 	t.Run("service-auth", func(t *testing.T) {
