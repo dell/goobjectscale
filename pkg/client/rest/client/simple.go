@@ -49,20 +49,20 @@ type Simple struct {
 
 // MakeRemoteCall executes an API request against the client endpoint, returning
 // the object body of the response into a response object.
-func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}) error {
-	err := r.Validate(c.Endpoint)
+func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}) error {
+	err := r.Validate(s.Endpoint)
 	if err != nil {
 		return fmt.Errorf("invalid request: %w", err)
 	}
 
 	// Do performs a single http request.
 	Do := func(ctx context.Context) error {
-		req, err := c.buildHTTPRequest(ctx, r)
+		req, err := s.buildHTTPRequest(ctx, r)
 		if err != nil {
 			return err
 		}
 
-		resp, err := c.HTTPClient.Do(req)
+		resp, err := s.HTTPClient.Do(req)
 		if err != nil {
 			return err
 		}
@@ -86,12 +86,12 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 	// If Authenticator is nil then just perform a single request; otherwise
 	// perform AuthRetriesMax requests but only if returned error is an authorization
 	// error.
-	if c.Authenticator == nil {
+	if s.Authenticator == nil {
 		return Do(ctx)
 	}
 
-	if !c.Authenticator.IsAuthenticated() {
-		if err := c.Authenticator.Login(ctx, c.HTTPClient); err != nil {
+	if !s.Authenticator.IsAuthenticated() {
+		if err := s.Authenticator.Login(ctx, s.HTTPClient); err != nil {
 			return fmt.Errorf("%w: login: %s", ErrAuthorization, err.Error())
 		}
 	}
@@ -101,7 +101,7 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 
 		switch {
 		case errors.Is(err, ErrAuthorization):
-			if err = c.Authenticator.Login(ctx, c.HTTPClient); err != nil {
+			if err = s.Authenticator.Login(ctx, s.HTTPClient); err != nil {
 				// TODO Depending on how the error is constructed we could potentially
 				//      leak credentials here.  Must be careful.
 				return fmt.Errorf("%w: retry login", err)
@@ -116,8 +116,8 @@ func (c *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 	return fmt.Errorf("%w: exhausted authentication tries", ErrAuthorization)
 }
 
-func (c *Simple) buildHTTPRequest(ctx context.Context, r Request) (*http.Request, error) {
-	req, err := r.HTTPWithContext(ctx, c.Endpoint)
+func (s *Simple) buildHTTPRequest(ctx context.Context, r Request) (*http.Request, error) {
+	req, err := r.HTTPWithContext(ctx, s.Endpoint)
 	if err != nil {
 		return nil, fmt.Errorf("simple client: %w", err)
 	}
@@ -126,11 +126,11 @@ func (c *Simple) buildHTTPRequest(ctx context.Context, r Request) (*http.Request
 	req.Header.Add("Content-Type", r.ContentType)
 	req.Header.Add("Accept", "application/xml")
 
-	if c.Authenticator != nil {
-		req.Header.Add("X-SDS-AUTH-TOKEN", c.Authenticator.Token())
+	if s.Authenticator != nil {
+		req.Header.Add("X-SDS-AUTH-TOKEN", s.Authenticator.Token())
 	}
 
-	if c.OverrideHeader {
+	if s.OverrideHeader {
 		req.Header.Add("X-EMC-Override", "true")
 	}
 
