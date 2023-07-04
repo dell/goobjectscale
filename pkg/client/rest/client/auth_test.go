@@ -21,8 +21,8 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-func testLogin(t *testing.T, auth client.Authenticator) {
-	fixtureFailedServiceauth := client.AuthService{
+func testServiceLogin(t *testing.T, auth client.Authenticator) {
+	fixtureFailedServiceAuth := client.AuthService{
 		Gateway:       ":not:a:valid:url",
 		SharedSecret:  "",
 		PodName:       "objectscale-graphql-7d754f8499-ng4h6",
@@ -30,13 +30,31 @@ func testLogin(t *testing.T, auth client.Authenticator) {
 		ObjectScaleID: "IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 	}
 
-	badAuth := &fixtureFailedServiceauth
+	badAuth := &fixtureFailedServiceAuth
 	err := badAuth.Login(context.TODO(), NewTestHTTPClient())
 	require.Error(t, err)
 
-	fixtureFailedServiceauth.Gateway = "bad:gate:way"
+	fixtureFailedServiceAuth.Gateway = "bad:gate:way"
 
-	badAuth = &fixtureFailedServiceauth
+	badAuth = &fixtureFailedServiceAuth
+	err = badAuth.Login(context.TODO(), NewTestHTTPClient())
+	require.Error(t, err)
+}
+
+func testUserLogin(t *testing.T, auth client.Authenticator) {
+	fixtureFailedUserAuth := client.AuthUser{
+		Gateway:  ":not:a:valid:url",
+		Username: "testuser",
+		Password: "testpassword",
+	}
+
+	badAuth := &fixtureFailedUserAuth
+	err := badAuth.Login(context.TODO(), NewTestHTTPClient())
+	require.Error(t, err)
+
+	fixtureFailedUserAuth.Gateway = "bad:gate:way"
+
+	badAuth = &fixtureFailedUserAuth
 	err = badAuth.Login(context.TODO(), NewTestHTTPClient())
 	require.Error(t, err)
 }

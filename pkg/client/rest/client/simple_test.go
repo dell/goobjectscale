@@ -73,7 +73,8 @@ func TestSimple(t *testing.T) {
 		"OverriderHeader":    testOverrideHeader,
 		"FailedAuth":         testFailedAuth,
 		"TestHttp":           testHTTP,
-		"TestLogin":          testLogin,
+		"TestServiceLogin":   testServiceLogin,
+		"TestUserLogin":      testUserLogin,
 	}
 
 	t.Run("service-auth", func(t *testing.T) {
@@ -422,6 +423,24 @@ func NewTestHTTPClient() *http.Client {
 		case "https://testserver/emptyBody":
 			return &http.Response{
 				StatusCode: 200,
+				Header:     header,
+			}
+
+		case "https://testgateway/mgmt/auth/login":
+			reqBody, _ := io.ReadAll(req.Body)
+			defaultBody := `{"username":"testuser","password":"testpassword"}`
+
+			if string(reqBody) == defaultBody {
+				return &http.Response{
+					StatusCode: 200,
+					Body:       io.NopCloser(bytes.NewReader([]byte(`{"access_token":"TESTTOKEN","refresh_token":"REFRESHTESTTOKEN","expires_in":900,"refresh_expires_in":1800}`))),
+					Header:     header,
+				}
+			}
+
+			return &http.Response{
+				StatusCode: 401,
+				Body:       io.NopCloser(bytes.NewReader([]byte(`{"http_status_code":401,"messages":[{"code":"4000","message":"Invalid credentials or authentication token provided to access to this resource .. Access is denied due to invalid or expired credentials","severity":"ERROR","timestamp":"2023-06-29T09:10:48Z"}]}`))),
 				Header:     header,
 			}
 

@@ -13,15 +13,22 @@
 package client
 
 import (
+	"bytes"
 	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/go-logr/logr"
+
+	"github.com/dell/goobjectscale/pkg/client/model"
 )
 
 // AuthRetriesMax is the maximum number of times the client will attempt to
@@ -144,6 +151,13 @@ type AuthUser struct {
 	Password string `json:"password"`
 
 	token string
+
+	log logr.Logger
+}
+
+// SetLogger configures the logger used internally to AuthUser.
+func (auth *AuthUser) SetLogger(log logr.Logger) {
+	auth.log = log
 }
 
 // IsAuthenticated returns true if the authenticated has been established.  This
@@ -155,25 +169,54 @@ func (auth *AuthUser) IsAuthenticated() bool {
 
 // Login obtains fresh authentication token(s) from the server.
 func (auth *AuthUser) Login(ctx context.Context, ht *http.Client) error {
+	err := auth.loginRKE(ctx, ht)
+	if err != nil {
+		auth.log.Error(err, "first authentication method failed")
+
+		return auth.loginLegacy(ctx, ht)
+	}
+
+	return nil
+}
+
+// login is wrapper for common functionality between loginRKE and loginLegacy.
+func (auth *AuthUser) login(ctx context.Context, ht *http.Client,
+	path, method string, body io.Reader, mutators ...func(*http.Request),
+) (*http.Response, error) {
 	u, err := url.Parse(auth.Gateway)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	u.Path = "/mgmt/login"
+	u.Path = path
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	req.SetBasicAuth(auth.Username, auth.Password)
+	// Mutators are used to modify request without duplication of code.
+	// Those can be used to inject headers, add basic authentication to request, etc.
+	for _, m := range mutators {
+		m(req)
+	}
 
 	resp, err := ht.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
+	return resp, nil
+}
+
+// loginLegacy is used to perform logging into the ObjectScale on legacy environment.
+func (auth *AuthUser) loginLegacy(ctx context.Context, ht *http.Client) error {
+	basicAuth := func(r *http.Request) { r.SetBasicAuth(auth.Username, auth.Password) }
+
+	resp, err := auth.login(ctx, ht, "/mgmt/login", http.MethodGet, nil, basicAuth)
+	if err != nil {
+		return fmt.Errorf("login failed: %w", err)
+	}
 	defer resp.Body.Close()
 
 	if err = HandleResponse(resp); err != nil {
@@ -181,6 +224,49 @@ func (auth *AuthUser) Login(ctx context.Context, ht *http.Client) error {
 	}
 
 	auth.token = resp.Header.Get("X-SDS-AUTH-TOKEN")
+	if auth.token == "" {
+		return fmt.Errorf("server error: login failed")
+	}
+
+	return nil
+}
+
+// loginRKE is used to perform logging into the ObjectScale on RKE environment.
+func (auth *AuthUser) loginRKE(ctx context.Context, ht *http.Client) error {
+	b, err := json.Marshal(model.RKELoginRequest{
+		Username: auth.Username,
+		Password: auth.Password,
+	})
+	if err != nil {
+		return err
+	}
+
+	headers := func(r *http.Request) {
+		r.Header.Add("Content-Type", "application/json")
+		r.Header.Add("Accept", "application/json")
+	}
+
+	resp, err := auth.login(ctx, ht, "/mgmt/auth/login", http.MethodPost, bytes.NewReader(b), headers)
+	if err != nil {
+		return fmt.Errorf("login failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if err = HandleResponse(resp); err != nil {
+		return err
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("reading body failed: %w", err)
+	}
+
+	rkeRes := &model.RKELoginResponse{}
+	if err := json.Unmarshal(body, rkeRes); err != nil {
+		return fmt.Errorf("unable to unmarshal login body: %w", err)
+	}
+
+	auth.token = rkeRes.AccessToken
 	if auth.token == "" {
 		return fmt.Errorf("server error: login failed")
 	}
