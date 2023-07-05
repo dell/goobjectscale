@@ -19,13 +19,10 @@ func (_m *BucketsInterface) Create(ctx context.Context, createParam model.Bucket
 	ret := _m.Called(ctx, createParam)
 
 	var r0 *model.Bucket
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, model.Bucket) (*model.Bucket, error)); ok {
 		return rf(ctx, createParam)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, model.Bucket) *model.Bucket); ok {
 		r0 = rf(ctx, createParam)
 	} else {
@@ -90,13 +87,10 @@ func (_m *BucketsInterface) Get(ctx context.Context, name string, params map[str
 	ret := _m.Called(ctx, name, params)
 
 	var r0 *model.Bucket
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (*model.Bucket, error)); ok {
 		return rf(ctx, name, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) *model.Bucket); ok {
 		r0 = rf(ctx, name, params)
 	} else {
@@ -119,13 +113,10 @@ func (_m *BucketsInterface) GetPolicy(ctx context.Context, bucketName string, pa
 	ret := _m.Called(ctx, bucketName, param)
 
 	var r0 string
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (string, error)); ok {
 		return rf(ctx, bucketName, param)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) string); ok {
 		r0 = rf(ctx, bucketName, param)
 	} else {
@@ -146,13 +137,10 @@ func (_m *BucketsInterface) GetQuota(ctx context.Context, bucketName string, nam
 	ret := _m.Called(ctx, bucketName, namespace)
 
 	var r0 *model.BucketQuotaInfo
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, string) (*model.BucketQuotaInfo, error)); ok {
 		return rf(ctx, bucketName, namespace)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, string) *model.BucketQuotaInfo); ok {
 		r0 = rf(ctx, bucketName, namespace)
 	} else {
@@ -175,13 +163,10 @@ func (_m *BucketsInterface) List(ctx context.Context, params map[string]string) 
 	ret := _m.Called(ctx, params)
 
 	var r0 *model.BucketList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.BucketList, error)); ok {
 		return rf(ctx, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.BucketList); ok {
 		r0 = rf(ctx, params)
 	} else {

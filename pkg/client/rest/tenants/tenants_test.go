@@ -24,6 +24,7 @@ import (
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
+	"github.com/dell/goobjectscale/pkg/client/api"
 	"github.com/dell/goobjectscale/pkg/client/model"
 	"github.com/dell/goobjectscale/pkg/client/rest"
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
@@ -66,7 +67,7 @@ func TestTenants(t *testing.T) {
 
 	clientset := rest.NewClientSet(&c)
 
-	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
+	for scenario, fn := range map[string]func(t *testing.T, clientset api.ClientSet){
 		"list":        testList,
 		"get":         testGet,
 		"create":      testCreate,
@@ -82,7 +83,7 @@ func TestTenants(t *testing.T) {
 	}
 }
 
-func testList(t *testing.T, clientset *rest.ClientSet) {
+func testList(t *testing.T, clientset api.ClientSet) {
 	tenants, err := clientset.Tenants().List(context.TODO(), map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(tenants.Items), 1)
@@ -91,7 +92,7 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testGet(t *testing.T, clientset *rest.ClientSet) {
+func testGet(t *testing.T, clientset api.ClientSet) {
 	tenant, err := clientset.Tenants().Get(context.TODO(), "10d9817c-3696-4625-854e-82b21d8c0795", map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, "10d9817c-3696-4625-854e-82b21d8c0795", tenant.ID)
@@ -100,7 +101,7 @@ func testGet(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testCreate(t *testing.T, clientset *rest.ClientSet) {
+func testCreate(t *testing.T, clientset api.ClientSet) {
 	payload := model.TenantCreate{
 		XMLName:           xml.Name{},
 		Alias:             "",
@@ -115,7 +116,7 @@ func testCreate(t *testing.T, clientset *rest.ClientSet) {
 	assert.Equal(t, "test-account", tenant.ID)
 }
 
-func testUpdate(t *testing.T, clientset *rest.ClientSet) {
+func testUpdate(t *testing.T, clientset api.ClientSet) {
 	payload := model.TenantUpdate{
 		Alias:           "test-alias",
 		BucketBlockSize: 100,
@@ -126,20 +127,20 @@ func testUpdate(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testDelete(t *testing.T, clientset *rest.ClientSet) {
+func testDelete(t *testing.T, clientset api.ClientSet) {
 	err := clientset.Tenants().Delete(context.TODO(), "test-account")
 	require.NoError(t, err)
 	err = clientset.Tenants().Delete(context.TODO(), "noaccount")
 	require.Error(t, err)
 }
 
-func testGetQuota(t *testing.T, clientset *rest.ClientSet) {
+func testGetQuota(t *testing.T, clientset api.ClientSet) {
 	quota, err := clientset.Tenants().GetQuota(context.TODO(), "test-account", nil)
 	require.NoError(t, err)
 	assert.Equal(t, "5", quota.BlockSize)
 }
 
-func testSetQuota(t *testing.T, clientset *rest.ClientSet) {
+func testSetQuota(t *testing.T, clientset api.ClientSet) {
 	payload := model.TenantQuotaSet{
 		XMLName:                 xml.Name{},
 		BlockSize:               "5",
@@ -151,7 +152,7 @@ func testSetQuota(t *testing.T, clientset *rest.ClientSet) {
 	require.NoError(t, err)
 }
 
-func testDeleteQuota(t *testing.T, clientset *rest.ClientSet) {
+func testDeleteQuota(t *testing.T, clientset api.ClientSet) {
 	err := clientset.Tenants().DeleteQuota(context.TODO(), "test-account")
 	require.NoError(t, err)
 }

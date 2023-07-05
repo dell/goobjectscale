@@ -23,6 +23,7 @@ import (
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
+	"github.com/dell/goobjectscale/pkg/client/api"
 	"github.com/dell/goobjectscale/pkg/client/rest"
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
@@ -64,7 +65,7 @@ func TestCRR(t *testing.T) {
 
 	clientset := rest.NewClientSet(&c)
 
-	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
+	for scenario, fn := range map[string]func(t *testing.T, clientset api.ClientSet){
 		"pause":      testPause,
 		"suspend":    testSuspend,
 		"resume":     testResume,
@@ -78,32 +79,32 @@ func TestCRR(t *testing.T) {
 	}
 }
 
-func testPause(t *testing.T, clientset *rest.ClientSet) {
+func testPause(t *testing.T, clientset api.ClientSet) {
 	err := clientset.CRR().PauseReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{"pauseEndMills": "3000"})
 	require.NoError(t, err)
 }
 
-func testSuspend(t *testing.T, clientset *rest.ClientSet) {
+func testSuspend(t *testing.T, clientset api.ClientSet) {
 	err := clientset.CRR().SuspendReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 }
 
-func testResume(t *testing.T, clientset *rest.ClientSet) {
+func testResume(t *testing.T, clientset api.ClientSet) {
 	err := clientset.CRR().ResumeReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 }
 
-func testThrottle(t *testing.T, clientset *rest.ClientSet) {
+func testThrottle(t *testing.T, clientset api.ClientSet) {
 	err := clientset.CRR().ThrottleReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{"throttleMBPerSecond": "3000"})
 	require.NoError(t, err)
 }
 
-func testUnthrottle(t *testing.T, clientset *rest.ClientSet) {
+func testUnthrottle(t *testing.T, clientset api.ClientSet) {
 	err := clientset.CRR().UnthrottleReplication(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 }
 
-func testGet(t *testing.T, clientset *rest.ClientSet) {
+func testGet(t *testing.T, clientset api.ClientSet) {
 	crr, err := clientset.CRR().Get(context.TODO(), "test-objectscale", "test-objectstore", map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, crr.DestObjectStore, "test-objectstore")

@@ -23,6 +23,7 @@ import (
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
+	"github.com/dell/goobjectscale/pkg/client/api"
 	"github.com/dell/goobjectscale/pkg/client/model"
 	"github.com/dell/goobjectscale/pkg/client/rest"
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
@@ -70,7 +71,7 @@ func TestObjectUser(t *testing.T) {
 	}
 	clientset := rest.NewClientSet(&c)
 
-	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
+	for scenario, fn := range map[string]func(t *testing.T, clientset api.ClientSet){
 		"list":         testList,
 		"getInfo":      testGetInfo,
 		"getSecret":    testGetSecret,
@@ -83,7 +84,7 @@ func TestObjectUser(t *testing.T) {
 	}
 }
 
-func testList(t *testing.T, clientset *rest.ClientSet) {
+func testList(t *testing.T, clientset api.ClientSet) {
 	data, err := clientset.ObjectUser().List(context.TODO(), nil)
 	require.NoError(t, err)
 	require.Len(t, data.BlobUser, 1)
@@ -114,7 +115,7 @@ var objectUserGetInfoTest = []struct {
 	},
 }
 
-func testGetInfo(t *testing.T, clientset *rest.ClientSet) {
+func testGetInfo(t *testing.T, clientset api.ClientSet) {
 	for _, tt := range objectUserGetInfoTest {
 		t.Run(tt.in, func(t *testing.T) {
 			data, err := clientset.ObjectUser().GetInfo(context.TODO(), tt.in, nil)
@@ -152,7 +153,7 @@ var objectUserGetSecretTest = []struct {
 	},
 }
 
-func testGetSecret(t *testing.T, clientset *rest.ClientSet) {
+func testGetSecret(t *testing.T, clientset api.ClientSet) {
 	for _, tt := range objectUserGetSecretTest {
 		t.Run(tt.in, func(t *testing.T) {
 			data, err := clientset.ObjectUser().GetSecret(context.TODO(), tt.in, nil)
@@ -191,7 +192,7 @@ var objectUserCreateSecretTest = []struct {
 	},
 }
 
-func testCreateSecret(t *testing.T, clientset *rest.ClientSet) {
+func testCreateSecret(t *testing.T, clientset api.ClientSet) {
 	for _, tt := range objectUserCreateSecretTest {
 		t.Run(tt.in1, func(t *testing.T) {
 			data, err := clientset.ObjectUser().CreateSecret(context.TODO(), tt.in1, tt.in2, nil)
@@ -226,7 +227,7 @@ var objectUserDeleteSecretTest = []struct {
 	},
 }
 
-func testDeleteSecret(t *testing.T, clientset *rest.ClientSet) {
+func testDeleteSecret(t *testing.T, clientset api.ClientSet) {
 	for _, tt := range objectUserDeleteSecretTest {
 		t.Run(tt.in1, func(t *testing.T) {
 			err := clientset.ObjectUser().DeleteSecret(context.TODO(), tt.in1, tt.in2, nil)

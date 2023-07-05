@@ -23,6 +23,8 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/model"
 )
 
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/rest/client -t opentelemetry -i RemoteCaller -o traced/RemoteCaller.gen.go
+
 // RemoteCaller interface is used to create backend calls.
 // into represents type, _into_ which data will be unmarshalled.
 // Naming follows Effective Go naming convention https://go.dev/doc/effective_go#interface-names

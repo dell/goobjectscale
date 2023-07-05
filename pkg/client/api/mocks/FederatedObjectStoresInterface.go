@@ -19,13 +19,10 @@ func (_m *FederatedObjectStoresInterface) List(ctx context.Context, params map[s
 	ret := _m.Called(ctx, params)
 
 	var r0 *model.FederatedObjectStoreList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.FederatedObjectStoreList, error)); ok {
 		return rf(ctx, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.FederatedObjectStoreList); ok {
 		r0 = rf(ctx, params)
 	} else {

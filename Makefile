@@ -11,12 +11,18 @@
 # limitations under the License.
 
 .PHONY: all
-all: test
+all: clean codegen test
 
 .PHONY: test
 test:
 	go test -cover ./... -coverprofile=coverage.out
 
+.PHONY: clean
+clean:
+	rm -rf \
+		./pkg/client/api/{traced,mocks} \
+		./pkg/client/rest/client/traced
+
 .PHONY: codegen
-codegen:
+codegen: clean
 	go generate ./...

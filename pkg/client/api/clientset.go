@@ -20,6 +20,16 @@ import (
 
 //go:generate go run github.com/vektra/mockery/v2@v2.20.0 --name (ClientSet)|(([A-Z][A-Za-z]+)Interface)
 
+// NOTE: we do not generate traced ClientSet. Look at the ./pkg/client/rest/clientset.go
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/api -t opentelemetry -i BucketsInterface -o traced/BucketsInterface.gen.go
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/api -t opentelemetry -i ObjectUserInterface -o traced/ObjectUserInterface.gen.go
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/api -t opentelemetry -i TenantsInterface -o traced/TenantsInterface.gen.go
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/api -t opentelemetry -i ObjmtInterface -o traced/ObjmtInterface.gen.go
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/api -t opentelemetry -i AlertPoliciesInterface -o traced/AlertPoliciesInterface.gen.go
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/api -t opentelemetry -i CRRInterface -o traced/CRRInterface.gen.go
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/api -t opentelemetry -i StatusInterface -o traced/StatusInterface.gen.go
+//go:generate go run github.com/hexdigest/gowrap/cmd/gowrap@v1.3.2 gen -g -p github.com/dell/goobjectscale/pkg/client/api -t opentelemetry -i FederatedObjectStoresInterface -o traced/FederatedObjectStoresInterface.gen.go
+
 // ClientSet represents a client interface of supported resources.
 type ClientSet interface {
 	// Buckets returns a bucket client interface

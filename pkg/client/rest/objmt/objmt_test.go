@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/dell/goobjectscale/pkg/client/api"
 	"github.com/dell/goobjectscale/pkg/client/rest"
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 
@@ -87,7 +88,7 @@ func TestObjmt(t *testing.T) {
 
 	clientset := rest.NewClientSet(&c)
 
-	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
+	for scenario, fn := range map[string]func(t *testing.T, clientset api.ClientSet){
 		"accountInfo":        testAccountInfoList,
 		"accountSample":      testAccountSampleList,
 		"bucketInfo":         testBucketInfoList,
@@ -105,7 +106,7 @@ func TestObjmt(t *testing.T) {
 	}
 }
 
-func testAccountInfoList(t *testing.T, clientset *rest.ClientSet) {
+func testAccountInfoList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetAccountBillingInfo(context.TODO(), []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
@@ -116,7 +117,7 @@ func testAccountInfoList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testAccountSampleList(t *testing.T, clientset *rest.ClientSet) {
+func testAccountSampleList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetAccountBillingSample(context.TODO(), []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
@@ -127,7 +128,7 @@ func testAccountSampleList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testBucketInfoList(t *testing.T, clientset *rest.ClientSet) {
+func testBucketInfoList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetBucketBillingInfo(context.TODO(), "a12345", []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
@@ -138,7 +139,7 @@ func testBucketInfoList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testBucketSampleList(t *testing.T, clientset *rest.ClientSet) {
+func testBucketSampleList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetBucketBillingSample(context.TODO(), "a12345", []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
@@ -149,7 +150,7 @@ func testBucketSampleList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testBucketPerfList(t *testing.T, clientset *rest.ClientSet) {
+func testBucketPerfList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetBucketBillingPerf(context.TODO(), "a12345", []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
@@ -160,7 +161,7 @@ func testBucketPerfList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testReplicationInfoList(t *testing.T, clientset *rest.ClientSet) {
+func testReplicationInfoList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetReplicationInfo(context.TODO(), "a12345", [][]string{{"a", "b"}, {"c", "d"}}, nil)
 	require.NoError(t, err)
@@ -171,7 +172,7 @@ func testReplicationInfoList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testReplicationSampleList(t *testing.T, clientset *rest.ClientSet) {
+func testReplicationSampleList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetReplicationSample(context.TODO(), "a12345", [][]string{{"a", "b"}, {"c", "d"}}, nil)
 	require.NoError(t, err)
@@ -182,7 +183,7 @@ func testReplicationSampleList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testStoreBillingInfoList(t *testing.T, clientset *rest.ClientSet) {
+func testStoreBillingInfoList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetStoreBillingInfo(context.TODO(), nil)
 	require.NoError(t, err)
@@ -193,7 +194,7 @@ func testStoreBillingInfoList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testStoreBillingSampleList(t *testing.T, clientset *rest.ClientSet) {
+func testStoreBillingSampleList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetStoreBillingSample(context.TODO(), nil)
 	require.NoError(t, err)
@@ -204,7 +205,7 @@ func testStoreBillingSampleList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testStorePerfList(t *testing.T, clientset *rest.ClientSet) {
+func testStorePerfList(t *testing.T, clientset api.ClientSet) {
 	// Success
 	data, err := clientset.ObjectMt().GetStoreReplicationData(context.TODO(), []string{"aaa", "bbb", "ccc"}, nil)
 	require.NoError(t, err)
