@@ -19,13 +19,10 @@ func (_m *TenantsInterface) Create(ctx context.Context, payload model.TenantCrea
 	ret := _m.Called(ctx, payload)
 
 	var r0 *model.Tenant
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, model.TenantCreate) (*model.Tenant, error)); ok {
 		return rf(ctx, payload)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, model.TenantCreate) *model.Tenant); ok {
 		r0 = rf(ctx, payload)
 	} else {
@@ -76,13 +73,10 @@ func (_m *TenantsInterface) Get(ctx context.Context, name string, params map[str
 	ret := _m.Called(ctx, name, params)
 
 	var r0 *model.Tenant
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (*model.Tenant, error)); ok {
 		return rf(ctx, name, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) *model.Tenant); ok {
 		r0 = rf(ctx, name, params)
 	} else {
@@ -105,13 +99,10 @@ func (_m *TenantsInterface) GetQuota(ctx context.Context, name string, params ma
 	ret := _m.Called(ctx, name, params)
 
 	var r0 *model.TenantQuota
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (*model.TenantQuota, error)); ok {
 		return rf(ctx, name, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) *model.TenantQuota); ok {
 		r0 = rf(ctx, name, params)
 	} else {
@@ -134,13 +125,10 @@ func (_m *TenantsInterface) List(ctx context.Context, params map[string]string) 
 	ret := _m.Called(ctx, params)
 
 	var r0 *model.TenantList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.TenantList, error)); ok {
 		return rf(ctx, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.TenantList); ok {
 		r0 = rf(ctx, params)
 	} else {

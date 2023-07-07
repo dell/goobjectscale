@@ -19,13 +19,10 @@ func (_m *ObjmtInterface) GetAccountBillingInfo(ctx context.Context, ids []strin
 	ret := _m.Called(ctx, ids, params)
 
 	var r0 *model.AccountBillingInfoList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) (*model.AccountBillingInfoList, error)); ok {
 		return rf(ctx, ids, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) *model.AccountBillingInfoList); ok {
 		r0 = rf(ctx, ids, params)
 	} else {
@@ -48,13 +45,10 @@ func (_m *ObjmtInterface) GetAccountBillingSample(ctx context.Context, ids []str
 	ret := _m.Called(ctx, ids, params)
 
 	var r0 *model.AccountBillingSampleList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) (*model.AccountBillingSampleList, error)); ok {
 		return rf(ctx, ids, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) *model.AccountBillingSampleList); ok {
 		r0 = rf(ctx, ids, params)
 	} else {
@@ -77,13 +71,10 @@ func (_m *ObjmtInterface) GetBucketBillingInfo(ctx context.Context, account stri
 	ret := _m.Called(ctx, account, ids, params)
 
 	var r0 *model.BucketBillingInfoList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) (*model.BucketBillingInfoList, error)); ok {
 		return rf(ctx, account, ids, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) *model.BucketBillingInfoList); ok {
 		r0 = rf(ctx, account, ids, params)
 	} else {
@@ -106,13 +97,10 @@ func (_m *ObjmtInterface) GetBucketBillingPerf(ctx context.Context, account stri
 	ret := _m.Called(ctx, account, ids, params)
 
 	var r0 *model.BucketPerfDataList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) (*model.BucketPerfDataList, error)); ok {
 		return rf(ctx, account, ids, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) *model.BucketPerfDataList); ok {
 		r0 = rf(ctx, account, ids, params)
 	} else {
@@ -135,13 +123,10 @@ func (_m *ObjmtInterface) GetBucketBillingSample(ctx context.Context, account st
 	ret := _m.Called(ctx, account, ids, params)
 
 	var r0 *model.BucketBillingSampleList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) (*model.BucketBillingSampleList, error)); ok {
 		return rf(ctx, account, ids, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, []string, map[string]string) *model.BucketBillingSampleList); ok {
 		r0 = rf(ctx, account, ids, params)
 	} else {
@@ -164,13 +149,10 @@ func (_m *ObjmtInterface) GetReplicationInfo(ctx context.Context, account string
 	ret := _m.Called(ctx, account, replicationPairs, params)
 
 	var r0 *model.BucketReplicationInfoList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, [][]string, map[string]string) (*model.BucketReplicationInfoList, error)); ok {
 		return rf(ctx, account, replicationPairs, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, [][]string, map[string]string) *model.BucketReplicationInfoList); ok {
 		r0 = rf(ctx, account, replicationPairs, params)
 	} else {
@@ -193,13 +175,10 @@ func (_m *ObjmtInterface) GetReplicationSample(ctx context.Context, account stri
 	ret := _m.Called(ctx, account, replicationPairs, params)
 
 	var r0 *model.BucketReplicationSampleList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, [][]string, map[string]string) (*model.BucketReplicationSampleList, error)); ok {
 		return rf(ctx, account, replicationPairs, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, [][]string, map[string]string) *model.BucketReplicationSampleList); ok {
 		r0 = rf(ctx, account, replicationPairs, params)
 	} else {
@@ -222,13 +201,10 @@ func (_m *ObjmtInterface) GetStoreBillingInfo(ctx context.Context, params map[st
 	ret := _m.Called(ctx, params)
 
 	var r0 *model.StoreBillingInfoList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.StoreBillingInfoList, error)); ok {
 		return rf(ctx, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.StoreBillingInfoList); ok {
 		r0 = rf(ctx, params)
 	} else {
@@ -251,13 +227,10 @@ func (_m *ObjmtInterface) GetStoreBillingSample(ctx context.Context, params map[
 	ret := _m.Called(ctx, params)
 
 	var r0 *model.StoreBillingSampleList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.StoreBillingSampleList, error)); ok {
 		return rf(ctx, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.StoreBillingSampleList); ok {
 		r0 = rf(ctx, params)
 	} else {
@@ -280,13 +253,10 @@ func (_m *ObjmtInterface) GetStoreReplicationData(ctx context.Context, ids []str
 	ret := _m.Called(ctx, ids, params)
 
 	var r0 *model.StoreReplicationDataList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) (*model.StoreReplicationDataList, error)); ok {
 		return rf(ctx, ids, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, []string, map[string]string) *model.StoreReplicationDataList); ok {
 		r0 = rf(ctx, ids, params)
 	} else {

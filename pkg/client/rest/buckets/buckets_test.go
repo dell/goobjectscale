@@ -23,6 +23,7 @@ import (
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
+	"github.com/dell/goobjectscale/pkg/client/api"
 	"github.com/dell/goobjectscale/pkg/client/model"
 	"github.com/dell/goobjectscale/pkg/client/rest"
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
@@ -64,7 +65,7 @@ func TestBuckets(t *testing.T) {
 	}
 	clientset := rest.NewClientSet(&c)
 
-	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
+	for scenario, fn := range map[string]func(t *testing.T, clientset api.ClientSet){
 		"list":         testList,
 		"get":          testGet,
 		"create":       testCreate,
@@ -82,7 +83,7 @@ func TestBuckets(t *testing.T) {
 	}
 }
 
-func testList(t *testing.T, clientset *rest.ClientSet) {
+func testList(t *testing.T, clientset api.ClientSet) {
 	buckets, err := clientset.Buckets().List(context.TODO(), map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(buckets.Items), 18)
@@ -91,7 +92,7 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testGet(t *testing.T, clientset *rest.ClientSet) {
+func testGet(t *testing.T, clientset api.ClientSet) {
 	bucket, err := clientset.Buckets().Get(context.TODO(), "Files", map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, bucket.Name, "Files")
@@ -100,7 +101,7 @@ func testGet(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testCreate(t *testing.T, clientset *rest.ClientSet) {
+func testCreate(t *testing.T, clientset api.ClientSet) {
 	createBucket := model.Bucket{
 		Name:             "testbucket1",
 		ReplicationGroup: "urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global",
@@ -118,7 +119,7 @@ func testCreate(t *testing.T, clientset *rest.ClientSet) {
 	}
 }
 
-func testDelete(t *testing.T, clientset *rest.ClientSet) {
+func testDelete(t *testing.T, clientset api.ClientSet) {
 	createBucket := model.Bucket{
 		Name:             "testbucket1",
 		ReplicationGroup: "urn:storageos:ReplicationGroupInfo:104b3728-fba1-41b3-8055-4592348f1d24:global",
@@ -136,7 +137,7 @@ func testDelete(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testGetQuota(t *testing.T, clientset *rest.ClientSet) {
+func testGetQuota(t *testing.T, clientset api.ClientSet) {
 	quota, err := clientset.Buckets().GetQuota(context.TODO(), "testbucket1", "130820808912778549")
 	require.NoError(t, err)
 	assert.Equal(t, int(quota.BlockSize), -1)
@@ -145,24 +146,24 @@ func testGetQuota(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testGetPolicy(t *testing.T, clientset *rest.ClientSet) {
+func testGetPolicy(t *testing.T, clientset api.ClientSet) {
 	_, err := clientset.Buckets().GetPolicy(context.TODO(), "testbucket1", map[string]string{})
 	require.NoError(t, err)
 	_, err = clientset.Buckets().GetPolicy(context.TODO(), "unknownbucket", map[string]string{})
 	require.Error(t, err)
 }
 
-func testUpdatePolicy(t *testing.T, clientset *rest.ClientSet) {
+func testUpdatePolicy(t *testing.T, clientset api.ClientSet) {
 	err := clientset.Buckets().UpdatePolicy(context.TODO(), "testbucket1", "testpolicy", map[string]string{})
 	require.Nil(t, err)
 }
 
-func testDeletePolicy(t *testing.T, clientset *rest.ClientSet) {
+func testDeletePolicy(t *testing.T, clientset api.ClientSet) {
 	err := clientset.Buckets().DeletePolicy(context.TODO(), "testbucket1", map[string]string{})
 	require.Nil(t, err)
 }
 
-func testUpdateQuota(t *testing.T, clientset *rest.ClientSet) {
+func testUpdateQuota(t *testing.T, clientset api.ClientSet) {
 	bucketQuotaUpdate := model.BucketQuotaUpdate{}
 	bucketQuota := model.BucketQuota{
 		BucketName: "testbucket1",
@@ -172,7 +173,7 @@ func testUpdateQuota(t *testing.T, clientset *rest.ClientSet) {
 	require.Nil(t, err)
 }
 
-func testDeleteQuota(t *testing.T, clientset *rest.ClientSet) {
+func testDeleteQuota(t *testing.T, clientset api.ClientSet) {
 	err := clientset.Buckets().DeleteQuota(context.TODO(), "testbucket1", "130820808912778549")
 	require.Nil(t, err)
 }

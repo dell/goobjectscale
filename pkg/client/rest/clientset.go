@@ -13,6 +13,8 @@
 package rest
 
 import (
+	tracedAPI "github.com/dell/goobjectscale/pkg/client/api/traced"
+
 	"github.com/dell/goobjectscale/pkg/client/api"
 	"github.com/dell/goobjectscale/pkg/client/rest/alertpolicies"
 	"github.com/dell/goobjectscale/pkg/client/rest/buckets"
@@ -39,6 +41,44 @@ type ClientSet struct {
 }
 
 var _ api.ClientSet = (*ClientSet)(nil)
+
+// NewClientSetWithTracing returns a new client set based on the provided REST client parameters with basic tracing.
+func NewClientSetWithTracing(c client.RemoteCaller) *ClientSet {
+	return &ClientSet{
+		client: c,
+
+		buckets: tracedAPI.NewBucketsInterfaceWithTracing(
+			&buckets.Buckets{Client: c},
+			"Buckets"),
+
+		objectUser: tracedAPI.NewObjectUserInterfaceWithTracing(
+			&objectuser.ObjectUser{Client: c},
+			"ObjectUser"),
+
+		tenants: tracedAPI.NewTenantsInterfaceWithTracing(
+			&tenants.Tenants{Client: c}, "Tenants"),
+
+		objmt: tracedAPI.NewObjmtInterfaceWithTracing(
+			&objmt.Objmt{Client: c},
+			"Objmt"),
+
+		crr: tracedAPI.NewCRRInterfaceWithTracing(
+			&crr.CRR{Client: c},
+			"CRR"),
+
+		alertPolicies: tracedAPI.NewAlertPoliciesInterfaceWithTracing(
+			&alertpolicies.AlertPolicies{Client: c},
+			"AlertPolicies"),
+
+		status: tracedAPI.NewStatusInterfaceWithTracing(
+			&status.Status{Client: c},
+			"Status"),
+
+		federatedObjectStores: tracedAPI.NewFederatedObjectStoresInterfaceWithTracing(
+			&federatedobjectstores.FederatedObjectStores{Client: c},
+			"FederatedObjectStores"),
+	}
+}
 
 // NewClientSet returns a new client set based on the provided REST client parameters.
 func NewClientSet(c client.RemoteCaller) *ClientSet {

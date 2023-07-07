@@ -19,13 +19,10 @@ func (_m *ObjectUserInterface) CreateSecret(ctx context.Context, uid string, req
 	ret := _m.Called(ctx, uid, req, params)
 
 	var r0 *model.ObjectUserSecretKeyCreateRes
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, model.ObjectUserSecretKeyCreateReq, map[string]string) (*model.ObjectUserSecretKeyCreateRes, error)); ok {
 		return rf(ctx, uid, req, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, model.ObjectUserSecretKeyCreateReq, map[string]string) *model.ObjectUserSecretKeyCreateRes); ok {
 		r0 = rf(ctx, uid, req, params)
 	} else {
@@ -62,13 +59,10 @@ func (_m *ObjectUserInterface) GetInfo(ctx context.Context, uid string, params m
 	ret := _m.Called(ctx, uid, params)
 
 	var r0 *model.ObjectUserInfo
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (*model.ObjectUserInfo, error)); ok {
 		return rf(ctx, uid, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) *model.ObjectUserInfo); ok {
 		r0 = rf(ctx, uid, params)
 	} else {
@@ -91,13 +85,10 @@ func (_m *ObjectUserInterface) GetSecret(ctx context.Context, uid string, params
 	ret := _m.Called(ctx, uid, params)
 
 	var r0 *model.ObjectUserSecret
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) (*model.ObjectUserSecret, error)); ok {
 		return rf(ctx, uid, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, map[string]string) *model.ObjectUserSecret); ok {
 		r0 = rf(ctx, uid, params)
 	} else {
@@ -120,13 +111,10 @@ func (_m *ObjectUserInterface) List(ctx context.Context, params map[string]strin
 	ret := _m.Called(ctx, params)
 
 	var r0 *model.ObjectUserList
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.ObjectUserList, error)); ok {
 		return rf(ctx, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.ObjectUserList); ok {
 		r0 = rf(ctx, params)
 	} else {

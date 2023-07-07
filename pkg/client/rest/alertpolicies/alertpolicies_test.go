@@ -24,6 +24,7 @@ import (
 	"gopkg.in/dnaeon/go-vcr.v3/cassette"
 	"gopkg.in/dnaeon/go-vcr.v3/recorder"
 
+	"github.com/dell/goobjectscale/pkg/client/api"
 	"github.com/dell/goobjectscale/pkg/client/model"
 	"github.com/dell/goobjectscale/pkg/client/rest"
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
@@ -65,7 +66,7 @@ func TestAlertpolicies(t *testing.T) {
 	}
 	clientset := rest.NewClientSet(&c)
 
-	for scenario, fn := range map[string]func(t *testing.T, clientset *rest.ClientSet){
+	for scenario, fn := range map[string]func(t *testing.T, clientset api.ClientSet){
 		"list":   testList,
 		"get":    testGet,
 		"create": testCreate,
@@ -78,7 +79,7 @@ func TestAlertpolicies(t *testing.T) {
 	}
 }
 
-func testList(t *testing.T, clientset *rest.ClientSet) {
+func testList(t *testing.T, clientset api.ClientSet) {
 	alertPolicies, err := clientset.AlertPolicies().List(context.TODO(), map[string]string{})
 	require.NoError(t, err)
 	assert.Equal(t, len(alertPolicies.Items), 3)
@@ -87,7 +88,7 @@ func testList(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testGet(t *testing.T, clientset *rest.ClientSet) {
+func testGet(t *testing.T, clientset api.ClientSet) {
 	alertPolicy, err := clientset.AlertPolicies().Get(context.TODO(), "testPolicy")
 	require.NoError(t, err)
 	assert.Equal(t, alertPolicy.PolicyName, "testPolicy")
@@ -96,7 +97,7 @@ func testGet(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testCreate(t *testing.T, clientset *rest.ClientSet) {
+func testCreate(t *testing.T, clientset api.ClientSet) {
 	payload := model.AlertPolicy{
 		XMLName:    xml.Name{},
 		PolicyName: "testPolicy",
@@ -106,7 +107,7 @@ func testCreate(t *testing.T, clientset *rest.ClientSet) {
 	assert.Equal(t, alertPolicy.PolicyName, "testPolicy")
 }
 
-func testUpdate(t *testing.T, clientset *rest.ClientSet) {
+func testUpdate(t *testing.T, clientset api.ClientSet) {
 	payload := model.AlertPolicy{
 		PolicyName: "testPolicy",
 	}
@@ -117,7 +118,7 @@ func testUpdate(t *testing.T, clientset *rest.ClientSet) {
 	require.Error(t, err)
 }
 
-func testDelete(t *testing.T, clientset *rest.ClientSet) {
+func testDelete(t *testing.T, clientset api.ClientSet) {
 	err := clientset.AlertPolicies().Delete(context.TODO(), "testPolicy")
 	require.NoError(t, err)
 	err = clientset.AlertPolicies().Delete(context.TODO(), "")

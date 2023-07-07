@@ -19,13 +19,10 @@ func (_m *CRRInterface) Get(ctx context.Context, destObjectScale string, destObj
 	ret := _m.Called(ctx, destObjectScale, destObjectStore, param)
 
 	var r0 *model.CRR
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) (*model.CRR, error)); ok {
 		return rf(ctx, destObjectScale, destObjectStore, param)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, string, map[string]string) *model.CRR); ok {
 		r0 = rf(ctx, destObjectScale, destObjectStore, param)
 	} else {
