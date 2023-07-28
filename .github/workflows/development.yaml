@@ -66,6 +66,23 @@ jobs:
         with:
           args: /github/workspace/pkg
 
+  shell-linter:
+    name: Run Shellcheck and Checkmake
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+      - uses: actions/setup-go@v4
+        with:
+          go-version: "1.20"
+          cache: false
+      - name: Install and run Checkmake
+        run: |
+          go install github.com/mrtazz/checkmake/cmd/checkmake@latest
+          checkmake Makefile
+
   tests:
     name: Run unit tests and check package coverage
     runs-on: ubuntu-latest
