@@ -109,10 +109,10 @@ func testInvalidEndpoint(t *testing.T, auth client.Authenticator) {
 		Path:        "",
 		ContentType: client.ContentTypeJSON,
 	}, nil)
-	errUrl := &url.Error{}
+	errURL := &url.Error{}
 
 	require.Error(t, err)
-	assert.ErrorAs(t, err, &errUrl)
+	assert.ErrorAs(t, err, &errURL)
 }
 
 func testInvalidContentType(t *testing.T, auth client.Authenticator) {
@@ -132,7 +132,7 @@ func testInvalidContentType(t *testing.T, auth client.Authenticator) {
 	require.ErrorIs(t, err, client.ErrContentType)
 }
 
-func testFailedAuth(t *testing.T, auth client.Authenticator) {
+func testFailedAuth(t *testing.T, _ client.Authenticator) {
 	badUser := client.AuthUser{
 		Gateway:  "https://testgateway",
 		Username: "testuser1",

@@ -237,12 +237,12 @@ func NewObjectUsers(blobUsers []model.BlobUser, userSecrets []UserSecret, userIn
 }
 
 // List returns a list of object users.
-func (o *ObjectUsers) List(ctx context.Context, _ map[string]string) (*model.ObjectUserList, error) {
+func (o *ObjectUsers) List(_ context.Context, _ map[string]string) (*model.ObjectUserList, error) {
 	return o.Users, nil
 }
 
 // GetSecret returns information about object user secrets.
-func (o *ObjectUsers) GetSecret(ctx context.Context, uid string, _ map[string]string) (*model.ObjectUserSecret, error) {
+func (o *ObjectUsers) GetSecret(_ context.Context, uid string, _ map[string]string) (*model.ObjectUserSecret, error) {
 	if _, ok := o.Secrets[uid]; !ok {
 		return nil, model.Error{
 			Description: "secret not found",
@@ -255,7 +255,7 @@ func (o *ObjectUsers) GetSecret(ctx context.Context, uid string, _ map[string]st
 }
 
 // CreateSecret will create a specific secret.
-func (o *ObjectUsers) CreateSecret(ctx context.Context, uid string, req model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
+func (o *ObjectUsers) CreateSecret(_ context.Context, uid string, req model.ObjectUserSecretKeyCreateReq, params map[string]string) (*model.ObjectUserSecretKeyCreateRes, error) {
 	if _, ok := params["X-TEST/ObjectUser/CreateSecret/force-fail"]; ok {
 		return nil, model.Error{
 			Description: "An unexpected error occurred",
@@ -296,7 +296,7 @@ func (o *ObjectUsers) CreateSecret(ctx context.Context, uid string, req model.Ob
 }
 
 // DeleteSecret will delete a specific secret.
-func (o *ObjectUsers) DeleteSecret(ctx context.Context, uid string, req model.ObjectUserSecretKeyDeleteReq, _ map[string]string) error {
+func (o *ObjectUsers) DeleteSecret(_ context.Context, uid string, req model.ObjectUserSecretKeyDeleteReq, _ map[string]string) error {
 	if _, ok := o.Secrets[uid]; !ok {
 		return model.Error{
 			Description: "user not found",
@@ -330,7 +330,7 @@ func clearSecretKey2(key *model.ObjectUserSecret) {
 }
 
 // GetInfo returns information about object user.
-func (o *ObjectUsers) GetInfo(ctx context.Context, uid string, _ map[string]string) (*model.ObjectUserInfo, error) {
+func (o *ObjectUsers) GetInfo(_ context.Context, uid string, _ map[string]string) (*model.ObjectUserInfo, error) {
 	if _, ok := o.InfoList[uid]; !ok {
 		return nil, model.Error{
 			Description: "info not found",
@@ -350,7 +350,7 @@ type FederatedObjectStores struct {
 var _ api.FederatedObjectStoresInterface = (*FederatedObjectStores)(nil) // interface guard
 
 // List implements the tenants API.
-func (f *FederatedObjectStores) List(ctx context.Context, _ map[string]string) (*model.FederatedObjectStoreList, error) {
+func (f *FederatedObjectStores) List(_ context.Context, _ map[string]string) (*model.FederatedObjectStoreList, error) {
 	return &model.FederatedObjectStoreList{Items: f.items}, nil
 }
 
@@ -362,7 +362,7 @@ type Tenants struct {
 var _ api.TenantsInterface = (*Tenants)(nil) // interface guard
 
 // Create creates a tenant in an object store.
-func (t *Tenants) Create(ctx context.Context, payload model.TenantCreate) (*model.Tenant, error) {
+func (t *Tenants) Create(_ context.Context, payload model.TenantCreate) (*model.Tenant, error) {
 	newtenant := &model.Tenant{
 		ID:                payload.AccountID,
 		EncryptionEnabled: payload.EncryptionEnabled,
@@ -375,7 +375,7 @@ func (t *Tenants) Create(ctx context.Context, payload model.TenantCreate) (*mode
 }
 
 // Delete deletes a tenant in an object store.
-func (t *Tenants) Delete(ctx context.Context, tenantID string) error {
+func (t *Tenants) Delete(_ context.Context, tenantID string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == tenantID {
 			t.items = append(t.items[:i], t.items[i+1:]...)
@@ -390,7 +390,7 @@ func (t *Tenants) Delete(ctx context.Context, tenantID string) error {
 }
 
 // Update updates Tenant details default_bucket_size and alias.
-func (t *Tenants) Update(ctx context.Context, payload model.TenantUpdate, tenantID string) error {
+func (t *Tenants) Update(_ context.Context, payload model.TenantUpdate, tenantID string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == tenantID {
 			t.items[i].BucketBlockSize = payload.BucketBlockSize
@@ -407,7 +407,7 @@ func (t *Tenants) Update(ctx context.Context, payload model.TenantUpdate, tenant
 }
 
 // Get implements the tenants API.
-func (t *Tenants) Get(ctx context.Context, id string, _ map[string]string) (*model.Tenant, error) {
+func (t *Tenants) Get(_ context.Context, id string, _ map[string]string) (*model.Tenant, error) {
 	for _, tenant := range t.items {
 		if tenant.ID == id {
 			return &tenant, nil
@@ -421,12 +421,12 @@ func (t *Tenants) Get(ctx context.Context, id string, _ map[string]string) (*mod
 }
 
 // List implements the tenants API.
-func (t *Tenants) List(ctx context.Context, _ map[string]string) (*model.TenantList, error) {
+func (t *Tenants) List(_ context.Context, _ map[string]string) (*model.TenantList, error) {
 	return &model.TenantList{Items: t.items}, nil
 }
 
 // GetQuota retrieves the quota settings for the given tenant.
-func (t *Tenants) GetQuota(ctx context.Context, id string, _ map[string]string) (*model.TenantQuota, error) {
+func (t *Tenants) GetQuota(_ context.Context, id string, _ map[string]string) (*model.TenantQuota, error) {
 	for _, tenant := range t.items {
 		if tenant.ID == id {
 			return &model.TenantQuota{
@@ -447,7 +447,7 @@ func (t *Tenants) GetQuota(ctx context.Context, id string, _ map[string]string) 
 }
 
 // SetQuota updates the quota settings for the given tenant.
-func (t *Tenants) SetQuota(ctx context.Context, id string, tenantQuota model.TenantQuotaSet) error {
+func (t *Tenants) SetQuota(_ context.Context, id string, tenantQuota model.TenantQuotaSet) error {
 	for i, tenant := range t.items {
 		if tenant.ID == id {
 			t.items[i].BlockSize = tenantQuota.BlockSize
@@ -466,7 +466,7 @@ func (t *Tenants) SetQuota(ctx context.Context, id string, tenantQuota model.Ten
 }
 
 // DeleteQuota deletes the quota settings for the given tenant.
-func (t *Tenants) DeleteQuota(ctx context.Context, id string) error {
+func (t *Tenants) DeleteQuota(_ context.Context, id string) error {
 	for i, tenant := range t.items {
 		if tenant.ID == id {
 			t.items[i].BlockSize = ""
@@ -493,12 +493,12 @@ type Buckets struct {
 var _ api.BucketsInterface = (*Buckets)(nil) // interface guard
 
 // List implements the buckets API.
-func (b *Buckets) List(ctx context.Context, _ map[string]string) (*model.BucketList, error) {
+func (b *Buckets) List(_ context.Context, _ map[string]string) (*model.BucketList, error) {
 	return &model.BucketList{Items: b.items}, nil
 }
 
 // Get implements the buckets API.
-func (b *Buckets) Get(ctx context.Context, name string, params map[string]string) (*model.Bucket, error) {
+func (b *Buckets) Get(_ context.Context, name string, params map[string]string) (*model.Bucket, error) {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/Get/force-fail"]
 	if ok {
@@ -521,7 +521,7 @@ func (b *Buckets) Get(ctx context.Context, name string, params map[string]string
 }
 
 // GetPolicy implements the buckets API.
-func (b *Buckets) GetPolicy(ctx context.Context, bucketName string, params map[string]string) (string, error) {
+func (b *Buckets) GetPolicy(_ context.Context, bucketName string, params map[string]string) (string, error) {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/GetPolicy/force-fail"]
 	if ok {
@@ -539,7 +539,7 @@ func (b *Buckets) GetPolicy(ctx context.Context, bucketName string, params map[s
 }
 
 // DeletePolicy implements the buckets API.
-func (b *Buckets) DeletePolicy(ctx context.Context, bucketName string, params map[string]string) error {
+func (b *Buckets) DeletePolicy(_ context.Context, bucketName string, params map[string]string) error {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/DeletePolicy/force-fail"]
 	if ok {
@@ -562,7 +562,7 @@ func (b *Buckets) DeletePolicy(ctx context.Context, bucketName string, params ma
 }
 
 // UpdatePolicy implements the buckets API.
-func (b *Buckets) UpdatePolicy(ctx context.Context, bucketName string, policy string, params map[string]string) error {
+func (b *Buckets) UpdatePolicy(_ context.Context, bucketName string, policy string, params map[string]string) error {
 	// this is not path, it is used to quickly distinguish which function must fail
 	_, ok := params["X-TEST/Buckets/UpdatePolicy/force-fail"]
 	if ok {
@@ -591,7 +591,7 @@ func (b *Buckets) UpdatePolicy(ctx context.Context, bucketName string, policy st
 }
 
 // Create implements the buckets API.
-func (b *Buckets) Create(ctx context.Context, createParams model.Bucket) (*model.Bucket, error) {
+func (b *Buckets) Create(_ context.Context, createParams model.Bucket) (*model.Bucket, error) {
 	// This piece of code verifies if the incoming request is for forcing an unexpected error.
 	if strings.Contains(createParams.Name, "FORCEFAIL") {
 		return &createParams, model.Error{
@@ -615,7 +615,7 @@ func (b *Buckets) Create(ctx context.Context, createParams model.Bucket) (*model
 }
 
 // Delete implements the buckets API.
-func (b *Buckets) Delete(ctx context.Context, name string, namespace string, emptyBucket bool) error {
+func (b *Buckets) Delete(_ context.Context, name string, namespace string, _ bool) error {
 	// This piece of code verifies if the incoming request is for forcing an unexpected error.
 	if strings.Contains(name, "FORCEFAIL") {
 		return model.Error{
@@ -638,7 +638,7 @@ func (b *Buckets) Delete(ctx context.Context, name string, namespace string, emp
 }
 
 // GetQuota gets the quota for the given bucket and namespace.
-func (b *Buckets) GetQuota(ctx context.Context, bucketName string, _ string) (*model.BucketQuotaInfo, error) {
+func (b *Buckets) GetQuota(_ context.Context, bucketName string, _ string) (*model.BucketQuotaInfo, error) {
 	for _, bucket := range b.items {
 		if bucket.Name == bucketName {
 			return &model.BucketQuotaInfo{
@@ -661,7 +661,7 @@ func (b *Buckets) GetQuota(ctx context.Context, bucketName string, _ string) (*m
 }
 
 // UpdateQuota updates the quota for the specified bucket.
-func (b *Buckets) UpdateQuota(ctx context.Context, bucketQuota model.BucketQuotaUpdate) error {
+func (b *Buckets) UpdateQuota(_ context.Context, bucketQuota model.BucketQuotaUpdate) error {
 	for i := 0; i < len(b.items); i++ {
 		if b.items[i].Name == bucketQuota.BucketName {
 			b.items[i].BlockSize = bucketQuota.BlockSize
@@ -680,7 +680,7 @@ func (b *Buckets) UpdateQuota(ctx context.Context, bucketQuota model.BucketQuota
 }
 
 // DeleteQuota deletes the quota setting for the given bucket and namespace.
-func (b *Buckets) DeleteQuota(ctx context.Context, bucketName string, _ string) error {
+func (b *Buckets) DeleteQuota(_ context.Context, bucketName string, _ string) error {
 	for i := 0; i < len(b.items); i++ {
 		if b.items[i].Name == bucketName {
 			b.items[i].BlockSize = -1
@@ -715,52 +715,52 @@ type Objmt struct {
 var _ api.ObjmtInterface = (*Objmt)(nil) // interface guard
 
 // GetStoreBillingInfo returns billing info metrics for object store.
-func (mt *Objmt) GetStoreBillingInfo(ctx context.Context, _ map[string]string) (*model.StoreBillingInfoList, error) {
+func (mt *Objmt) GetStoreBillingInfo(_ context.Context, _ map[string]string) (*model.StoreBillingInfoList, error) {
 	return mt.storeBillingInfoList, nil
 }
 
 // GetStoreBillingSample returns billing sample (time-window) metrics for object store.
-func (mt *Objmt) GetStoreBillingSample(ctx context.Context, _ map[string]string) (*model.StoreBillingSampleList, error) {
+func (mt *Objmt) GetStoreBillingSample(_ context.Context, _ map[string]string) (*model.StoreBillingSampleList, error) {
 	return mt.storeBillingSampleList, nil
 }
 
 // GetStoreReplicationData returns CRR metrics for defined object stores.
-func (mt *Objmt) GetStoreReplicationData(ctx context.Context, _ []string, _ map[string]string) (*model.StoreReplicationDataList, error) {
+func (mt *Objmt) GetStoreReplicationData(_ context.Context, _ []string, _ map[string]string) (*model.StoreReplicationDataList, error) {
 	return mt.storeReplicationDataList, nil
 }
 
 // GetAccountBillingInfo returns billing info metrics for defined accounts.
-func (mt *Objmt) GetAccountBillingInfo(ctx context.Context, _ []string, _ map[string]string) (*model.AccountBillingInfoList, error) {
+func (mt *Objmt) GetAccountBillingInfo(_ context.Context, _ []string, _ map[string]string) (*model.AccountBillingInfoList, error) {
 	return mt.accountBillingInfoList, nil
 }
 
 // GetAccountBillingSample returns billing sample (time-window) metrics for defined accounts.
-func (mt *Objmt) GetAccountBillingSample(ctx context.Context, _ []string, _ map[string]string) (*model.AccountBillingSampleList, error) {
+func (mt *Objmt) GetAccountBillingSample(_ context.Context, _ []string, _ map[string]string) (*model.AccountBillingSampleList, error) {
 	return mt.accountBillingSampleList, nil
 }
 
 // GetBucketBillingInfo returns billing info metrics for defined buckets and account.
-func (mt *Objmt) GetBucketBillingInfo(ctx context.Context, _ string, _ []string, _ map[string]string) (*model.BucketBillingInfoList, error) {
+func (mt *Objmt) GetBucketBillingInfo(_ context.Context, _ string, _ []string, _ map[string]string) (*model.BucketBillingInfoList, error) {
 	return mt.bucketBillingInfoList, nil
 }
 
 // GetBucketBillingSample returns billing sample (time-window) metrics for defined buckets and account.
-func (mt *Objmt) GetBucketBillingSample(ctx context.Context, _ string, _ []string, _ map[string]string) (*model.BucketBillingSampleList, error) {
+func (mt *Objmt) GetBucketBillingSample(_ context.Context, _ string, _ []string, _ map[string]string) (*model.BucketBillingSampleList, error) {
 	return mt.bucketBillingSampleList, nil
 }
 
 // GetBucketBillingPerf returns performance metrics for defined buckets and account.
-func (mt *Objmt) GetBucketBillingPerf(ctx context.Context, _ string, _ []string, _ map[string]string) (*model.BucketPerfDataList, error) {
+func (mt *Objmt) GetBucketBillingPerf(_ context.Context, _ string, _ []string, _ map[string]string) (*model.BucketPerfDataList, error) {
 	return mt.bucketBillingPerfList, nil
 }
 
 // GetReplicationInfo returns billing info metrics for defined replication pairs and account.
-func (mt *Objmt) GetReplicationInfo(ctx context.Context, _ string, _ [][]string, _ map[string]string) (*model.BucketReplicationInfoList, error) {
+func (mt *Objmt) GetReplicationInfo(_ context.Context, _ string, _ [][]string, _ map[string]string) (*model.BucketReplicationInfoList, error) {
 	return mt.bucketReplicationInfoList, nil
 }
 
 // GetReplicationSample returns billing sample (time-window) metrics for defined replication pairs and account.
-func (mt *Objmt) GetReplicationSample(ctx context.Context, _ string, _ [][]string, _ map[string]string) (*model.BucketReplicationSampleList, error) {
+func (mt *Objmt) GetReplicationSample(_ context.Context, _ string, _ [][]string, _ map[string]string) (*model.BucketReplicationSampleList, error) {
 	return mt.bucketReplicationSampleList, nil
 }
 
@@ -772,7 +772,7 @@ type CRR struct {
 var _ api.CRRInterface = (*CRR)(nil) // interface guard
 
 // PauseReplication implements the CRR API.
-func (c *CRR) PauseReplication(ctx context.Context, destObjectScale string, destObjectStore string, params map[string]string) error {
+func (c *CRR) PauseReplication(_ context.Context, destObjectScale string, destObjectStore string, params map[string]string) error {
 	// resume, _ := strconv.Atoi(params["pauseEndMills"])
 	resume, _ := strconv.ParseInt(params["pauseEndMills"], 10, 64)
 	c.Config.DestObjectScale = destObjectScale
@@ -784,7 +784,7 @@ func (c *CRR) PauseReplication(ctx context.Context, destObjectScale string, dest
 }
 
 // SuspendReplication implements the CRR API.
-func (c *CRR) SuspendReplication(ctx context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
+func (c *CRR) SuspendReplication(_ context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 
@@ -792,7 +792,7 @@ func (c *CRR) SuspendReplication(ctx context.Context, destObjectScale string, de
 }
 
 // ResumeReplication implements the CRR API.
-func (c *CRR) ResumeReplication(ctx context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
+func (c *CRR) ResumeReplication(_ context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 
@@ -800,7 +800,7 @@ func (c *CRR) ResumeReplication(ctx context.Context, destObjectScale string, des
 }
 
 // UnthrottleReplication implements the CRR API.
-func (c *CRR) UnthrottleReplication(ctx context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
+func (c *CRR) UnthrottleReplication(_ context.Context, destObjectScale string, destObjectStore string, _ map[string]string) error {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 
@@ -808,7 +808,7 @@ func (c *CRR) UnthrottleReplication(ctx context.Context, destObjectScale string,
 }
 
 // ThrottleReplication implements the CRR API.
-func (c *CRR) ThrottleReplication(ctx context.Context, destObjectScale string, destObjectStore string, param map[string]string) error {
+func (c *CRR) ThrottleReplication(_ context.Context, destObjectScale string, destObjectStore string, param map[string]string) error {
 	throttle, _ := strconv.Atoi(param["throttlePerSecond"])
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
@@ -818,7 +818,7 @@ func (c *CRR) ThrottleReplication(ctx context.Context, destObjectScale string, d
 }
 
 // Get implements the CRR API.
-func (c *CRR) Get(ctx context.Context, destObjectScale string, destObjectStore string, _ map[string]string) (*model.CRR, error) {
+func (c *CRR) Get(_ context.Context, destObjectScale string, destObjectStore string, _ map[string]string) (*model.CRR, error) {
 	c.Config.DestObjectScale = destObjectScale
 	c.Config.DestObjectStore = destObjectStore
 
@@ -838,7 +838,7 @@ type AlertPolicies struct {
 var _ api.AlertPoliciesInterface = (*AlertPolicies)(nil) // interface guard
 
 // Get implements the AlertPolicy API.
-func (ap *AlertPolicies) Get(ctx context.Context, policyName string) (*model.AlertPolicy, error) {
+func (ap *AlertPolicies) Get(_ context.Context, policyName string) (*model.AlertPolicy, error) {
 	for _, AlertPolicy := range ap.items {
 		if AlertPolicy.PolicyName == policyName {
 			return &AlertPolicy, nil
@@ -852,12 +852,12 @@ func (ap *AlertPolicies) Get(ctx context.Context, policyName string) (*model.Ale
 }
 
 // List implements the buckets API.
-func (ap *AlertPolicies) List(ctx context.Context, _ map[string]string) (*model.AlertPolicies, error) {
+func (ap *AlertPolicies) List(_ context.Context, _ map[string]string) (*model.AlertPolicies, error) {
 	return &model.AlertPolicies{Items: ap.items}, nil
 }
 
 // Create implements the AlertPolicy API.
-func (ap *AlertPolicies) Create(ctx context.Context, payload model.AlertPolicy) (*model.AlertPolicy, error) {
+func (ap *AlertPolicies) Create(_ context.Context, payload model.AlertPolicy) (*model.AlertPolicy, error) {
 	newAlertPolicy := &model.AlertPolicy{
 		PolicyName:           payload.PolicyName,
 		MetricType:           payload.MetricType,
@@ -879,7 +879,7 @@ func (ap *AlertPolicies) Create(ctx context.Context, payload model.AlertPolicy) 
 }
 
 // Delete implements the AlertPolicy API.
-func (ap *AlertPolicies) Delete(ctx context.Context, policyName string) error {
+func (ap *AlertPolicies) Delete(_ context.Context, policyName string) error {
 	for i, alertpolicy := range ap.items {
 		if alertpolicy.PolicyName == policyName {
 			ap.items = append(ap.items[:i], ap.items[i+1:]...)
@@ -894,7 +894,7 @@ func (ap *AlertPolicies) Delete(ctx context.Context, policyName string) error {
 }
 
 // Update implements the AlertPolicy API.
-func (ap *AlertPolicies) Update(ctx context.Context, payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
+func (ap *AlertPolicies) Update(_ context.Context, payload model.AlertPolicy, policyName string) (*model.AlertPolicy, error) {
 	for i, alertpolicy := range ap.items {
 		if alertpolicy.PolicyName == policyName {
 			ap.items[i].PolicyName = payload.PolicyName
@@ -929,7 +929,7 @@ type Status struct {
 var _ api.StatusInterface = (*Status)(nil) // interface guard
 
 // GetRebuildStatus implements the Status API.
-func (s *Status) GetRebuildStatus(ctx context.Context, objStoreName, ssPodName, ssPodNameSpace, level string, params map[string]string) (*model.RebuildInfo, error) {
+func (s *Status) GetRebuildStatus(_ context.Context, _, _, _, _ string, _ map[string]string) (*model.RebuildInfo, error) {
 	s.RebuildInfo.TotalBytes = 2048
 	s.RebuildInfo.RemainingBytes = 1024
 

@@ -19,13 +19,10 @@ func (_m *StatusInterface) GetRebuildStatus(ctx context.Context, objStoreName st
 	ret := _m.Called(ctx, objStoreName, ssPodName, ssPodNameSpace, level, params)
 
 	var r0 *model.RebuildInfo
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, string, string, string, map[string]string) (*model.RebuildInfo, error)); ok {
 		return rf(ctx, objStoreName, ssPodName, ssPodNameSpace, level, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string, string, string, string, map[string]string) *model.RebuildInfo); ok {
 		r0 = rf(ctx, objStoreName, ssPodName, ssPodNameSpace, level, params)
 	} else {

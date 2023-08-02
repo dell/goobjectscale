@@ -19,13 +19,10 @@ func (_m *AlertPoliciesInterface) Create(ctx context.Context, payload model.Aler
 	ret := _m.Called(ctx, payload)
 
 	var r0 *model.AlertPolicy
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, model.AlertPolicy) (*model.AlertPolicy, error)); ok {
 		return rf(ctx, payload)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, model.AlertPolicy) *model.AlertPolicy); ok {
 		r0 = rf(ctx, payload)
 	} else {
@@ -62,13 +59,10 @@ func (_m *AlertPoliciesInterface) Get(ctx context.Context, policyName string) (*
 	ret := _m.Called(ctx, policyName)
 
 	var r0 *model.AlertPolicy
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, string) (*model.AlertPolicy, error)); ok {
 		return rf(ctx, policyName)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, string) *model.AlertPolicy); ok {
 		r0 = rf(ctx, policyName)
 	} else {
@@ -91,13 +85,10 @@ func (_m *AlertPoliciesInterface) List(ctx context.Context, params map[string]st
 	ret := _m.Called(ctx, params)
 
 	var r0 *model.AlertPolicies
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) (*model.AlertPolicies, error)); ok {
 		return rf(ctx, params)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string) *model.AlertPolicies); ok {
 		r0 = rf(ctx, params)
 	} else {
@@ -120,13 +111,10 @@ func (_m *AlertPoliciesInterface) Update(ctx context.Context, payload model.Aler
 	ret := _m.Called(ctx, payload, policyName)
 
 	var r0 *model.AlertPolicy
-
 	var r1 error
-
 	if rf, ok := ret.Get(0).(func(context.Context, model.AlertPolicy, string) (*model.AlertPolicy, error)); ok {
 		return rf(ctx, payload, policyName)
 	}
-
 	if rf, ok := ret.Get(0).(func(context.Context, model.AlertPolicy, string) *model.AlertPolicy); ok {
 		r0 = rf(ctx, payload, policyName)
 	} else {
