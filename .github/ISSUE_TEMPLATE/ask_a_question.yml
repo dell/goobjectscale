@@ -1,0 +1,12 @@
+name: Ask a question
+description: Ask a question.
+title: "[QUESTION]: "
+labels: ["type/question"]
+body:
+  - type: textarea
+    id: solution
+    attributes:
+      label: How can the Team help you today?
+      description: Details.
+    validations:
+      required: true

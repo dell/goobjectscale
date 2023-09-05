@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest an idea for this project.
+title: "[FEATURE]: "
+labels: ["type/feature-request", "needs-triage"]
+body:
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like.
+      description: A clear and concise description of what you want to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered.
+      description: A clear and concise description of any alternative solutions or features you've considered.
+    validations:
+      required: true
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: Additional Information
+      description: Any other relevant information about the feature request.

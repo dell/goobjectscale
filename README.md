@@ -26,7 +26,7 @@ import (
 )
 
 // First, provide user credentials for your ObjectScale.
-objectscaleAuthUser := objectscaleClient.AuthUser{
+objectscaleAuthUser := client.AuthUser{
 	Gateway:  "https://gateway.example.com:443", // See FAQ on how to get it.
 	Username: "example-user",
 	Password: "example-password",
@@ -101,13 +101,14 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/session"
+	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
 // Let's use default HTTP Client.
 x509Client := *http.DefaultClient
 
 // First, provide user credentials for your ObjectScale.
-objectscaleAuthUser := &objectscaleClient.AuthUser{
+objectscaleAuthUser := &client.AuthUser{
 	Gateway:  "https://gateway.example.com:443", // See FAQ on how to get it.
 	Username: "example-user",
 	Password: "example-password",
@@ -157,7 +158,7 @@ The easiest way to obtain ObjectScale Gateway endpoint URL is to look in ObjectS
 4. Select *Federation* tab;
 5. In the table you will see one or more values, unroll selected one;
 6. In the table, you will now see *External Endpoint* value associated with *objectscale-gateway-internal*.
-7. The endpoint must be of the following format: `https://<IP-ADDRESS>:443` or `https://<EXTERNAL-HOSTNAME>`
+7. The endpoint must be of the following format: `https://<IP-ADDRESS>:4443` or `https://<EXTERNAL-HOSTNAME>`
 
 ### How to obtain ObjectScale Objectstore endpoint URL?
 
