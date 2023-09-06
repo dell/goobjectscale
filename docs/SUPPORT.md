@@ -4,7 +4,7 @@ Copyright (c) 2023 Dell Inc., or its subsidiaries. All Rights Reserved.
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-   
+
     http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
@@ -16,12 +16,17 @@ limitations under the License.
 
 # Support
 
-We use GitHub for creating/tracking various [issues](https://github.com/dell/goobjectscale/issues/new/choose) such as bugs, feature requests, and questions. The following resources are also available.
+We use GitHub for creating/tracking various [issues][repo-issues] such as bugs, feature requests, and questions. The following resources are also available.
 
 ## Documentation
 
-For documentation, please visit [Go Reference for dell/goobjectscale](https://pkg.go.dev/github.com/dell/goobjectscale).
+For documentation, please visit [Go Reference][go-reference].
 
 ## Slack
 
 Join our Slack group. Click [Here](http://del.ly/Slack_request) to request your invite.
+
+<!-- URLs here -->
+
+[repo-issues]: https://github.com/dell/goobjectscale/issues/new/choose
+[go-reference]: https://pkg.go.dev/github.com/dell/goobjectscale

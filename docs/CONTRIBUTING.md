@@ -4,7 +4,7 @@ Copyright (c) 2021-2022 Dell Inc., or its subsidiaries. All Rights Reserved.
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-   
+
     http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
@@ -43,15 +43,15 @@ You can contribute to this project in several ways. Here are some examples:
 
 ## Submitting issues
 
-All issues related to CSM, regardless of the repository the issue belongs to, should be submitted [here](https://github.com/dell/csm/issues). Issues will be triaged and labels will be used to indicate the type of issue. This section outlines the types of issues that can be submitted.  
+All issues related to the repository, should be submitted [here][issues]. Issues will be triaged and labels will be used to indicate the type of issue. This section outlines the types of issues that can be submitted.
 
 ### Report bugs
 
-We aim to track and document everything related to CSM via the Issues page. The code and documentation are released with no warranties or SLAs and are intended to be supported through a community driven process.
+We aim to track and document everything related to product via the Issues page. The code and documentation are released with no warranties or SLAs and are intended to be supported through a community driven process.
 
-Before submitting a new issue, make sure someone hasn't already reported the problem. Look through the [existing issues](https://github.com/dell/csm/issues) for similar issues.
+Before submitting a new issue, make sure someone hasn't already reported the problem. Look through the [existing issues][issues] for similar issues.
 
-Report a bug by submitting a [bug report](https://github.com/dell/csm/issues/new?labels=type%2Fbug%2C+needs-triage&template=bug_report.md&title=%5BBUG%5D%3A). Make sure that you provide as much information as possible on how to reproduce the bug.
+Report a bug by submitting a [bug report][new-bug-report]. Make sure that you provide as much information as possible on how to reproduce the bug.
 
 When opening a Bug please include the following information to help with debugging:
 
@@ -64,13 +64,13 @@ An Issue __must__ be created before submitting any pull request. Any pull reques
 
 ### Feature request
 
-If you have an idea of how to improve this project, submit a [feature request](https://github.com/dell/csm/issues/new?labels=type%2Ffeature-request%2C+needs-triage&template=feature_request.md&title=%5BFEATURE%5D%3A).
+If you have an idea of how to improve this project, submit a [feature request][new-feature-request].
 
 ### Answering questions
 
-If you have a question and you can't find the answer in the documentation or issues, the next step is to submit a [question.](https://github.com/dell/csm/issues/new?labels=type%2Fquestion&template=ask-a-question.md&title=%5BQUESTION%5D%3A)
+If you have a question and you can't find the answer in the documentation or issues, the next step is to submit a [question][new-question].
 
-We'd love your help answering questions being asked by other CSM users.
+We'd love your help answering questions being asked by other users.
 
 ## Triage issues
 
@@ -81,7 +81,7 @@ Triage helps ensure that issues resolve quickly by:
 * Lowering the issue count by preventing duplicate issues.
 * Streamlining the development process by preventing duplicate discussions.
 
-If you don't have the knowledge or time to code, consider helping with _issue triage_. The CSM community will thank you for saving them time by spending some of yours.
+If you don't have the knowledge or time to code, consider helping with _issue triage_. The community will thank you for saving them time by spending some of yours.
 
 Read more about the ways you can [Triage issues](ISSUE_TRIAGE.md).
 
@@ -89,14 +89,14 @@ Read more about the ways you can [Triage issues](ISSUE_TRIAGE.md).
 
 Unsure where to begin contributing? Start by browsing issues labeled `beginner friendly` or `help wanted`.
 
-* [Beginner-friendly](https://github.com/dell/csm/issues?q=is%3Aopen+is%3Aissue+label%3A%22beginner+friendly%22) issues are generally straightforward to complete.
-* [Help wanted](https://github.com/dell/csm/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) issues are problems we would like the community to help us with regardless of complexity.
+* [Beginner-friendly][beginner-friendly] issues are generally straightforward to complete.
+* [Help wanted][help-wanted] issues are problems we would like the community to help us with regardless of complexity.
 
 When you're ready to contribute, it's time to create a pull request.
 
 ## Branching
 
-CSM follows a scaled trunk branching strategy where short-lived branches are created off of the main branch. When coding is complete, the branch is merged back into main after being approved in a pull request code review.
+This repository follows a scaled trunk branching strategy where short-lived branches are created off of the main branch. When coding is complete, the branch is merged back into main after being approved in a pull request code review.
 
 ### Steps for branching and contributing
 
@@ -104,7 +104,7 @@ CSM follows a scaled trunk branching strategy where short-lived branches are cre
 2. Create a branch off of the main branch.
 3. Make your changes and commit them to your branch.
 4. If other code changes have merged into the upstream main branch, perform a rebase of those changes into your branch.
-5. Open a [pull request](https://github.com/dell/csm/pulls) between your branch and the upstream main branch.
+5. Open a [pull request][pulls] between your branch and the upstream main branch.
 6. Once your pull request has merged, your branch can be deleted.
 
 
@@ -132,7 +132,7 @@ $ git commit -S -m "your commit message"
 
 ### Commit message format
 
-CSM uses the guidelines for commit messages outlined in [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/)
+This repository uses the guidelines for commit messages outlined in [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/)
 
 ## Pull Requests
 
@@ -153,7 +153,7 @@ If the pull request fixes a bug:
 * The pull request description must include `Fixes #<issue number>`.
 * To avoid regressions, the pull request should include tests that replicate the fixed bug.
 
-The CSM team _squashes_ all commits into one when we accept a pull request. The title of the pull request becomes the subject line of the squashed commit message. We still encourage contributors to write informative commit messages, as they becomes a part of the Git commit body.
+The team _squashes_ all commits into one when we accept a pull request. The title of the pull request becomes the subject line of the squashed commit message. We still encourage contributors to write informative commit messages, as they becomes a part of the Git commit body.
 
 We use the pull request title when we generate change logs for releases. As such, we strive to make the title as informative as possible.
 
@@ -161,7 +161,7 @@ Make sure that the title for your pull request uses the same format as the subje
 
 ### Quality Gates for pull requests
 
-GitHub Actions are used to enforce quality gates when a pull request is created or when any commit is made to the pull request. These GitHub Actions enforce our minimum code quality requirement for any code that get checked into the CSM Go code repository. If any of the quality gates fail, it is expected that the contributor will look into the check log, understand the problem and resolve the issue. If help is needed, please feel free to reach out the maintainers of the project for [support](SUPPORT.md).
+GitHub Actions are used to enforce quality gates when a pull request is created or when any commit is made to the pull request. These GitHub Actions enforce our minimum code quality requirement for any code that get checked into the Go code repository. If any of the quality gates fail, it is expected that the contributor will look into the check log, understand the problem and resolve the issue. If help is needed, please feel free to reach out the maintainers of the project for [support](SUPPORT.md).
 
 #### Security scans
 
@@ -187,7 +187,7 @@ A pull request must satisfy following for it to be merged:
 
 ## Code Style
 
-For the Go code in the CSM repository, we expect the code styling outlined in [Effective Go](https://golang.org/doc/effective_go.html). In addition to this, we have the following supplements:
+For the Go code in the repository, we expect the code styling outlined in [Effective Go](https://golang.org/doc/effective_go.html). In addition to this, we have the following supplements:
 
 ### Handle Errors
 
@@ -298,3 +298,13 @@ By using golangci-lint, we can collectively improve the quality of our codebase 
 ### TODOs in the code
 
 We don't like TODOs in the code or documentation. It is really best if you sort out all issues you can see with the changes before we check the changes in.
+
+<!-- URLs here -->
+
+[pulls]: https://github.com/dell/goobjectscale/pulls
+[issues]: https://github.com/dell/goobjectscale/issues
+[beginner-friendly]: https://github.com/dell/goobjectscale/issues?q=is%3Aopen+is%3Aissue+label%3A%22beginner+friendly%22
+[help-wanted]: https://github.com/dell/goobjectscale/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22
+[new-bug-report]: https://github.com/dell/goobjectscale/issues/new?labels=type%2Fbug%2C+needs-triage&template=bug_report.yml&title=%5BBUG%5D%3A
+[new-feature-request]: https://github.com/dell/goobjectscale/issues/new?labels=type%2Ffeature-request%2C+needs-triage&template=feature_request.yml&title=%5BFEATURE%5D%3A
+[new-question]: https://github.com/dell/goobjectscale/issues/new?labels=type%2Fquestion&template=ask_a_question.yml&title=%5BQUESTION%5D%3A

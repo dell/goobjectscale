@@ -10,6 +10,18 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/dell/goobjectscale)](https://goreportcard.com/report/github.com/dell/goobjectscale)
 [![Go Reference](https://pkg.go.dev/badge/github.com/dell/goobjectscale.svg)](https://pkg.go.dev/github.com/dell/goobjectscale)
 
+## Table of Contents
+
+* [Code of Conduct](./docs/CODE_OF_CONDUCT.md)
+* [Maintainer Guide](./docs/MAINTAINER_GUIDE.md)
+* [Committer Guide](./docs/COMMITTER_GUIDE.md)
+* [Contributing Guide](./docs/CONTRIBUTING.md)
+* [Branching Strategy](./docs/BRANCHING.md)
+* [List of Adopters](./docs/ADOPTERS.md)
+* [Maintainers](./docs/MAINTAINERS.md)
+* [Support](./docs/SUPPORT.md)
+* [Security](./docs/SECURITY.md)
+
 ## Description
 _goobjectscale_ is a Go package that provides a client for the Dell ObjectScale Managment HTTP API and helpers for Dell ObjectScale Identity and Access Management (IAM) HTTP API (compatible with Amazon Web Servicess IAM).
 

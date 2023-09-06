@@ -4,7 +4,7 @@ Copyright (c) 2021-2022 Dell Inc., or its subsidiaries. All Rights Reserved.
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-   
+
     http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
@@ -183,7 +183,7 @@ This workflow starts off with a GitHub issue of type bug being created.
 1. Collaborator or maintainer creates a GitHub bug using the appropriate GitHub issue template.
 2. By default the bug is assigned the type/bug and needs-triage labels.
 
-```                                                                                                                                                     
+```
                                                +--------------------------+                                                                              
                                                | New bug issue opened/more|                                                                              
                                                | information added        |                                                                              
@@ -241,7 +241,7 @@ This workflow starts off with a GitHub issue of type feature request being creat
 
 The following flow chart outlines the triage process
 
-```         
+```
                                             +---------------------------------+                                                  
                                             |New feature request issue opened/|                                                  
                                             |more information added           |                                                  
