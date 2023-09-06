@@ -16,8 +16,6 @@
 * [Maintainer Guide](./docs/MAINTAINER_GUIDE.md)
 * [Committer Guide](./docs/COMMITTER_GUIDE.md)
 * [Contributing Guide](./docs/CONTRIBUTING.md)
-* [Branching Strategy](./docs/BRANCHING.md)
-* [List of Adopters](./docs/ADOPTERS.md)
 * [Maintainers](./docs/MAINTAINERS.md)
 * [Support](./docs/SUPPORT.md)
 * [Security](./docs/SECURITY.md)
