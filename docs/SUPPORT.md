@@ -22,10 +22,6 @@ We use GitHub for creating/tracking various [issues][repo-issues] such as bugs, 
 
 For documentation, please visit [Go Reference][go-reference].
 
-## Slack
-
-Join our Slack group. Click [Here](http://del.ly/Slack_request) to request your invite.
-
 <!-- URLs here -->
 
 [repo-issues]: https://github.com/dell/goobjectscale/issues/new/choose
