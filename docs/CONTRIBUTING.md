@@ -165,6 +165,7 @@ GitHub Actions are used to enforce quality gates when a pull request is created 
 
 #### Security scans
 
+* [Golang Security Checker](https://github.com/securego/gosec) inspects source code for security vulnerabilities by scanning the Go AST. It is integrated via [golangci-lint](https://golangci-lint.run/).
 * [Malware Scanner](https://github.com/dell/common-github-actions/tree/main/malware-scanner) inspects source code for malware.
 
 #### Code linting, scanning and vetting

@@ -16,7 +16,7 @@ limitations under the License.
 
 # Support
 
-We use GitHub for creating/tracking various [issues][repo-issues] such as bugs, feature requests, and questions. The following resources are also available.
+We use GitHub for creating/tracking various [issues][repo-issues] such as bugs, feature requests, and questions.
 
 ## Documentation
 
