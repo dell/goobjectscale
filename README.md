@@ -10,6 +10,16 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/dell/goobjectscale)](https://goreportcard.com/report/github.com/dell/goobjectscale)
 [![Go Reference](https://pkg.go.dev/badge/github.com/dell/goobjectscale.svg)](https://pkg.go.dev/github.com/dell/goobjectscale)
 
+## Table of Contents
+
+* [Code of Conduct](./docs/CODE_OF_CONDUCT.md)
+* [Maintainer Guide](./docs/MAINTAINER_GUIDE.md)
+* [Committer Guide](./docs/COMMITTER_GUIDE.md)
+* [Contributing Guide](./docs/CONTRIBUTING.md)
+* [Maintainers](./docs/MAINTAINERS.md)
+* [Support](./docs/SUPPORT.md)
+* [Security](./docs/SECURITY.md)
+
 ## Description
 _goobjectscale_ is a Go package that provides a client for the Dell ObjectScale Managment HTTP API and helpers for Dell ObjectScale Identity and Access Management (IAM) HTTP API (compatible with Amazon Web Servicess IAM).
 
@@ -26,7 +36,7 @@ import (
 )
 
 // First, provide user credentials for your ObjectScale.
-objectscaleAuthUser := objectscaleClient.AuthUser{
+objectscaleAuthUser := client.AuthUser{
 	Gateway:  "https://gateway.example.com:443", // See FAQ on how to get it.
 	Username: "example-user",
 	Password: "example-password",
@@ -101,13 +111,14 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/session"
+	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
 // Let's use default HTTP Client.
 x509Client := *http.DefaultClient
 
 // First, provide user credentials for your ObjectScale.
-objectscaleAuthUser := &objectscaleClient.AuthUser{
+objectscaleAuthUser := &client.AuthUser{
 	Gateway:  "https://gateway.example.com:443", // See FAQ on how to get it.
 	Username: "example-user",
 	Password: "example-password",
@@ -157,7 +168,7 @@ The easiest way to obtain ObjectScale Gateway endpoint URL is to look in ObjectS
 4. Select *Federation* tab;
 5. In the table you will see one or more values, unroll selected one;
 6. In the table, you will now see *External Endpoint* value associated with *objectscale-gateway-internal*.
-7. The endpoint must be of the following format: `https://<IP-ADDRESS>:443` or `https://<EXTERNAL-HOSTNAME>`
+7. The endpoint must be of the following format: `https://<IP-ADDRESS>:4443` or `https://<EXTERNAL-HOSTNAME>`
 
 ### How to obtain ObjectScale Objectstore endpoint URL?
 

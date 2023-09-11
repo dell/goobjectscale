@@ -1,0 +1,48 @@
+backlog:
+    name: backlog
+    color: "#bfdadc"
+    description: Issue has been reviewed and added to the product backlog.
+beginner friendly:
+    name: beginner friendly
+    color: "#F1EDE2"
+    description: The issue is suitable for a beginner to work on.
+help wanted:
+    name: help wanted
+    color: "#C1E157"
+    description: Request for help from the community.
+needs-triage:
+    name: needs-triage
+    color: "#0075ca"
+    description: Issue requires triage.
+triage/duplicate:
+    name: triage/duplicate
+    color: "#e4e669"
+    description: Indicates the issue or pull request already exists.
+triage/needs-information:
+    name: triage/needs-information
+    color: "#d876e3"
+    description: Applied to an issue as part of triage indicating more information is required in order to work on.
+triage/needs-investigation:
+    name: triage/needs-investigation
+    color: "#ffffff"
+    description: Issue requires more investigation to reproduce and understand.
+triage/works-as-intended:
+    name: triage/works-as-intended
+    color: "#0052cc"
+    description: Applied to a bug issue as part of triage when the issue works as intended by design.
+type/bug:
+    name: type/bug
+    color: "#979300"
+    description: Something isn't working. This is the default label associated with a bug issue.
+type/feature:
+    name: type/feature
+    color: "#017E63"
+    description: A feature. This label is applied to a feature issues.
+type/feature-request:
+    name: type/feature-request
+    color: "#42D336"
+    description: New feature request. This is the default label associated with a feature request issue.
+type/question:
+    name: type/question
+    color: "#71DA9C"
+    description: Ask a question. This is the default label associated with a question issue.
