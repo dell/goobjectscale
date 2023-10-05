@@ -5,7 +5,7 @@
 
 [![GitHub license](https://img.shields.io/github/license/dell/goobjectscale)](https://github.com/dell/goobjectscale/blob/main/LICENSE)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/dell/goobjectscale)](https://github.com/dell/goobjectscale/releases/latest)
-[![GitHub branch checks state](https://img.shields.io/github/checks-status/dell/goobjectscale/main)](https://github.com/dell/goobjectscale/actions)
+[![Development Actions](https://github.com/dell/goobjectscale/actions/workflows/development.yaml/badge.svg)](https://github.com/dell/goobjectscale/actions/workflows/development.yaml)
 [![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/dell/goobjectscale)](https://github.com/dell/goobjectscale/blob/main/go.mod)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dell/goobjectscale)](https://goreportcard.com/report/github.com/dell/goobjectscale)
 [![Go Reference](https://pkg.go.dev/badge/github.com/dell/goobjectscale.svg)](https://pkg.go.dev/github.com/dell/goobjectscale)
