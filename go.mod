@@ -3,7 +3,7 @@ module github.com/dell/goobjectscale
 go 1.21
 
 require (
-	github.com/aws/aws-sdk-go v1.44.311
+	github.com/aws/aws-sdk-go v1.45.24
 	github.com/go-logr/logr v1.2.4
 	github.com/stretchr/testify v1.8.4
 	gopkg.in/dnaeon/go-vcr.v3 v3.1.2
