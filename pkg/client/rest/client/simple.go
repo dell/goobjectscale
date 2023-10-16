@@ -69,7 +69,7 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 			return err
 		}
 
-		s.log.V(10).Info("request",
+		s.log.V(10).Info("request prepared",
 			"Header", req.Header,
 			"URL", req.URL,
 		)
@@ -81,9 +81,14 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 
 		defer resp.Body.Close()
 
-		s.log.V(10).Info("response",
-			"Body", resp.Body,
+		body, err := io.ReadAll(resp.Body)
+
+		s.log.V(10).Info("request sent",
+			"Body", string(body),
+			"BodyReadError", err,
 			"ContentLength", resp.ContentLength,
+			"Header", req.Header,
+			"URL", req.URL,
 			"StatusCode", resp.StatusCode,
 			"Status", resp.Status,
 			"URL", resp.Header,
