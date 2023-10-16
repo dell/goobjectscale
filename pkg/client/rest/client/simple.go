@@ -22,6 +22,7 @@ import (
 	"net/http"
 
 	"github.com/dell/goobjectscale/pkg/client/model"
+	"github.com/go-logr/logr"
 )
 
 var _ RemoteCaller = (*Simple)(nil) // interface guard
@@ -41,10 +42,16 @@ type Simple struct {
 	// obtain login credentials.
 	Authenticator Authenticator
 
-	HTTPClient *http.Client
-
 	// Should X-EMC-Override header be added into the request
 	OverrideHeader bool
+
+	HTTPClient *http.Client
+
+	log logr.Logger
+}
+
+func (s *Simple) SetLogger(log logr.Logger) {
+	s.log = log
 }
 
 // MakeRemoteCall executes an API request against the client endpoint, returning
@@ -62,12 +69,25 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 			return err
 		}
 
+		s.log.V(10).Info("request",
+			"Header", req.Header,
+			"URL", req.URL,
+		)
+
 		resp, err := s.HTTPClient.Do(req)
 		if err != nil {
 			return err
 		}
 
 		defer resp.Body.Close()
+
+		s.log.V(10).Info("response",
+			"Body", resp.Body,
+			"ContentLength", resp.ContentLength,
+			"StatusCode", resp.StatusCode,
+			"Status", resp.Status,
+			"URL", resp.Header,
+		)
 
 		err = validateResponse(r, resp)
 		if err != nil {
@@ -196,7 +216,7 @@ func unmarshal(r Request, resp *http.Response, v interface{}) error {
 			return fmt.Errorf("response: xml: %w", err)
 		}
 	default:
-		return fmt.Errorf("response: %s: %w", r.ContentType, ErrContentType)
+		return fmt.Errorf("response: %s: %w", contentType, ErrContentType)
 	}
 
 	return nil
