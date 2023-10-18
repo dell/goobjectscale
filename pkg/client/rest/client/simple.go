@@ -91,19 +91,13 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 			"URL", resp.Header,
 		)
 
-		// not checking error, as this is a best-effort call, and we do not care about the error here.
-		body, _ := io.ReadAll(resp.Body)
-		s.log.V(10).Info("Response obtained (extra info).", //nolint:gomnd
-			"Body", string(body),
-		)
-
-		err = validateResponse(r, resp)
+		err = s.validateResponse(r, resp)
 		if err != nil {
 			return err
 		}
 
 		if into != nil {
-			if err := unmarshal(r, resp, into); err != nil {
+			if err := s.unmarshal(r, resp, into); err != nil {
 				return err
 			}
 		}
@@ -165,13 +159,13 @@ func (s *Simple) buildHTTPRequest(ctx context.Context, r Request) (*http.Request
 	return req, nil
 }
 
-func validateResponse(r Request, resp *http.Response) error {
+func (s *Simple) validateResponse(r Request, resp *http.Response) error {
 	switch {
 	case resp.StatusCode == http.StatusUnauthorized:
 		return ErrAuthorization
 	case resp.StatusCode >= http.StatusBadRequest:
 		var ecsError model.Error
-		if err := unmarshal(r, resp, &ecsError); err != nil {
+		if err := s.unmarshal(r, resp, &ecsError); err != nil {
 			return err
 		}
 
@@ -181,9 +175,9 @@ func validateResponse(r Request, resp *http.Response) error {
 	return nil
 }
 
-// Unmarshal unmarshals resp.Body into v with respect to returned Content-Type or
+// unmarshal unmarshals resp.Body into v with respect to returned Content-Type or
 // original requested Content-Type.
-func unmarshal(r Request, resp *http.Response, v interface{}) error {
+func (s *Simple) unmarshal(r Request, resp *http.Response, v interface{}) error {
 	// Use content type sent by server first but fall back to original request content type.
 	contentType := resp.Header.Get("Content-Type")
 	if contentType == "" {
@@ -191,10 +185,10 @@ func unmarshal(r Request, resp *http.Response, v interface{}) error {
 	}
 
 	// Reading all of resp.Body into memory is inefficient, and it's better to send
-	// it directly into decoders.  However if body is empty the decoders will
-	// receive an EOF.  They can also receive EOF for malformed responses.
+	// it directly into decoders. However if body is empty the decoders will
+	// receive an EOF. They can also receive EOF for malformed responses.
 	// We need to differentiate between EOF from empty responses and malformed
-	// responsed.
+	// response.
 	var cw CountWriter
 	body := io.TeeReader(resp.Body, &cw)
 
@@ -211,6 +205,9 @@ func unmarshal(r Request, resp *http.Response, v interface{}) error {
 
 		return err
 	}
+
+	// we want to attempt to log the body safely.
+	body = io.TeeReader(body, &LogWriter{log: s.log})
 
 	switch contentType {
 	case ContentTypeJSON:

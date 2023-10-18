@@ -13,19 +13,37 @@
 package client
 
 import (
+	"encoding/hex"
 	"io"
-)
 
-var _ io.Writer = (*CountWriter)(nil) // interface guard
+	"github.com/go-logr/logr"
+)
 
 // CountWriter is an io.Writer that counts bytes written without actually writing anything.
 type CountWriter struct {
 	N int
 }
 
+var _ io.Writer = (*CountWriter)(nil) // interface guard
+
 // Write adds len(p) to the current value of N and returns len(p) without
 // writing anything.
 func (w *CountWriter) Write(p []byte) (int, error) {
 	w.N += len(p)
+	return len(p), nil
+}
+
+type LogWriter struct {
+	log logr.Logger
+}
+
+var _ io.Writer = (*LogWriter)(nil)
+
+func (w *LogWriter) Write(p []byte) (int, error) {
+	w.log.V(10).WithCallDepth(1).Info("Writing.", //nolint:gomnd
+		"content", hex.Dump(p),
+		"length", len(p),
+	)
+
 	return len(p), nil
 }
