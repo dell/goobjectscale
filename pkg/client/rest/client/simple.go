@@ -50,6 +50,7 @@ type Simple struct {
 	log logr.Logger
 }
 
+// SetLogger sets the logger in the Simple client.
 func (s *Simple) SetLogger(log logr.Logger) {
 	s.log = log
 }
@@ -69,7 +70,7 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 			return err
 		}
 
-		s.log.V(10).Info("request prepared",
+		s.log.V(8).Info("Request prepared.", //nolint:gomnd
 			"Header", req.Header,
 			"URL", req.URL,
 		)
@@ -81,17 +82,19 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 
 		defer resp.Body.Close()
 
-		body, err := io.ReadAll(resp.Body)
-
-		s.log.V(10).Info("request sent",
-			"Body", string(body),
-			"BodyReadError", err,
+		s.log.V(8).Info("Response obtained.", //nolint:gomnd
 			"ContentLength", resp.ContentLength,
 			"Header", req.Header,
 			"URL", req.URL,
 			"StatusCode", resp.StatusCode,
 			"Status", resp.Status,
 			"URL", resp.Header,
+		)
+
+		// not checking error, as this is a best-effort call, and we do not care about the error here.
+		body, _ := io.ReadAll(resp.Body)
+		s.log.V(10).Info("Response obtained (extra info).", //nolint:gomnd
+			"Body", string(body),
 		)
 
 		err = validateResponse(r, resp)
