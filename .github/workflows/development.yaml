@@ -2,7 +2,7 @@ name: Development Actions
 
 on:
   push:
-    branches: [main]
+    branches: ["**"]
   pull_request:
     branches: ["**"]
   workflow_call:
