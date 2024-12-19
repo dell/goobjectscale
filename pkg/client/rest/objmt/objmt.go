@@ -22,38 +22,38 @@ import (
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
 )
 
-type bucketIdsReqBody struct {
+type bucketIDsReqBody struct {
 	XMLName xml.Name `xml:"bucket_list"`
-	Ids     []string `xml:"id"`
+	IDs     []string `xml:"id"`
 }
 
-type accountIdsReqBody struct {
+type accountIDsReqBody struct {
 	XMLName xml.Name `xml:"account_list"`
-	Ids     []string `xml:"id"`
+	IDs     []string `xml:"id"`
 }
 
-type storeIdsReqBody struct {
+type storeIDsReqBody struct {
 	XMLName xml.Name `xml:"store_list"`
-	Ids     []string `xml:"id"`
+	IDs     []string `xml:"id"`
 }
 
 type replicationPairsReqBody struct {
 	XMLName      xml.Name         `xml:"replication_list"`
-	Replications []replicationIds `xml:"replication"`
+	Replications []replicationIDs `xml:"replication"`
 }
 
-type replicationIds struct {
+type replicationIDs struct {
 	XMLName xml.Name `xml:"replication"`
 	Src     string   `xml:"src"`
 	Dest    string   `xml:"dest"`
 }
 
-func newReplicationIds(ids [][]string) *replicationPairsReqBody {
+func newReplicationIDs(ids [][]string) *replicationPairsReqBody {
 	ret := &replicationPairsReqBody{}
 
-	ret.Replications = []replicationIds{}
+	ret.Replications = []replicationIDs{}
 	for _, id := range ids {
-		ret.Replications = append(ret.Replications, replicationIds{Src: id[0], Dest: id[1]})
+		ret.Replications = append(ret.Replications, replicationIDs{Src: id[0], Dest: id[1]})
 	}
 
 	return ret
@@ -70,7 +70,7 @@ func (o *Objmt) GetAccountBillingInfo(ctx context.Context, ids []string, params 
 		Method:      http.MethodPost,
 		Path:        "/object/mt/account/info",
 		ContentType: client.ContentTypeXML,
-		Body:        accountIdsReqBody{Ids: ids},
+		Body:        accountIDsReqBody{IDs: ids},
 		Params:      params,
 	}
 
@@ -90,7 +90,7 @@ func (o *Objmt) GetAccountBillingSample(ctx context.Context, ids []string, param
 		Method:      http.MethodPost,
 		Path:        "/object/mt/account/sample",
 		ContentType: client.ContentTypeXML,
-		Body:        accountIdsReqBody{Ids: ids},
+		Body:        accountIDsReqBody{IDs: ids},
 		Params:      params,
 	}
 
@@ -111,7 +111,7 @@ func (o *Objmt) GetBucketBillingInfo(ctx context.Context, account string, ids []
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/info", account),
 		ContentType: client.ContentTypeXML,
-		Body:        bucketIdsReqBody{Ids: ids},
+		Body:        bucketIDsReqBody{IDs: ids},
 		Params:      params,
 	}
 
@@ -131,7 +131,7 @@ func (o *Objmt) GetBucketBillingSample(ctx context.Context, account string, ids 
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/sample", account),
 		ContentType: client.ContentTypeXML,
-		Body:        bucketIdsReqBody{Ids: ids},
+		Body:        bucketIDsReqBody{IDs: ids},
 		Params:      params,
 	}
 
@@ -151,7 +151,7 @@ func (o *Objmt) GetBucketBillingPerf(ctx context.Context, account string, ids []
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/bucket/perf", account),
 		ContentType: client.ContentTypeXML,
-		Body:        bucketIdsReqBody{Ids: ids},
+		Body:        bucketIDsReqBody{IDs: ids},
 		Params:      params,
 	}
 
@@ -171,7 +171,7 @@ func (o *Objmt) GetReplicationInfo(ctx context.Context, account string, replicat
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/replication/info", account),
 		ContentType: client.ContentTypeXML,
-		Body:        newReplicationIds(replicationPairs),
+		Body:        newReplicationIDs(replicationPairs),
 		Params:      params,
 	}
 
@@ -191,7 +191,7 @@ func (o *Objmt) GetReplicationSample(ctx context.Context, account string, replic
 		Method:      http.MethodPost,
 		Path:        fmt.Sprintf("/object/mt/account/%s/replication/sample", account),
 		ContentType: client.ContentTypeXML,
-		Body:        newReplicationIds(replicationPairs),
+		Body:        newReplicationIDs(replicationPairs),
 		Params:      params,
 	}
 
@@ -249,7 +249,7 @@ func (o *Objmt) GetStoreReplicationData(ctx context.Context, ids []string, param
 		Method:      http.MethodPost,
 		Path:        "/object/mt/store/replication",
 		ContentType: client.ContentTypeXML,
-		Body:        storeIdsReqBody{Ids: ids},
+		Body:        storeIDsReqBody{IDs: ids},
 		Params:      params,
 	}
 

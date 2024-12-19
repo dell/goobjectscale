@@ -22,6 +22,7 @@ import (
 	"net/http"
 
 	"github.com/dell/goobjectscale/pkg/client/model"
+	"github.com/go-logr/logr"
 )
 
 var _ RemoteCaller = (*Simple)(nil) // interface guard
@@ -41,10 +42,17 @@ type Simple struct {
 	// obtain login credentials.
 	Authenticator Authenticator
 
-	HTTPClient *http.Client
-
 	// Should X-EMC-Override header be added into the request
 	OverrideHeader bool
+
+	HTTPClient *http.Client
+
+	log logr.Logger
+}
+
+// SetLogger sets the logger in the Simple client.
+func (s *Simple) SetLogger(log logr.Logger) {
+	s.log = log
 }
 
 // MakeRemoteCall executes an API request against the client endpoint, returning
@@ -62,6 +70,11 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 			return err
 		}
 
+		s.log.V(8).Info("Request prepared.", //nolint:gomnd
+			"Header", req.Header,
+			"URL", req.URL,
+		)
+
 		resp, err := s.HTTPClient.Do(req)
 		if err != nil {
 			return err
@@ -69,13 +82,22 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 
 		defer resp.Body.Close()
 
-		err = validateResponse(r, resp)
+		s.log.V(8).Info("Response obtained.", //nolint:gomnd
+			"ContentLength", resp.ContentLength,
+			"Header", req.Header,
+			"URL", req.URL,
+			"StatusCode", resp.StatusCode,
+			"Status", resp.Status,
+			"URL", resp.Header,
+		)
+
+		err = s.validateResponse(r, resp)
 		if err != nil {
 			return err
 		}
 
 		if into != nil {
-			if err := unmarshal(r, resp, into); err != nil {
+			if err := s.unmarshal(r, resp, into); err != nil {
 				return err
 			}
 		}
@@ -137,13 +159,13 @@ func (s *Simple) buildHTTPRequest(ctx context.Context, r Request) (*http.Request
 	return req, nil
 }
 
-func validateResponse(r Request, resp *http.Response) error {
+func (s *Simple) validateResponse(r Request, resp *http.Response) error {
 	switch {
 	case resp.StatusCode == http.StatusUnauthorized:
 		return ErrAuthorization
 	case resp.StatusCode >= http.StatusBadRequest:
 		var ecsError model.Error
-		if err := unmarshal(r, resp, &ecsError); err != nil {
+		if err := s.unmarshal(r, resp, &ecsError); err != nil {
 			return err
 		}
 
@@ -153,9 +175,9 @@ func validateResponse(r Request, resp *http.Response) error {
 	return nil
 }
 
-// Unmarshal unmarshals resp.Body into v with respect to returned Content-Type or
+// unmarshal unmarshals resp.Body into v with respect to returned Content-Type or
 // original requested Content-Type.
-func unmarshal(r Request, resp *http.Response, v interface{}) error {
+func (s *Simple) unmarshal(r Request, resp *http.Response, v interface{}) error {
 	// Use content type sent by server first but fall back to original request content type.
 	contentType := resp.Header.Get("Content-Type")
 	if contentType == "" {
@@ -163,10 +185,10 @@ func unmarshal(r Request, resp *http.Response, v interface{}) error {
 	}
 
 	// Reading all of resp.Body into memory is inefficient, and it's better to send
-	// it directly into decoders.  However if body is empty the decoders will
-	// receive an EOF.  They can also receive EOF for malformed responses.
+	// it directly into decoders. However if body is empty the decoders will
+	// receive an EOF. They can also receive EOF for malformed responses.
 	// We need to differentiate between EOF from empty responses and malformed
-	// responsed.
+	// response.
 	var cw CountWriter
 	body := io.TeeReader(resp.Body, &cw)
 
@@ -184,6 +206,9 @@ func unmarshal(r Request, resp *http.Response, v interface{}) error {
 		return err
 	}
 
+	// we want to attempt to log the body safely.
+	body = io.TeeReader(body, &LogWriter{log: s.log})
+
 	switch contentType {
 	case ContentTypeJSON:
 		decoder := json.NewDecoder(body)
@@ -196,7 +221,7 @@ func unmarshal(r Request, resp *http.Response, v interface{}) error {
 			return fmt.Errorf("response: xml: %w", err)
 		}
 	default:
-		return fmt.Errorf("response: %s: %w", r.ContentType, ErrContentType)
+		return fmt.Errorf("response: %s: %w", contentType, ErrContentType)
 	}
 
 	return nil
