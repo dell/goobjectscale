@@ -23,17 +23,17 @@ jobs:
     name: golangci-lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: "1.23"
           cache: false
       - name: Checkout the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Vendor packages
         run: |
           go mod vendor
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v5
+        uses: golangci/golangci-lint-action@v8
         with:
           version: latest
           skip-cache: true
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v5
       - name: Malware Scanner
         uses: dell/common-github-actions/malware-scanner@main
         with:
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v5
       - name: Run the forbidden words scan
         uses: dell/common-github-actions/code-sanitizer@main
         with:
@@ -66,10 +66,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@master
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v6
         with:
           go-version: "1.23"
           cache: false
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3.2.0
+        uses: actions/checkout@v5
       - name: Run unit tests and check package coverage
         uses: dell/common-github-actions/go-code-tester@main
         with:
