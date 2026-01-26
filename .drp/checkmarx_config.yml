@@ -1,0 +1,7 @@
+---
+checkmarx:
+  vulnerability_level: 'high'
+project_exclusion_list:
+  exclusion_file_paths:
+    - 'fixtures/generate_fixtures.go'
+    - 'pkg/config/mgmtconfig_test.go'

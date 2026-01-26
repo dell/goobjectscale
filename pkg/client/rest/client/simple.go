@@ -1,14 +1,10 @@
-// Copyright © 2023 Dell Inc. or its subsidiaries. All Rights Reserved.
+// Copyright © 2023 - 2025 Dell Inc. or its subsidiaries. All Rights Reserved.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//      http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// This software contains the intellectual property of Dell Inc.
+// or is licensed to Dell Inc. from third parties. Use of this software
+// and the intellectual property contained therein is expressly limited to the
+// terms and conditions of the License Agreement under which it is provided by or
+// on behalf of Dell Inc. or its subsidiaries.
 
 package client
 
@@ -50,7 +46,6 @@ type Simple struct {
 	log logr.Logger
 }
 
-// SetLogger sets the logger in the Simple client.
 func (s *Simple) SetLogger(log logr.Logger) {
 	s.log = log
 }
@@ -69,28 +64,22 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 		if err != nil {
 			return err
 		}
-
-		s.log.V(8).Info("Request prepared.", //nolint:gomnd
+		s.log.V(6).Info("Request prepared.", //nolint:gomnd
 			"Header", req.Header,
 			"URL", req.URL,
 		)
-
 		resp, err := s.HTTPClient.Do(req)
 		if err != nil {
 			return err
 		}
 
 		defer resp.Body.Close()
-
-		s.log.V(8).Info("Response obtained.", //nolint:gomnd
+		s.log.V(6).Info("Response obtained.", //nolint:gomnd
 			"ContentLength", resp.ContentLength,
-			"Header", req.Header,
-			"URL", req.URL,
 			"StatusCode", resp.StatusCode,
 			"Status", resp.Status,
-			"URL", resp.Header,
+			"Header", resp.Header,
 		)
-
 		err = s.validateResponse(r, resp)
 		if err != nil {
 			return err
@@ -205,9 +194,6 @@ func (s *Simple) unmarshal(r Request, resp *http.Response, v interface{}) error 
 
 		return err
 	}
-
-	// we want to attempt to log the body safely.
-	body = io.TeeReader(body, &LogWriter{log: s.log})
 
 	switch contentType {
 	case ContentTypeJSON:

@@ -1,0 +1,292 @@
+interactions:
+  - id: 0
+    request:
+      content_length: 0
+      host: ""
+      method: GET
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/login
+    response:
+      body: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><loggedIn><user>root</user></loggedIn>
+      code: 200
+      content_length: 93
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Length:
+          - "93"
+        Content-Type:
+          - application/xml
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+        X-Sds-Auth-Max-Age:
+          - "28800"
+        X-Sds-Auth-Token:
+          - BAAcd09xUnFITm43eHVDeFhSTjFYb3hOS05rVktrPQMAjAQASHVybjpzdG9yYWdlb3M6VmlydHVhbERhdGFDZW50ZXJEYXRhOmRmOTNjMGRmLWZkOTAtNDUwZi1iZDMwLWJlYTRlZGQ3MjJkNQIADTE3NjQzNDA3NDQ1MjIDAC51cm46VG9rZW46MDY5OTEyOTYtODRlNy00MjY3LTk2MTctMjVjYmJjYWQ2MGZlAgAC0A8=
+        X-Sds-Auth-Username:
+          - root
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+  - id: 1
+    request:
+      body: "null"
+      content_length: 4
+      form:
+        namespace:
+          - ns1
+      host: ""
+      method: GET
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/object/bucket/bucket1/info?namespace=ns1
+    response:
+      body: '{"name":"bucket1","id":"ns1.bucket1","link":{"rel":"self","href":"/object/bucket/ns1.bucket1"},"namespace":"ns1","vpool":"urn:storageos:ReplicationGroupInfo:b8c368c7-abe1-4fda-a0eb-dfcd28d43f16:global","locked":false,"fs_access_enabled":false,"softquota":"-1","created":"2025-09-23T03:25:39.416Z","is_stale_allowed":false,"is_object_lock_with_ado_allowed":false,"is_tso_read_only":false,"is_object_lock_enabled":false,"default_object_lock_retention_mode":null,"default_object_lock_retention_years":null,"default_object_lock_retention_days":null,"default_retention":0,"block_size":-1,"auto_commit_period":0,"notification_size":-1,"blockSizeInCount":-1,"notificationSizeInCount":-1,"is_encryption_enabled":"false","TagSet":[],"retention":0,"default_group":null,"default_group_file_read_permission":false,"default_group_file_write_permission":false,"default_group_file_execute_permission":false,"default_group_dir_read_permission":false,"default_group_dir_write_permission":false,"default_group_dir_execute_permission":false,"min_max_governor":{"enforce_retention":false,"minimum_fixed_retention":null,"maximum_fixed_retention":null,"minimum_variable_retention":null,"maximum_variable_retention":null},"audit_delete_expiration":-2,"enableAdvancedMetadataSearch":false,"advancedMetadataSearchTargetName":null,"advancedMetadataSearchTargetStream":null,"is_empty_bucket_in_progress":false,"versioning_status":null,"api_type":"S3","local_object_metadata_reads":false,"owner":"object_user1","search_metadata":{"isEnabled":false,"metadata":[],"maxKeys":0,"metadata_tokens":false}}'
+      code: 200
+      content_length: -1
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+      transfer_encoding:
+        - chunked
+  - id: 2
+    request:
+      body: '{"name":"bucket2","namespace":"ns1"}'
+      content_length: 36
+      host: ""
+      method: POST
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/object/bucket
+    response:
+      body: '{"global":null,"remote":null,"vdc":null,"metaData":{"isEnabled":false,"metadata":[],"maxKeys":0,"metadata_tokens":false},"advancedMetadataSearchEnabled":false,"advancedMetadataSearchTargetName":null,"advancedMetadataSearchTargetStream":null,"name":"bucket2","id":"ns1.bucket2","link":null,"creation_time":null,"inactive":false,"internal":null,"error_message":null,"TagSet":[]}'
+      code: 200
+      content_length: -1
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+      transfer_encoding:
+        - chunked
+  - id: 3
+    request:
+      body: "null"
+      content_length: 4
+      form:
+        namespace:
+          - ns1
+      host: ""
+      method: GET
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/object/bucket?namespace=ns1
+    response:
+      body: '{"object_bucket":[{"name":"bucket1","id":"ns1.bucket1","link":{"rel":"self","href":"/object/bucket/ns1.bucket1"},"namespace":"ns1","vpool":"urn:storageos:ReplicationGroupInfo:b8c368c7-abe1-4fda-a0eb-dfcd28d43f16:global","locked":false,"fs_access_enabled":false,"softquota":"-1","created":"2025-09-23T03:25:39.416Z","is_stale_allowed":false,"is_object_lock_with_ado_allowed":false,"is_tso_read_only":false,"is_object_lock_enabled":false,"default_object_lock_retention_mode":null,"default_object_lock_retention_years":null,"default_object_lock_retention_days":null,"default_retention":0,"block_size":-1,"auto_commit_period":0,"notification_size":-1,"blockSizeInCount":-1,"notificationSizeInCount":-1,"is_encryption_enabled":"false","TagSet":[],"retention":0,"default_group":null,"default_group_file_read_permission":false,"default_group_file_write_permission":false,"default_group_file_execute_permission":false,"default_group_dir_read_permission":false,"default_group_dir_write_permission":false,"default_group_dir_execute_permission":false,"min_max_governor":{"enforce_retention":false,"minimum_fixed_retention":null,"maximum_fixed_retention":null,"minimum_variable_retention":null,"maximum_variable_retention":null},"audit_delete_expiration":-2,"enableAdvancedMetadataSearch":false,"advancedMetadataSearchTargetName":null,"advancedMetadataSearchTargetStream":null,"is_empty_bucket_in_progress":false,"versioning_status":null,"api_type":"S3","local_object_metadata_reads":false,"owner":"object_user1","search_metadata":{"isEnabled":false,"metadata":[],"maxKeys":0,"metadata_tokens":false}},{"name":"bucket2","id":"ns1.bucket2","link":{"rel":"self","href":"/object/bucket/ns1.bucket2"},"namespace":"ns1","vpool":"urn:storageos:ReplicationGroupInfo:b8c368c7-abe1-4fda-a0eb-dfcd28d43f16:global","locked":false,"fs_access_enabled":false,"softquota":"-1","created":"2025-11-29T14:24:16.661Z","is_stale_allowed":false,"is_object_lock_with_ado_allowed":false,"is_tso_read_only":false,"is_object_lock_enabled":false,"default_object_lock_retention_mode":null,"default_object_lock_retention_years":null,"default_object_lock_retention_days":null,"default_retention":0,"block_size":-1,"auto_commit_period":0,"notification_size":-1,"blockSizeInCount":-1,"notificationSizeInCount":-1,"is_encryption_enabled":"false","TagSet":[],"retention":0,"default_group":null,"default_group_file_read_permission":false,"default_group_file_write_permission":false,"default_group_file_execute_permission":false,"default_group_dir_read_permission":false,"default_group_dir_write_permission":false,"default_group_dir_execute_permission":false,"min_max_governor":{"enforce_retention":false,"minimum_fixed_retention":null,"maximum_fixed_retention":null,"minimum_variable_retention":null,"maximum_variable_retention":null},"audit_delete_expiration":-2,"enableAdvancedMetadataSearch":false,"advancedMetadataSearchTargetName":null,"advancedMetadataSearchTargetStream":null,"is_empty_bucket_in_progress":false,"versioning_status":null,"api_type":"S3","local_object_metadata_reads":false,"owner":"root","search_metadata":{"isEnabled":false,"metadata":[],"maxKeys":0,"metadata_tokens":false}},{"name":"test123","id":"ns1.test123","link":{"rel":"self","href":"/object/bucket/ns1.test123"},"namespace":"ns1","vpool":"urn:storageos:ReplicationGroupInfo:b8c368c7-abe1-4fda-a0eb-dfcd28d43f16:global","locked":false,"fs_access_enabled":false,"softquota":"-1","created":"2025-09-26T17:20:11.695Z","is_stale_allowed":false,"is_object_lock_with_ado_allowed":false,"is_tso_read_only":false,"is_object_lock_enabled":false,"default_object_lock_retention_mode":null,"default_object_lock_retention_years":null,"default_object_lock_retention_days":null,"default_retention":0,"block_size":-1,"auto_commit_period":0,"notification_size":-1,"blockSizeInCount":-1,"notificationSizeInCount":-1,"is_encryption_enabled":"false","TagSet":[],"retention":0,"default_group":null,"default_group_file_read_permission":false,"default_group_file_write_permission":false,"default_group_file_execute_permission":false,"default_group_dir_read_permission":false,"default_group_dir_write_permission":false,"default_group_dir_execute_permission":false,"min_max_governor":{"enforce_retention":false,"minimum_fixed_retention":null,"maximum_fixed_retention":null,"minimum_variable_retention":null,"maximum_variable_retention":null},"audit_delete_expiration":-2,"enableAdvancedMetadataSearch":false,"advancedMetadataSearchTargetName":null,"advancedMetadataSearchTargetStream":null,"is_empty_bucket_in_progress":false,"versioning_status":null,"api_type":"S3","local_object_metadata_reads":false,"owner":"root","search_metadata":{"isEnabled":false,"metadata":[],"maxKeys":0,"metadata_tokens":false}},{"name":"trevoriam","id":"ns1.trevoriam","link":{"rel":"self","href":"/object/bucket/ns1.trevoriam"},"namespace":"ns1","vpool":"urn:storageos:ReplicationGroupInfo:b8c368c7-abe1-4fda-a0eb-dfcd28d43f16:global","locked":false,"fs_access_enabled":false,"softquota":"-1","created":"2025-11-26T12:28:01.798Z","is_stale_allowed":false,"is_object_lock_with_ado_allowed":false,"is_tso_read_only":false,"is_object_lock_enabled":false,"default_object_lock_retention_mode":null,"default_object_lock_retention_years":null,"default_object_lock_retention_days":null,"default_retention":0,"block_size":-1,"auto_commit_period":0,"notification_size":-1,"blockSizeInCount":-1,"notificationSizeInCount":-1,"is_encryption_enabled":"false","TagSet":[],"retention":0,"default_group":null,"default_group_file_read_permission":false,"default_group_file_write_permission":false,"default_group_file_execute_permission":false,"default_group_dir_read_permission":false,"default_group_dir_write_permission":false,"default_group_dir_execute_permission":false,"min_max_governor":{"enforce_retention":false,"minimum_fixed_retention":null,"maximum_fixed_retention":null,"minimum_variable_retention":null,"maximum_variable_retention":null},"audit_delete_expiration":-2,"enableAdvancedMetadataSearch":false,"advancedMetadataSearchTargetName":null,"advancedMetadataSearchTargetStream":null,"is_empty_bucket_in_progress":false,"versioning_status":null,"api_type":"S3","local_object_metadata_reads":false,"owner":"root","search_metadata":{"isEnabled":false,"metadata":[],"maxKeys":0,"metadata_tokens":false}},{"name":"trevoriam2","id":"ns1.trevoriam2","link":{"rel":"self","href":"/object/bucket/ns1.trevoriam2"},"namespace":"ns1","vpool":"urn:storageos:ReplicationGroupInfo:b8c368c7-abe1-4fda-a0eb-dfcd28d43f16:global","locked":false,"fs_access_enabled":false,"softquota":"-1","created":"2025-11-26T14:09:34.108Z","is_stale_allowed":false,"is_object_lock_with_ado_allowed":false,"is_tso_read_only":false,"is_object_lock_enabled":false,"default_object_lock_retention_mode":null,"default_object_lock_retention_years":null,"default_object_lock_retention_days":null,"default_retention":0,"block_size":-1,"auto_commit_period":0,"notification_size":-1,"blockSizeInCount":-1,"notificationSizeInCount":-1,"is_encryption_enabled":"false","TagSet":[],"retention":0,"default_group":null,"default_group_file_read_permission":false,"default_group_file_write_permission":false,"default_group_file_execute_permission":false,"default_group_dir_read_permission":false,"default_group_dir_write_permission":false,"default_group_dir_execute_permission":false,"min_max_governor":{"enforce_retention":false,"minimum_fixed_retention":null,"maximum_fixed_retention":null,"minimum_variable_retention":null,"maximum_variable_retention":null},"audit_delete_expiration":-2,"enableAdvancedMetadataSearch":false,"advancedMetadataSearchTargetName":null,"advancedMetadataSearchTargetStream":null,"is_empty_bucket_in_progress":false,"versioning_status":null,"api_type":"S3","local_object_metadata_reads":false,"owner":"root","search_metadata":{"isEnabled":false,"metadata":[],"maxKeys":0,"metadata_tokens":false}}],"MaxBuckets":null,"NextMarker":null,"Filter":"namespace=ns1&name=*","NextPageLink":null}'
+      code: 200
+      content_length: -1
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+      transfer_encoding:
+        - chunked
+  - id: 4
+    request:
+      body: |-
+        {
+        		"Version": "2012-10-17",
+        		"Statement": [
+        			{
+        				"Effect": "Allow",
+        				"Action": ["*"],
+        				"Resource": [
+        					"arn:aws:s3:::bucket2/*"
+        				],
+        				"Principal": {
+        					"AWS": "urn:ecs:iam::ns1:user/iamuser"
+        				}
+        			}
+        		]
+        	}
+      content_length: 230
+      form:
+        namespace:
+          - ns1
+      host: ""
+      method: PUT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/object/bucket/bucket2/policy?namespace=ns1
+    response:
+      body: ""
+      code: 200
+      content_length: 0
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Length:
+          - "0"
+        Content-Type:
+          - application/json
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+  - id: 5
+    request:
+      body: "null"
+      content_length: 4
+      form:
+        namespace:
+          - ns1
+      host: ""
+      method: GET
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/object/bucket/bucket2/policy?namespace=ns1
+    response:
+      body: '{"Version":"2012-10-17","Id":"null","Statement":[{"Action":["*"],"Resource":["arn:aws:s3:::bucket2\/*"],"Effect":"Allow","Principal":{"AWS":"urn:ecs:iam::ns1:user\/iamuser"}}]}'
+      code: 200
+      content_length: -1
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+      transfer_encoding:
+        - chunked
+  - id: 6
+    request:
+      body: "null"
+      content_length: 4
+      form:
+        namespace:
+          - ns1
+      host: ""
+      method: DELETE
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/object/bucket/bucket2/policy?namespace=ns1
+    response:
+      body: ""
+      code: 200
+      content_length: 0
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Length:
+          - "0"
+        Content-Type:
+          - application/json
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+  - id: 7
+    request:
+      body: "null"
+      content_length: 4
+      host: ""
+      method: GET
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/vdc/data-service/vpools
+    response:
+      body: '{"data_service_vpool":[{"global":null,"remote":null,"vdc":null,"varrayMappings":[{"name":"urn:storageos:VirtualDataCenterData:df93c0df-fd90-450f-bd30-bea4edd722d5","value":"urn:storageos:VirtualArray:c1a7103f-d345-4cd1-9a3e-a956e519c2c2","is_replication_target":false}],"name":"rg1","id":"urn:storageos:ReplicationGroupInfo:b8c368c7-abe1-4fda-a0eb-dfcd28d43f16:global","link":null,"creation_time":1758597925354,"inactive":false,"internal":null,"description":"Default replication group description","isAllowAllNamespaces":true,"enable_rebalancing":true,"useReplicationTarget":false,"isFullRep":false}]}'
+      code: 200
+      content_length: -1
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+      transfer_encoding:
+        - chunked
+  - id: 8
+    request:
+      body: "null"
+      content_length: 4
+      form:
+        namespace:
+          - ns1
+      host: ""
+      method: POST
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      url: https://testgateway:4443/object/bucket/bucket2/deactivate?namespace=ns1
+    response:
+      body: ""
+      code: 200
+      content_length: 0
+      duration: 0s
+      headers:
+        Connection:
+          - keep-alive
+        Content-Length:
+          - "0"
+        Content-Type:
+          - application/json
+        Date:
+          - Sat, 29 Nov 2025 14:24:16 GMT
+      proto: HTTP/1.1
+      proto_major: 1
+      proto_minor: 1
+      status: 200 OK
+version: 2
