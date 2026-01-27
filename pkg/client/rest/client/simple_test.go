@@ -1,14 +1,10 @@
-// Copyright © 2023 Dell Inc. or its subsidiaries. All Rights Reserved.
+// Copyright © 2023 - 2025 Dell Inc. or its subsidiaries. All Rights Reserved.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//      http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// This software contains the intellectual property of Dell Inc.
+// or is licensed to Dell Inc. from third parties. Use of this software
+// and the intellectual property contained therein is expressly limited to the
+// terms and conditions of the License Agreement under which it is provided by or
+// on behalf of Dell Inc. or its subsidiaries.
 
 package client_test
 
@@ -23,26 +19,17 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/dell/goobjectscale/pkg/client/model"
 	"github.com/dell/goobjectscale/pkg/client/rest"
 	"github.com/dell/goobjectscale/pkg/client/rest/client"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var FixtureUserAuth = client.AuthUser{
 	Gateway:  "https://testgateway",
 	Username: "testuser",
 	Password: "testpassword",
-}
-
-var FixtureServiceauth = client.AuthService{
-	Gateway:       "https://testgateway",
-	SharedSecret:  "OSC234DSF223423",
-	PodName:       "objectscale-graphql-7d754f8499-ng4h6",
-	Namespace:     "svc-objectscale-domain-c8",
-	ObjectScaleID: "IgQBVjz4mq1M6wmKjHmfDgoNSC56NGPDbLvnkaiuaZKpwHOMFOMGouNld7GXCC690qgw4nRCzj3EkLFgPitA2y8vagG6r3yrUbBdI8FsGRQqW741eiYykf4dTvcwq8P6",
 }
 
 // RoundTripFunc is a transport mock that makes a fake HTTP response locally.
@@ -73,18 +60,7 @@ func TestSimple(t *testing.T) {
 		"OverriderHeader":    testOverrideHeader,
 		"FailedAuth":         testFailedAuth,
 		"TestHttp":           testHTTP,
-		"TestServiceLogin":   testServiceLogin,
-		"TestUserLogin":      testUserLogin,
 	}
-
-	t.Run("service-auth", func(t *testing.T) {
-		for scenario, fn := range tests {
-			t.Run(scenario, func(t *testing.T) {
-				service := FixtureServiceauth // shallow copy
-				fn(t, &service)
-			})
-		}
-	})
 
 	t.Run("user-auth", func(t *testing.T) {
 		for scenario, fn := range tests {
@@ -426,25 +402,7 @@ func NewTestHTTPClient() *http.Client {
 				Header:     header,
 			}
 
-		case "https://testgateway/mgmt/auth/login":
-			reqBody, _ := io.ReadAll(req.Body)
-			defaultBody := `{"username":"testuser","password":"testpassword"}`
-
-			if string(reqBody) == defaultBody {
-				return &http.Response{
-					StatusCode: 200,
-					Body:       io.NopCloser(bytes.NewReader([]byte(`{"access_token":"TESTTOKEN","refresh_token":"REFRESHTESTTOKEN","expires_in":900,"refresh_expires_in":1800}`))),
-					Header:     header,
-				}
-			}
-
-			return &http.Response{
-				StatusCode: 401,
-				Body:       io.NopCloser(bytes.NewReader([]byte(`{"http_status_code":401,"messages":[{"code":"4000","message":"Invalid credentials or authentication token provided to access to this resource .. Access is denied due to invalid or expired credentials","severity":"ERROR","timestamp":"2023-06-29T09:10:48Z"}]}`))),
-				Header:     header,
-			}
-
-		case "https://testgateway/mgmt/login":
+		case "https://testgateway/login":
 			reqAuth := fmt.Sprint(req.Header["Authorization"])
 			defaultAuthCreds := "[Basic dGVzdHVzZXI6dGVzdHBhc3N3b3Jk]" //nolint:gosec
 
@@ -453,19 +411,9 @@ func NewTestHTTPClient() *http.Client {
 			if reqAuth == defaultAuthCreds {
 				header.Set("X-Sds-Auth-Token", "TESTTOKEN")
 			}
-
 			return &http.Response{
 				StatusCode: 200,
-				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"OK"}`))),
-				Header:     header,
-			}
-
-		case "https://testgateway/mgmt/serviceLogin":
-			header.Set("X-SDS-AUTH-TOKEN", "TESTTOKEN")
-
-			return &http.Response{
-				StatusCode: 200,
-				Body:       io.NopCloser(bytes.NewReader([]byte(`{"Description":"OK"}`))),
+				Body:       io.NopCloser(bytes.NewReader([]byte(`{"user":"root"}`))),
 				Header:     header,
 			}
 		}
