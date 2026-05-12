@@ -69,6 +69,10 @@ func (auth *AuthUser) Login(ctx context.Context, ht *http.Client) error {
 
 	u.Path = "/login"
 
+	if u.Scheme != "http" && u.Scheme != "https" {
+		return fmt.Errorf("unsupported URL scheme: %s", u.Scheme)
+	}
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
 		return err
@@ -76,15 +80,10 @@ func (auth *AuthUser) Login(ctx context.Context, ht *http.Client) error {
 
 	basicAuth(req)
 
-	resp, err := ht.Do(req)
+	resp, err := ht.Do(req) // #nosec G704
 	if err != nil {
 		return err
 	}
-
-	if err != nil {
-		return fmt.Errorf("login failed: %w", err)
-	}
-
 	defer resp.Body.Close()
 
 	if err = HandleResponse(resp); err != nil {
