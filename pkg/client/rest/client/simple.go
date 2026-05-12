@@ -68,7 +68,7 @@ func (s *Simple) MakeRemoteCall(ctx context.Context, r Request, into interface{}
 			"Header", req.Header,
 			"URL", req.URL,
 		)
-		resp, err := s.HTTPClient.Do(req)
+		resp, err := s.HTTPClient.Do(req) // #nosec G704
 		if err != nil {
 			return err
 		}
@@ -143,6 +143,10 @@ func (s *Simple) buildHTTPRequest(ctx context.Context, r Request) (*http.Request
 
 	if s.OverrideHeader {
 		req.Header.Add("X-EMC-Override", "true")
+	}
+
+	if req.URL.Scheme != "http" && req.URL.Scheme != "https" {
+		return nil, fmt.Errorf("unsupported URL scheme: %s", req.URL.Scheme)
 	}
 
 	return req, nil
