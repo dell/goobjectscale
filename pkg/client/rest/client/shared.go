@@ -1,4 +1,4 @@
-// Copyright © 2023 - 2025 Dell Inc. or its subsidiaries. All Rights Reserved.
+// Copyright © 2023-2026 Dell Inc. or its subsidiaries. All Rights Reserved.
 //
 // This software contains the intellectual property of Dell Inc.
 // or is licensed to Dell Inc. from third parties. Use of this software
@@ -43,9 +43,9 @@ func HandleResponse(resp *http.Response) error {
 				return err
 			}
 
-			apiError := &model.Error{}
+			apiError := model.Error{}
 
-			err = xml.Unmarshal(body, apiError)
+			err = xml.Unmarshal(body, &apiError)
 			if err != nil {
 				return err
 			}
